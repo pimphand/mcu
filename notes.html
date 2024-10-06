@@ -1,0 +1,43 @@
+<script>
+    $('#masukanNormal').click(function (e) {
+
+        $('#keadaanUmum').val('Compost Mentis');
+        $('#normokepala').prop('checked', true);
+        $('#kepala').val('Normochepal');
+        $('#pupil').val('ISOKOR');
+        $('#buta_warna').val('NORMAL');
+        $('#telinga2').val('Normal');
+        $('#tonsiltenggorokan').prop('checked', true);
+        $('#tenggorokan').val('TAK');
+        $('#faring').val('Tidak Hiperemis');
+        $('#leher_kgb').val('PEMBESARAN -');
+        $('#leher_jvp').val('MENINGKAT -');
+        $('#fisik_jantung_auskultasi').val('BJ I + BJ II Normal');
+        $('#fisik_jantung_perkusi').val('Sonor');
+        $('#fisik_paru_inspeksi').val('Pergerakan Dada Simetris');
+        $('#fisik_jantung_palpasi').val('IC Teraba');
+        $('#fisik_paru_perkusi').val('Sonor');
+        $('#fisik_abdomen_inspeksi').val('Supel');
+        $('#fisik_abdomen_auskultasi').val('Bising usus Normal');
+        $('#fisik_abdomen_perkusi').val('Timpani');
+        var pemEkg = "0";
+        if (pemEkg == 1) {
+            $('#fisekgfisik_ekg').prop('checked', false);
+            $('#fisekg2fisik_ekg').prop('checked', true);
+            $('#fisik_ekg').val('DBN');
+        } else {
+            $('#fisekgfisik_ekg').prop('checked', true);
+            $('#fisekg2fisik_ekg').prop('checked', false);
+        }
+
+        $('#fisekg2neurologis').prop('checked', true);
+        $('#neurologis').val('DBN');
+        $('#pemeriksa_fisik').val('dr. Dini Desti Susanti');
+        $('#cu_fisik_p').prop('checked', true);
+        $('#u_fisik_p').val('1');
+        $('#cu_fisik').prop('checked', true);
+        $('#u_fisik').val('1');
+
+    });
+
+</script>

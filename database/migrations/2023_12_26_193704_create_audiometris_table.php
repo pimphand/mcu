@@ -1,0 +1,42 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration {
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('audiometris', function (Blueprint $table) {
+            $table->id();
+            $table->string('audiometri_telinga_kanan')->nullable();
+            $table->string('audiometri_telinga_kiri')->nullable();
+            $table->string('pendengaran_telinga_kanan')->nullable();
+            $table->string('pendengaran_telinga_kiri')->nullable();
+            $table->text('kesimpulan')->nullable();
+            $table->text('saran')->nullable();
+            $table->boolean('selesai')->nullable();
+            $table->unsignedBigInteger('participant_id')->nullable();
+            $table->unsignedBigInteger('employee_id')->nullable();
+            $table->timestamps();
+
+            $table->unsignedBigInteger('created_by')->nullable();
+            $table->unsignedBigInteger('updated_by')->nullable();
+            $table->foreign('created_by', 'audiometris_created_by_fk')->references('id')->on('users')->nullOnDelete();
+            $table->foreign('updated_by', 'audiometris_updated_by_fk')->references('id')->on('users')->nullOnDelete();
+            $table->foreign('participant_id', 'audiometris_participant_id_fk')->references('id')->on('participants')->nullOnDelete();
+            $table->foreign('employee_id', 'audiometris_employee_id_fk')->references('id')->on('employees')->nullOnDelete();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('audiometris');
+    }
+};
