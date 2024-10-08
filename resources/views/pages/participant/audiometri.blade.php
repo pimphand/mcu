@@ -6,6 +6,9 @@
 <div class="modal-body">
     @csrf
     @method('put')
+    @php
+        $audiometri = $participant->audiometri;
+    @endphp
     <div class="row mb-2">
         <div class="col-12">
             <div class="form-group">
@@ -28,7 +31,7 @@
                 <select name="pendengaran_telinga_kanan" id="pendengaran_telinga_kanan" class="form-select">
                     <option value="">Pilih</option>
                     @foreach ($participants->getPendengaranTelingaKanan() as $key => $item)
-                        <option value="{{ $key }}">{{ $item }}</option>
+                        <option value="{{ $key }}" {{ $audiometri->pendengaran_telinga_kanan == $key ? "selected" : ''}}>{{ $item }}</option>
                     @endforeach
                 </select>
             </div>
@@ -38,8 +41,8 @@
                 <label for="" class="form-label required">Pendengaran Telinga Kiri</label>
                 <select name="pendengaran_telinga_kiri" id="pendengaran_telinga_kiri" class="form-select">
                     <option value="">Pilih</option>
-                    @foreach ($participants->getPendengaranTelingaKiri() as $key => $item)
-                        <option value="{{ $key }}">{{ $item }}</option>
+                    @foreach ($participants->getPendengaranTelingaKiri() as $kiri => $item)
+                        <option value="{{ $kiri }}" {{ $audiometri->pendengaran_telinga_kanan == $kiri ? "selected" : ''}}>{{ $kiri }}</option>
                     @endforeach
                 </select>
             </div>
@@ -49,13 +52,13 @@
         <div class="col-12">
             <div class="form-group">
                 <label for="form-label required">Kesimpulan Pem. Audiometri</label>
-                <input type="text" name="kesimpulan" id="kesimpulan" class="form-control">
+                <input type="text" name="kesimpulan" value="{{ $audiometri->kesimpulan }}" id="kesimpulan" class="form-control">
             </div>
         </div>
         <div class="col-12">
             <div class="form-group">
                 <label for="form-label required">Saran Hasil Pem. Auidometri</label>
-                <input type="text" name="saran" id="saran" class="form-control">
+                <input type="text" name="saran" value="{{ $audiometri->saran }}" id="saran" class="form-control">
             </div>
         </div>
     </div>
@@ -63,7 +66,10 @@
         <div class="col-md-4">
             <div class="form-group">
                 <label class="form-label required" for="">Petugas Pemeriksa</label>
-                <select name="employee_id" id="employee_id" class="form-control form-select" required>
+                <select name="employee_id" id="" class="form-control form-select employee_id" required>
+                    @foreach($employees as $employee)
+                        <option  value="{{ $employee->id }}" {{$employee->id == $audiometri->employee?->id ? "selected" : ''  }}>{{ $employee?->nama }}</option>
+                    @endforeach
                 </select>
                 <div class="invalid-feedback">Please select a valid state.</div>
             </div>
@@ -86,3 +92,12 @@
         onclick="window.open('{{ route('report.audiometri', $participant->id) }}', '', 'toolbar=yes,scrollbars=yes,resizable=yes,width=900,height=600');">Print</button>
     <button type="submit" class="btn btn-primary" id="submit-edit-detail">Sumbit</button>
 </div>
+
+<script>
+    // Menggunakan querySelector
+    var selectElement = document.querySelector('.employee_id');  // Mengambil elemen pertama dengan class 'employee_id'
+    selectElement.value = "1";
+    // Jika perlu memicu event 'change'
+    var event = new Event('change');
+    selectElement.dispatchEvent(event);
+</script>

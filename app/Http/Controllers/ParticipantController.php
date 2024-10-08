@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Imports\UsersImport;
+use App\Models\Employee;
 use App\Services\DivisiService;
 use App\Services\ParticipantService;
 use Illuminate\Http\Request;
@@ -12,10 +13,14 @@ class ParticipantController extends Controller
 {
     private ParticipantService $participantService;
     private DivisiService $divisiService;
+
+    private $employees;
     public function __construct(ParticipantService $participantService, DivisiService $divisiService)
     {
         $this->participantService = $participantService;
         $this->divisiService = $divisiService;
+
+        $this->employees = Employee::all();
     }
     /**
      * Display a listing of the resource.
@@ -175,7 +180,9 @@ class ParticipantController extends Controller
     public function detailTandaVital(int $id)
     {
         $participant = $this->participantService->find($id);
-        return view('pages.participant.tanda-vital', compact('participant'));
+        $employees = $this->employees;
+
+        return view('pages.participant.tanda-vital', compact('participant', 'employees'));
     }
 
     public function updateTandaVital(Request $request, int $id)
@@ -215,8 +222,9 @@ class ParticipantController extends Controller
     {
         $participant = $this->participantService->find($id);
         $participants = $this->participantService;
+        $employees = $this->employees;
 
-        return view('pages.participant.pemeriksaan-fisik', compact('participant', 'participants'));
+        return view('pages.participant.pemeriksaan-fisik', compact('participant', 'participants', 'employees'));
     }
 
     public function updatePemeriksaanFisik(Request $request, int $id)
@@ -285,7 +293,8 @@ class ParticipantController extends Controller
     public function detailLaboratorium(int $id)
     {
         $participant = $this->participantService->find($id);
-        return view('pages.participant.laboratorium', compact('participant'));
+        $employees = $this->employees;
+        return view('pages.participant.laboratorium', compact('participant', 'employees'));
     }
 
     public function updateLaboratorium(Request $request, int $id)
@@ -339,7 +348,8 @@ class ParticipantController extends Controller
     public function detailRadiologi(int $id)
     {
         $participant = $this->participantService->find($id);
-        return view('pages.participant.radiologi', compact('participant'));
+        $employees = $this->employees;
+        return view('pages.participant.radiologi', compact('participant', 'employees'));
     }
 
     public function updateRadiologi(Request $request, int $id)
@@ -360,7 +370,9 @@ class ParticipantController extends Controller
     {
         $participant = $this->participantService->find($id);
         $participants = $this->participantService;
-        return view('pages.participant.audiometri', compact('participant', 'participants'));
+        $employees = $this->employees;
+        // dd($participant);
+        return view('pages.participant.audiometri', compact('participant', 'participants', 'employees'));
     }
 
     public function updateAudiometri(Request $request, int $id)
@@ -380,7 +392,8 @@ class ParticipantController extends Controller
     {
         $participant = $this->participantService->find($id);
         $participants = $this->participantService;
-        return view('pages.participant.spirometri', compact('participant', 'participants'));
+        $employees = $this->employees;
+        return view('pages.participant.spirometri', compact('participant', 'participants', 'employees'));
     }
 
     public function updateSpirometri(Request $request, int $id)
@@ -404,7 +417,10 @@ class ParticipantController extends Controller
     public function detailRectal(int $id)
     {
         $participant = $this->participantService->find($id);
-        return view('pages.participant.rectal', compact('participant'));
+
+        $employees = $this->employees;
+
+        return view('pages.participant.rectal', compact('participant', 'employees'));
     }
 
     public function updateRectal(Request $request, int $id)
@@ -424,7 +440,9 @@ class ParticipantController extends Controller
     public function detailEkg(int $id)
     {
         $participant = $this->participantService->find($id);
-        return view('pages.participant.ekg', compact('participant'));
+        $employees = $this->employees;
+
+        return view('pages.participant.ekg', compact('participant', 'employees'));
     }
 
     public function updateEkg(Request $request, int $id)

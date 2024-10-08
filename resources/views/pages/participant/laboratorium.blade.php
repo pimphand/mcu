@@ -199,9 +199,12 @@
             <div class="row mb-2">
                 <div class="col-md-12">
                     <label class="form-label required" for="">Petugas Pemeriksa</label>
-                    <select name="employee_id" id="employee_id" class="form-control form-select"
+                    <select name="employee_id" id="" class="form-control form-select employee_id"
                         required>
-                        <option value="{{ $laboratorium->employee?->id }}">{{ $laboratorium->employee?->nama }}</option>
+
+                        @foreach($employees as $employee)
+                        <option  value="{{ $employee->id }}" {{$employee->id == $laboratorium->employee?->id ? "selected" : ''  }}>{{ $employee?->nama }}</option>
+                        @endforeach
                     </select>
                     <div class="invalid-feedback">Please select a valid state.</div>
                 </div>
@@ -233,7 +236,7 @@
                     0-110 mg/dl
                 </div>
             </div>
-    
+
             <div class="row mb-1">
                 <div class="col-md-4">
                     <label for="" class="form-label required">Cholesterol Total </label>
@@ -324,7 +327,7 @@
                     <input type="number" name="berat_jenis" id="berat_jenis" value="{{ $laboratorium->berat_jenis }}" class="form-control">
                 </div>
                 <div class="col-md-4">
-                    
+
                 </div>
             </div>
             <div class="row mb-1">
@@ -335,7 +338,7 @@
                     <input type="number" name="ph_reaksi" id="ph_reaksi" value="{{ $laboratorium->ph_reaksi }}" class="form-control">
                 </div>
                 <div class="col-md-4">
-                    
+
                 </div>
             </div>
             <div class="row mb-1">
@@ -346,7 +349,7 @@
                     <input type="text" name="warna" id="warna" value="{{ $laboratorium->warna }}" class="form-control">
                 </div>
                 <div class="col-md-4">
-                    
+
                 </div>
             </div>
             <div class="row mb-1">
@@ -357,7 +360,7 @@
                     <input type="text" name="kekeruhan" id="kekeruhan" value="{{ $laboratorium->kekeruhan }}" class="form-control">
                 </div>
                 <div class="col-md-4">
-                    
+
                 </div>
             </div>
             <div class="row mb-1">
@@ -480,3 +483,12 @@
     <button type="button" class="btn btn-info" id="" onclick="window.open('{{ route('report.laboratorium', $participant->id) }}', '', 'toolbar=yes,scrollbars=yes,resizable=yes,width=900,height=600');">Print</button>
     <button type="submit" class="btn btn-primary" id="submit-edit-detail">Sumbit</button>
 </div>
+
+<script>
+    // Menggunakan querySelector
+    var selectElement = document.querySelector('.employee_id');  // Mengambil elemen pertama dengan class 'employee_id'
+    selectElement.value = "2";
+    // Jika perlu memicu event 'change'
+    var event = new Event('change');
+    selectElement.dispatchEvent(event);
+</script>

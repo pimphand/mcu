@@ -37,8 +37,11 @@
         <div class="col-md-4 mb-2">
             <div class="form-group">
                 <label class="form-label required" for="">Petugas Pemeriksa</label>
-                <select name="employee_id" id="employee_id" class="form-control" required>
-                    <option value="{{ $radiologi->employee?->id }}">{{ $radiologi->employee?->nama }}</option>
+                <select name="employee_id"  class="form-control employee_id" required>
+                    @foreach ($employees as  $employee)
+                        <option value="{{ $employee->id }}" {{$employee->id == $radiologi->employee?->id ? "selected" : ''  }}>{{ $employee->nama }}</option>
+                    @endforeach
+
                 </select>
                 <div class="invalid-feedback">Please select a valid state.</div>
             </div>
@@ -70,12 +73,9 @@
 
         // Atur nilai default
         var selectElement = document.getElementById('employee_id');
-        selectElement.value = "3";
+        selectElement.value = "4";
 
         // Trigger event 'change' secara manual untuk Select2
         var event = new Event('change');
         selectElement.dispatchEvent(event);
-
-
-
 </script>

@@ -55,8 +55,11 @@
         <div class="col-md-4">
             <div class="form-group">
                 <label class="form-label required" for="">Petugas Pemeriksa</label>
-                <select name="employee_id" id="employee_id" class="form-control form-select" required>
-                    <option value="{{ $rectal->employee?->id }}">{{ $rectal->employee?->nama }}</option>
+                <select name="employee_id" id="" class="form-control form-select employee_id" required>
+                    {{-- <option value="{{ $rectal->employee?->id }}">{{ $rectal->employee?->nama }}</option> --}}
+                    @foreach($employees as $employee)
+                        <option  value="{{ $employee->id }}" {{$employee->id == $rectal->employee?->id ? "selected" : ''  }}>{{ $employee?->nama }}</option>
+                    @endforeach
                 </select>
                 <div class="invalid-feedback">Please select a valid state.</div>
             </div>
@@ -79,3 +82,13 @@
     <button type="button" class="btn btn-info" id="" onclick="window.open('{{ route('report.rectal', $participant->id) }}', '', 'toolbar=yes,scrollbars=yes,resizable=yes,width=900,height=600');">Print</button>
     <button type="submit" class="btn btn-primary" id="submit-edit-detail">Sumbit</button>
 </div>
+
+
+<script>
+    // Menggunakan querySelector
+    var selectElement = document.querySelector('.employee_id');
+    selectElement.value = "2";
+    // Jika perlu memicu event 'change'
+    var event = new Event('change');
+    selectElement.dispatchEvent(event);
+</script>

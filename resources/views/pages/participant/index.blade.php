@@ -755,7 +755,7 @@
                     }
                 })
             });
-
+            getEmployee();
             function getEmployee() {
                 $('#content-edit-detail #employee_id').select2({
                     allowClear: true,
