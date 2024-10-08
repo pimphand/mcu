@@ -124,6 +124,11 @@ Route::middleware('auth')->group(function () {
         Route::put('/{id}', [DivisiController::class, 'update'])->name('divisi.update');
         Route::delete('/{id}', [DivisiController::class, 'destroy'])->name('divisi.delete');
     });
+    Route::middleware('mcu')->group(function () {
+
+        Route::get('participant-upload-validasi-dokter', [\App\Http\Controllers\UploadFileController::class, 'getValidateDoctor'])->name('upload.validasi.dokter');
+        Route::post('participant-upload-validasi-dokter', [\App\Http\Controllers\UploadFileController::class, 'validateDoctor']);
+    });
 
     /** route crud participant */
     Route::prefix('participant')->middleware('mcu')->group(function () {

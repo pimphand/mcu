@@ -29,8 +29,7 @@
     </style>
     <!-- Basic Tabs starts -->
     <div class="card">
-        <div class="card-header">
-        </div>
+
         <div class="card-body">
             <form action="{{ route('participant.print.mcu') }}" method="get">
                 <div class="row">
