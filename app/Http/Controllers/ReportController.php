@@ -24,6 +24,7 @@ class ReportController extends Controller
     public function tandaVital($participantId)
     {
         $participant = $this->participantService->find($participantId);
+
         $pdf = Pdf::loadView('pages.report.tanda-vital', compact('participant'));
 
         return $pdf->stream(sprintf('%s.pdf', $participant->code));
@@ -32,6 +33,7 @@ class ReportController extends Controller
     public function pemeriksaanFisik($participantId)
     {
         $participant = $this->participantService->find($participantId);
+        // dd($participant);
         $pdf = Pdf::loadView('pages.report.pemeriksaan-fisik', compact('participant'));
 
         return $pdf->stream(sprintf('%s.pdf', $participant->code));

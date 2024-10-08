@@ -497,12 +497,13 @@
                             </tr>
                             <tr>
                                 <td class="text-center">
-                                    <img src="{{ public_path($pemeriksaanFisik->employee?->ttd ? $pemeriksaanFisik->employee?->ttd : 'images/ttd-kosong.png') }}" width="80"
+==
+                                    <img src="{{ asset($pemeriksaanFisik->employee?->ttd) }}" width="150"
                                         alt="img" alt="img">
                                 </td>
                             </tr>
                             <tr>
-                                <td class="text-center">{{ $tandaVital->employee?->nama }}</td>
+                                <td class="text-center">{{ $pemeriksaanFisik->employee?->nama }}</td>
                             </tr>
                         </tbody>
                     </table>

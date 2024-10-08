@@ -123,25 +123,25 @@
                 <td class="border">COR</td>
                 <td class="border text-center">
                     {!! $radiologi->cor !!}</td>
-                
+
             </tr>
             <tr>
                 <td class="border">Diafragma Sinus </td>
                 <td class="border text-center">
                     {!! $radiologi->diafragma_sinus !!}</td>
-                
+
             </tr>
             <tr>
                 <td class="border">Pulmo</td>
                 <td class="border text-center">
                     {!! $radiologi->pulmo !!}</td>
-                
+
             </tr>
             <tr>
                 <td class="border">Kesan</td>
                 <td class="border text-center">
                     {!! $radiologi->kesan !!}</td>
-                
+
             </tr>
         </tbody>
     </table>
@@ -162,7 +162,7 @@
                             </tr>
                             <tr>
                                 <td class="text-center">
-                                    <img src="{{ public_path($radiologi->employee?->ttd ? $radiologi->employee?->ttd : 'images/ttd-kosong.png') }}" width="80"
+                                    <img src="{{ asset($radiologi->employee?->ttd ? $radiologi->employee?->ttd : 'images/ttd-kosong.png') }}" width="100"
                                         alt="img" alt="img">
                                 </td>
                             </tr>

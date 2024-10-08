@@ -10,12 +10,13 @@
                         <tbody>
                             <tr>
                                 <td style="text-align: center;">
-                                    <p style="padding: 0px; margin: 0px; font-size: 24px;">Klinik dr. Dini <br>
+                                    <p style="padding: 0px; margin: 0px; font-size: 24px;">KLINIK DR. DINI <br>
 		                                MEDICAL CENTER
                                     </p>
                                     <p>No.Izin : 0104220009994 <br>
-Jln. Raya Karang Hilir no 815 Desa Karangtengah Kec. Cibadak
-Kab.  Sukabumi (0266) 6545065</p>
+                                        Jln. Raya Karang Hilir no 815 Desa Karangtengah Kec. Cibadak
+                                        Kab.  Sukabumi (0266) 6545065
+                                    </p>
                                 </td>
                             </tr>
                             <tr>
