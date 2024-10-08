@@ -4,10 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Imports\UsersImport;
 use App\Models\Employee;
+use App\Models\Participant;
 use App\Services\DivisiService;
 use App\Services\ParticipantService;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class ParticipantController extends Controller
 {
@@ -384,6 +387,8 @@ class ParticipantController extends Controller
             'pendengaran_telinga_kiri' => '',
             'kesimpulan' => '',
             'saran' => '',
+            'selesai' => '',
+            'employee_id' => ''
         ]);
         return $this->participantService->updateAudiometri($data, $id);
     }
@@ -464,14 +469,26 @@ class ParticipantController extends Controller
 
     public function printMCU(Request $request)
     {
+        // dd($request->all());
+        $data = [];
         $client = $this->participantService->getClient();
-        return view('pages.participant.print-mcu', compact('client'));
+        if ($request->filter) {
+            $data = QueryBuilder::for(Participant::class)
+                ->allowedFilters([
+                    AllowedFilter::exact('client_id'),
+                    AllowedFilter::exact('contract_id'),
+                    AllowedFilter::exact('divisi_id'),
+                    AllowedFilter::scope('date_range'),
+                ])
+                ->get();
+        }
+        return view('pages.participant.print-mcu', compact('client', 'data'));
     }
 
     public function detailFotoKamera(int $id)
     {
         $participant = $this->participantService->find($id);
-        return view('pages.participant.foto-kamera', compact('participant'));
+        return view('pages.participant.foto-kamera', compact('participant', 'data'));
     }
 
     public function updateFotoKamera(Request $request, int $id)

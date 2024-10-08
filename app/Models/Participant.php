@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 
 class Participant extends Model
 {
@@ -74,5 +75,12 @@ class Participant extends Model
     public function ekg()
     {
         return $this->hasOne(Ekg::class, 'participant_id', 'id')->with('employee');
+    }
+
+    public function scopeDateRange(Builder $query, $date)
+    {
+        $date = explode(' to ', $date);
+        // dd($date);
+        return $query->whereBetween('created_at', [$date[0], $date[1]]);
     }
 }

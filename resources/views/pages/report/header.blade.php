@@ -21,7 +21,8 @@
                             </tr>
                             <tr>
                                 <td class="text-center" style="font-size: 13px; color: rgb(157, 155, 155);">
-                                    {{ $participant->client?->address }}</td>
+                                    {{-- {{ $participant->client?->address }} --}}
+                                    </td>
                             </tr>
                         </tbody>
                     </table>
@@ -50,7 +51,7 @@
                             </tr>
                             <tr>
                                 <td class="text-center" style="font-size: 13px; color: rgb(157, 155, 155);">
-                                    {{ config('app.address') }}</td>
+                                    {{-- {{ config('app.address') }}</td> --}}
                             </tr>
                         </tbody>
                     </table>

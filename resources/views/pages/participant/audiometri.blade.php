@@ -80,7 +80,7 @@
                 <label class="form-check-label h-3 fw-bold" for="">Selesai
                     &nbsp;</label>
                 <div class="form-check form-check-success form-switch ml-2">
-                    <input type="checkbox" name="selesai" class="form-check-input" id="selesai" />
+                    <input type="checkbox" name="selesai" {{ $audiometri->selesai ? 'checked' : '' }} class="form-check-input" value="1" id="selesai" />
                 </div>
             </div>
         </div>

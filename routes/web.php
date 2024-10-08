@@ -192,7 +192,7 @@ Route::middleware('auth')->group(function () {
 
     Route::middleware('mcu')->get('/participant-register', [ParticipantController::class, 'register'])->name('participant.register');
 
-    Route::middleware('mcu')->get('/participant-print-mcu', [ParticipantController::class, 'printMCU'])->name('participant.print.mcu');
+    Route::middleware('mcu')->get('/participant-print-mcu', action: [ParticipantController::class, 'printMCU'])->name('participant.print.mcu');
 
     // Route::prefix('pesera')->group(function(){
     //     Route::get('/', [ParticipantController::class,'peserta'])->name('peserta.index');
