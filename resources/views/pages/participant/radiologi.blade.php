@@ -65,17 +65,9 @@
 
 
 <script>
-  // Event listener untuk klik pertama kali
-        var selectElement = document.getElementById('employee_id');
-        selectElement.addEventListener('click', function() {
-            setDefaultValue();
-        }, { once: true });
-
-        // Atur nilai default
-        var selectElement = document.getElementById('employee_id');
-        selectElement.value = "4";
-
-        // Trigger event 'change' secara manual untuk Select2
-        var event = new Event('change');
-        selectElement.dispatchEvent(event);
+  var selectElement = document.querySelector('.employee_id');
+    selectElement.value = "4";
+    // Jika perlu memicu event 'change'
+    var event = new Event('change');
+    selectElement.dispatchEvent(event);
 </script>
