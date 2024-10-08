@@ -358,7 +358,7 @@
                 <label for="" class="form-label">Inspeksi</label>
                 <select name="abdomen_inspeksi" id="abdomen_inspeksi" class="form-select">
                     <option value="">Pilih</option>
-                    @foreach ($participants->getInspeksi() as $key => $item)
+                    @foreach ($participants->abdomenInspeksi() as $key => $item)
                         <option value="{{ $key }}" {{ $pemeriksaanFisik->abdomen_inspeksi == $key ? 'selected' : null }}>{{ $item }}</option>
                     @endforeach
                 </select>
@@ -624,3 +624,60 @@
     <button type="button" class="btn btn-info" onclick="window.open('{{ route('report.pemeriksaan.fisik', $participant->id) }}', '', 'toolbar=yes,scrollbars=yes,resizable=yes,width=900,height=600');">Print</button>
     <button type="submit" class="btn btn-primary" id="submit-edit-detail">Sumbit</button>
 </div>
+
+<script>
+document.getElementById('nilai_normal').addEventListener('click', function (e) {
+    console.log(e)
+    document.getElementById('keadaan_umum').value = 'Compost Mentis';
+    document.getElementById('kepala').checked = true;
+    document.getElementById('kepala_text').value = 'Normochepal';
+    document.getElementById('hidung').value = 'Polip ( - / - )';
+    document.getElementById('mata').value = 'CA( - / - ) SI( - / - )';
+    document.getElementById('pupil').value = 'ISOKOR';
+    document.getElementById('visus').value = 'Mata Kanan 6/6 , Mata Kiri 6/6';
+    document.getElementById('buta_warna').value = 'NORMAL';
+    document.getElementById('kelainan_telinga').value = 'NORMAL';
+    document.getElementById('gigi').value = 'NORMAL';
+    document.getElementById('telinga').value = 'Serumen ( - / - )';
+     document.getElementById('tenggorokan').checked = true;
+    document.getElementById('tenggorokan_text').value = "TAK";
+    document.getElementById('bibir').value = "Sianosis ( - )";
+    document.getElementById('lidah').value = "Tyfoid tang ( - )";
+    document.getElementById('jantung_inspeksi').value = "IC Tidak Terlihat ( - )";
+
+    document.getElementById('faring').value = 'TIDAK HIPEREMIS';
+
+    document.getElementById('jantung_auskultasi').value = 'BJ I + BJ II NORMAL';
+    document.getElementById('jantung_palpasi').value = 'IC TERABA';
+    document.getElementById('jantung_perkusi').value = 'DALL';
+    document.getElementById('leher_kgb').value = 'PEMBESARAN -';
+    document.getElementById('leher_jvp').value = 'MENINGKAT -';
+
+    document.getElementById('paru_inspeksi').value = 'Pergerakan Dada Simetris';
+
+    document.getElementById('paru_auskultasi_vasikuler').value = '+ / +';
+
+    document.getElementById('paru_auskultasi_ronkhi').value = '- / -';
+    document.getElementById('paru_auskultasi_wheezing').value = '- / -';
+    document.getElementById('paru_palpasi').value = 'IC TERABA';
+    document.getElementById('paru_perkusi').value = 'SONOR';
+    document.getElementById('abdomen_inspeksi').value = 'TIDAK';
+    document.getElementById('abdomen_auskultasi').value = 'BISING USUS NORMAL';
+    document.getElementById('abdomen_palpasi').value = 'Nyeri Tekan Epigastrium ( - )';
+    document.getElementById('abdomen_perkusi').value = 'TIMPANI';
+
+    //
+    document.getElementById('reflex_fisiologis_atas').value = '+ / +';
+    document.getElementById('reflex_fisiologis_bawah').value = '+ / +';
+    document.getElementById('reflex_phatologis_atas').value = '- / -';
+    document.getElementById('reflex_phatologis_bawah').value = '- / -';
+    //ekg_bdn
+    document.getElementById('ekg_bdn').checked = true;
+    document.getElementById('neurologis_bdn').checked = true;
+    document.getElementById('fisik_diperiksa').checked = true;
+    document.getElementById('selesai').checked = true;
+    document.getElementById('ekg_text').value = 'BDN';
+    document.getElementById('neurologis_text').value = 'BDN';
+});
+
+</script>

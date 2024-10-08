@@ -531,8 +531,16 @@ class ParticipantService
     public function getInspeksi()
     {
         return [
+            'Pergerakan Dada Simetris' => 'Pergerakan Dada Simetris',
+            'Pergerakan Dada Tidak Simetris' => 'Pergerakan Dada Tidak Simetris',
+        ];
+    }
+
+    public function abdomenInspeksi()
+    {
+        return [
             'SUPEL' => 'SUPEL',
-            'TIDAK' => 'TIDAK',
+            'TIDAK' => 'TIDAK'
         ];
     }
     public function getAuskultasi()
@@ -562,6 +570,7 @@ class ParticipantService
         return [
             'SONOR' => 'SONOR',
             'REDUP' => 'REDUP',
+            'DALL' => 'DALL',
         ];
     }
     public function getPerkusi2()
