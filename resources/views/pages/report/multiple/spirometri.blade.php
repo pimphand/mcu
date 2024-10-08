@@ -1,6 +1,10 @@
+@foreach ($data as $index=> $participant)
 <!DOCTYPE html>
 <html lang="en">
-
+@php
+$totalItems = count($data);  // Jumlah total data
+$currentPage = $index + 1;
+@endphp
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -36,6 +40,7 @@
 <body>
     @include('pages.report.header', $participant)
     <table>
+
         <body>
             <tr>
                 <td>
@@ -160,7 +165,14 @@
             </tr>
         </tbody>
     </table>
+
+    <!-- Footer yang menunjukkan nomor halaman -->
+    <div class="footer" style="position: fixed; bottom: 0; left: 0; right: 0; width: 100%; text-align: end; font-size: 12px;">
+        <div class="page-number">
+            Print {{ $currentPage }} dari {{ $totalItems }}
+        </div>
+    </div>
 </body>
 
 </html>
-
+@endforeach

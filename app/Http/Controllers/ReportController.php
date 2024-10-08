@@ -133,4 +133,33 @@ class ReportController extends Controller
 
         // return view('pages.report.register', compact('participant'));
     }
+
+    public function audiometriBulk(array $participantIds)
+    {
+        $pdfs = [];
+
+        foreach ($participantIds as $participantId) {
+            $participant = $this->participantService->find($participantId);
+            $pdf = Pdf::loadView('pages.report.audiometri', compact('participant'));
+
+            // Menyimpan setiap PDF ke array
+            $pdfs[] = [
+                'filename' => sprintf('%s.pdf', $participant->code),
+                'content' => $pdf->output()
+            ];
+        }
+
+        // Menggabungkan semua PDF ke dalam satu file
+        $mergedPdf = new \setasign\Fpdi\Fpdi();
+        foreach ($pdfs as $pdfData) {
+            $tmpPdf = \TCPDI::createFromString($pdfData['content']);
+            for ($i = 1; $i <= $tmpPdf->getNumberOfPages(); $i++) {
+                $mergedPdf->addPage();
+                $mergedPdf->useTemplate($mergedPdf->importPage($i));
+            }
+        }
+
+        // Menampilkan PDF hasil gabungan
+        return $mergedPdf->Output('I', 'merged_audiometri.pdf');
+    }
 }

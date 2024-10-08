@@ -70,6 +70,48 @@
                     </div>
                 </div>
             </form>
+
+            <div class="row mt-2">
+                <div class="col-md-3">
+                    <input type="text" id="start" class="form-sm form-control "
+                            placeholder="Dari No" />
+                </div>
+                <div class="col-md-3">
+                    <input type="text" id="end" class="form-sm form-control "
+                            placeholder="Sampai No" />
+                </div>
+                <div class="col-md-6">
+                <div class="btn-group" role="group" aria-label="First group">
+                    <button type="button" class="btn btn-sm btn-outline-info waves-effect import" data-url="{{ route('multiple.register') }}">
+                     Stiker
+                    </button>
+                    <button type="button" class="btn btn-sm btn-outline-info waves-effect import">
+                     Resume
+                    </button>
+                    <button type="button" class="btn btn-sm btn-outline-primary waves-effect import">
+                      Pem. Fisik
+                    </button>
+                    <button type="button" class="btn btn-sm btn-outline-primary waves-effect import">
+                     Lab
+                    </button>
+                    <button type="button" class="btn btn-sm btn-outline-warning waves-effect import">
+                     Rad
+                    </button>
+                    <button type="button" class="btn btn-sm btn-outline-warning waves-effect import">
+                     Audiometri
+                    </button>
+                    <button type="button" class="btn btn-sm btn-outline-success waves-effect import">
+                     EKG
+                    </button>
+                    <button type="button" class="btn btn-sm btn-outline-success waves-effect import">
+                     Spiro
+                    </button>
+                    <button type="button" class="btn btn-sm btn-outline-success waves-effect import">
+                     Rectal
+                    </button>
+                  </div>
+                </div>
+            </div>
         </div>
         <div class="card-body">
             <div class="table-responsive table-responsive small textkecil">
@@ -212,5 +254,14 @@
             maxDate: 'today',
             defaultDate: ["{{ $date1 }}", "{{ $date2 }}"]
         });
+
+        $('.import').click(function(){
+            let url = $(this).data('url');
+            let start = $('#start').val();
+            let end = $('#end').val();
+            url = url + '?start=' + start + '&end=' + end+"filter[date_range]="+ $('#fp-range').val()+`&filter[participant.client_id]=${$('#client_id').val()}`;
+            window.open(url, '', 'toolbar=yes,scrollbars=yes,resizable=yes,width=900,height=600');
+        });
+
     </script>
 @endsection

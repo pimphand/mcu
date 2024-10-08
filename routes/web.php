@@ -10,6 +10,7 @@ use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\McuController;
 use App\Http\Controllers\ParticipantController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\ReportMultipleController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Models\Participant;
@@ -191,6 +192,8 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::middleware('mcu')->get('/participant-register', [ParticipantController::class, 'register'])->name('participant.register');
+    Route::middleware('mcu')->get('/multiple-spirometri', [ReportMultipleController::class, 'spirometri'])->name('multiple.register');
+    Route::middleware('mcu')->get('/multiple-identitas', [ReportMultipleController::class, 'identitas'])->name('multiple.identitas');
 
     Route::middleware('mcu')->get('/participant-print-mcu', action: [ParticipantController::class, 'printMCU'])->name('participant.print.mcu');
 
