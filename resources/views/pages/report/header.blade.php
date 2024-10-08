@@ -3,15 +3,19 @@
         <tbody>
             <tr>
                 <td>
-                    <img src="{{ public_path('images/dental-checkup.png') }}" width="80" alt="img" alt="img">
+                    <img src="{{ public_path('logo.png') }}" width="80" alt="img" alt="img">
                 </td>
                 <td class="text-center">
                     <table>
                         <tbody>
                             <tr>
                                 <td style="text-align: center;">
-                                    <p style="padding: 0px; margin: 0px; font-size: 24px;">{{ $participant->client?->name }}
+                                    <p style="padding: 0px; margin: 0px; font-size: 24px;">Klinik dr. Dini <br>
+		                                MEDICAL CENTER
                                     </p>
+                                    <p>No.Izin : 0104220009994 <br>
+Jln. Raya Karang Hilir no 815 Desa Karangtengah Kec. Cibadak
+Kab.  Sukabumi (0266) 6545065</p>
                                 </td>
                             </tr>
                             <tr>

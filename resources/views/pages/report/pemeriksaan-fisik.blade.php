@@ -10,6 +10,9 @@
         table {
             width: 100%;
         }
+        @page {
+            size: 21cm 33cm;
+        }
 
         .text-center {
             text-align: center;
@@ -20,7 +23,7 @@
         }
 
         td {
-            padding: 5px;
+
         }
 
         .border {
@@ -28,7 +31,7 @@
             border-collapse: collapse;
             width: 50%;
             padding: 3px;
-            font-size: 14px;
+            font-size: 13px;
         }
     </style>
 </head>
@@ -41,7 +44,7 @@
             <tr>
                 <td>
                     <table>
-                        <tbody>
+                        <tbody style="font-size:12px">
                             <tr>
                                 <td>MCU ID</td>
                                 <td>:</td>
@@ -73,7 +76,7 @@
                 </td>
                 <td>
                     <table>
-                        <tbody>
+                        <tbody style="font-size:12px">
                             <tr>
                                 <td>Perusahaan</td>
                                 <td>:</td>
@@ -104,14 +107,14 @@
         $tandaVital = $participant->tandaVital;
         $pemeriksaanFisik = $participant->pemeriksaanFisik;
     @endphp
-    <table style="border-collapse: collapse;">
+    <table style="border-collapse: collapse;font-size:12px">
         <thead>
             <tr>
                 <th class="border">PEMERIKSAAN</th>
                 <th class="border">HASIL</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody style="font-size:12px">
             <tr>
                 <td colspan="2" class="border">TANDA VITAL</td>
             </tr>
@@ -119,109 +122,109 @@
                 <td class="border">Keluhan Utama</td>
                 <td class="border text-center">
                     {{ $tandaVital->keluhan_utama_text }}</td>
-                
+
             </tr>
             <tr>
                 <td class="border">Riwayat Penyakit Sekarang </td>
                 <td class="border text-center">
                     {{ $tandaVital->riwayat_penyakit_sekarang_text  }}</td>
-                    
+
             </tr>
             <tr>
                 <td class="border">Riwayat Penyakit Terdahulu</td>
                 <td class="border text-center">
                     {{ $tandaVital->riwayat_penyakit_terdahulu_text }}</td>
-                    
+
             </tr>
             <tr>
                 <td class="border">Alergi</td>
                 <td class="border text-center">
                     {{ $tandaVital->alergi_text }}</td>
-                    
+
             </tr>
             <tr>
                 <td class="border">Merokok</td>
                 <td class="border text-center">
                     {{ $tandaVital->merokok ? 'YA' : 'TIDAK' }}</td>
-                    
+
             </tr>
             <tr>
                 <td class="border">Konsumsi Alkohol</td>
                 <td class="border text-center">
                     {{ $tandaVital->komsumsi_alkohol ? 'YA' : 'TIDAK' }}</td>
-                    
+
             </tr>
             <tr>
                 <td class="borde$pemeriksaanFisikr">Riwayat Trauma</td>
                 <td class="border text-center">
                     {{ $tandaVital->riwayat_trauma }}</td>
-                    
+
             </tr>
             <tr>
                 <td class="border">Tinggi Badan</td>
                 <td class="border text-center">
                     {{ $tandaVital->tinggi_badan }} cm</td>
-                    
+
             </tr>
             <tr>
                 <td class="border">Berat Badan</td>
                 <td class="border text-center">
                     {{ $tandaVital->berat_badan }} kg</td>
-                    
+
             </tr>
             <tr>
                 <td class="border">IMT</td>
                 <td class="border text-center">
                     {{ $tandaVital->imt }}</td>
-                    
+
             </tr>
             <tr>
                 <td class="border">Nilai IMT</td>
                 <td class="border text-center">
                     {{ $tandaVital->imt_nilai }}</td>
-                    
+
             </tr>
             <tr>
                 <td class="border">Tekanan Darah</td>
                 <td class="border text-center">
                     {{ $tandaVital->tekanan_darah }} mmHg</td>
-                    
+
             </tr>
             <tr>
                 <td class="border">Frekuensi Nadi</td>
                 <td class="border text-center">
                     {{ $tandaVital->frekuensi_nadi }} x/menit</td>
-                    
+
             </tr>
             <tr>
                 <td class="border">Suhu</td>
                 <td class="border text-center">
                     {{ $tandaVital->suhu }} Celcius</td>
-                    
+
             </tr>
             <tr>
                 <td class="border">Frekuensi Nafas</td>
                 <td class="border text-center">
                     {{ $tandaVital->frekuensi_nafas }} x/menit</td>
-                    
+
             </tr>
             <tr>
                 <td class="border">Ibu Hamil</td>
                 <td class="border text-center">
                     {{ $tandaVital->ibu_hamil ? 'YA' : 'TIDAK' }}</td>
-                    
+
             </tr>
             <tr>
                 <td class="border">Vaksin Hepatitis</td>
                 <td class="border text-center">
                     {{ $tandaVital->vaksin_hepatitis ? 'YA' : 'TIDAK' }}</td>
-                    
+
             </tr>
             <tr>
                 <td class="border">Vaksin Tetanus</td>
                 <td class="border text-center">
                     {{ $tandaVital->vaksin_tetanus ? 'YA' : 'TIDAK' }}</td>
-                    
+
             </tr>
             <tr>
                 <td colspan="2" class="border">KEADAAN UMUM</td>

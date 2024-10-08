@@ -1,5 +1,5 @@
 <html lang="en">
-{{-- @php
+@php
 function getAgeInYearsMonthsDays($birthDate)
 {
 // Mengubah string tanggal lahir ke objek Carbon
@@ -19,7 +19,7 @@ $roundedDays = floor($diffDays);
 // Format hasilnya
 return "{$roundedYears} Tahun {$roundedMonths} Bulan {$roundedDays} Hari";
 }
-@endphp --}}
+@endphp
 
 <head>
     <meta charset="UTF-8">
@@ -63,7 +63,7 @@ return "{$roundedYears} Tahun {$roundedMonths} Bulan {$roundedDays} Hari";
         <tr>
             <td>
                 <div class="qr-code">
-                    <img src="http://mcu.test/logo.png" alt="Logo Perusahaan" width="60" height="">
+                    <img src="{{ asset('logo.png') }}" alt="Logo Perusahaan" width="60" height="">
                 </div>
             </td>
             <td style="text-align: center">
@@ -106,13 +106,13 @@ return "{$roundedYears} Tahun {$roundedMonths} Bulan {$roundedDays} Hari";
         </tr>
         <tr>
             <td style="text-align: left;">USIA</td>
-            <td style="text-align: left;">: {{ $usia }}</td>
+            <td style="text-align: left;">: {{ getAgeInYearsMonthsDays($participant->birthday) }}</td>
             <td style="text-align: left;">TGL REGISTRASI</td>
             <td style="text-align: left;">: {{ $participant->register_date }}</td>
         </tr>
     </table>
     <table>
-        <td><img src="http://mcu.test/register-transformed.jpg" width="100%" alt=""></td>
+        <td><img src="{{ asset('register-transformed.jpg') }}" width="100%" alt=""></td>
     </table>
     Paket MCU:
     <table style="width: 100%; border-collapse: collapse; font-size:10px; border: 1px solid black;">
