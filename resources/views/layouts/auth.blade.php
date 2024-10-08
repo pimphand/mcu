@@ -96,6 +96,7 @@
         })
     </script>
     @yield('js')
+    @stack('js')
 </body>
 <!-- END: Body-->
 

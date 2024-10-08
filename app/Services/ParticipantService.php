@@ -16,6 +16,7 @@ use App\Models\TandaVital;
 use App\Models\User;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class ParticipantService
 {
@@ -128,6 +129,7 @@ class ParticipantService
 
     public function create(array $data)
     {
+        // dd($data);
         \DB::beginTransaction();
         try {
             $user = Auth::user();
@@ -163,9 +165,9 @@ class ParticipantService
             return $insert;
         } catch (\Throwable $th) {
             \DB::rollBack();
+            Log::error($th);
             return false;
         }
-
     }
 
     public function update(array $data, $id)
@@ -626,7 +628,7 @@ class ParticipantService
             'Gangguan Sangat Berat: lebih dari 90 dB' => 'Gangguan Sangat Berat: lebih dari 90 dB',
         ];
     }
-    private function mapingPaket(array $data)
+    public function mapingPaket(array $data)
     {
         if (isset($data['packet_a'])) {
             $data['packet_a'] = true;
@@ -692,4 +694,6 @@ class ParticipantService
 
         return $data;
     }
+
+    public function import() {}
 }

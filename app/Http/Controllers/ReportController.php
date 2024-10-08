@@ -113,4 +113,22 @@ class ReportController extends Controller
 
         return $pdf->stream(sprintf('%s.pdf', $participant->code));
     }
+
+    public function register($participantId)
+    {
+        $participant = $this->participantService->find($participantId);
+        // dd($participant);
+        $pdf = Pdf::loadView('pages.report.register', compact('participant'))
+
+            ->setOption('margin-top', 0)  // Atur margin atas menjadi 0
+            ->setOption('margin-bottom', 0)  // Atur margin bawah menjadi 0
+            ->setOption('margin-left', 0)  // Atur margin kiri menjadi 0
+            ->setOption('margin-right', 0)
+            ->setOption('header-html', '')
+            ->setOption('footer-html', '');
+
+        return $pdf->stream(sprintf('%s.pdf', $participant->code));
+
+        // return view('pages.report.register', compact('participant'));
+    }
 }

@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\UsersImport;
 use App\Services\DivisiService;
 use App\Services\ParticipantService;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ParticipantController extends Controller
 {
@@ -103,6 +105,7 @@ class ParticipantController extends Controller
     public function detail(string $id)
     {
         $participant = $this->participantService->find($id);
+        // dd($participant->ekg);
         return view('pages.participant.detail', compact('participant'));
     }
 
@@ -479,5 +482,16 @@ class ParticipantController extends Controller
         }
         $data['photo'] = $request->file('photo')->store('photo');
         return $this->participantService->updateFotoKomputer($data, $id);
+    }
+
+    public function import(Request $request)
+    {
+        $data = $request->validate([
+            'file' => 'required|mimes:xlsx,xls'
+        ]);
+
+        Excel::queueImport(new UsersImport(auth()->id(), auth()->user()->client_id, $request->devisi), $request->file('file'));
+
+        return redirect()->route('participant.index')->with('success', 'Data berhasil diimport');
     }
 }

@@ -85,14 +85,21 @@
                     @foreach ($participants as $key => $item)
                     <tr>
                         <td>
-                            <a href="{{ route('participant.edit', $item->id) }}"
+                            <a href="{{ route('participant.edit', $item->id) }}" data-bs-toggle="tooltip"
+                                data-bs-placement="right" data-bs-original-title="Edit Register "
                                 data-url="{{ route('participant.edit', $item->id) }}"
                                 class="btn btn-sm btn-outline-dark edit">
                                 <i data-feather='edit'></i>
                             </a>
-                            <a href="#" class="btn btn-sm btn-outline-danger delete"
+                            <a href="#" class="btn btn-sm btn-outline-danger delete" data-bs-toggle="tooltip"
+                                data-bs-placement="right" data-bs-original-title="Hapus Register "
                                 data-url="{{ route('participant.delete', $item->id) }}">
                                 <i data-feather='trash'></i>
+                            </a>
+                            <a href="{{ route('report.register', $item->id) }}" target="_blank"
+                                class="btn btn-sm btn-outline-warning" data-bs-toggle="tooltip"
+                                data-bs-placement="right" data-bs-original-title="Print Register ">
+                                <i data-feather='file-text'></i>
                             </a>
                         </td>
                         @if ($isRegisterPage)
@@ -263,6 +270,32 @@
                         </tr>
                     </tbody>
                 </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modal-import" tabindex="-1" aria-labelledby="modal-delete" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Import Peserta</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="">
+                <form action="{{ route('participant.import') }}" method="post" enctype="multipart/form-data">
+                    @csrf
+                    <div class="form-group">
+                        <label for="form-label required">File Excel</label>
+                        <input type="file" name="file" id="file" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="form-label required">Devisi</label>
+                        <input type="text" name="devisi" id="devisi" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">Import</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

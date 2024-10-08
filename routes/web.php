@@ -12,6 +12,7 @@ use App\Http\Controllers\ParticipantController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
+use App\Models\Participant;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -165,6 +166,9 @@ Route::middleware('auth')->group(function () {
         Route::get('/detail/foto-komputer/{id}', [ParticipantController::class, 'detailFotoKomputer'])->name('participant.detail.foto.komputer');
         Route::post('/detail/foto-komputer/{id}', [ParticipantController::class, 'updateFotoKomputer'])->name('participant.detail.foto.komputer.update');
 
+
+        //import
+        Route::post('/import', [ParticipantController::class, 'import'])->name('participant.import');
     });
 
     Route::prefix('report')->group(function () {
@@ -182,6 +186,7 @@ Route::middleware('auth')->group(function () {
             Route::get('ekg/{participantId}', [ReportController::class, 'ekg'])->name('report.ekg');
             Route::get('sticker-lab/{participantId}', [ReportController::class, 'stickerLab'])->name('report.sticker.lab');
             Route::get('sticker-5pcs/{participantId}', [ReportController::class, 'sticker5pcs'])->name('report.sticker.5pcs');
+            Route::get('report-register/{id}', [ReportController::class, 'register'])->name('report.register');
         });
     });
 

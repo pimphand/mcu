@@ -19,8 +19,9 @@
                     <ul class="list-unstyled">
                         <li class="mb-75">
                             <span>Usia</span><br>
-                            <span
-                                class="fw-bolder me-25">{{ \Carbon\Carbon::parse($participant->birthday)->diff(\Carbon\Carbon::now('Asia/Jakarta'))->format('%y tahun, %m bulan dan %d hari') }}</span>
+                            <span class="fw-bolder me-25">{{
+                                \Carbon\Carbon::parse($participant->birthday)->diff(\Carbon\Carbon::now('Asia/Jakarta'))->format('%y
+                                tahun, %m bulan dan %d hari') }}</span>
                         </li>
                         <li class="mb-75">
                             <span>Tgl Lahir</span><br>
@@ -62,8 +63,11 @@
                     </div>
                     <div class="card-body">
                         <div class="progress progress-bar-primary">
-                            <div class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="100"
-                                aria-valuemax="100" style="width: 100%"></div>
+                            <div class="progress-bar" role="progressbar"
+                                aria-valuenow="{{ $participant->tandaVital?->selesai ? 100 : '' }}"
+                                aria-valuemin="{{ $participant->tandaVital?->selesai ? 100 :'' }}"
+                                aria-valuemax="{{ $participant->tandaVital?->selesai ? 100 : '0' }}" @if($participant->
+                                tandaVital?->selesai) style="width: 100%" @endif></div>
                         </div>
                     </div>
                 </div>
@@ -86,8 +90,11 @@
                     </div>
                     <div class="card-body">
                         <div class="progress progress-bar-info">
-                            <div class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="100"
-                                aria-valuemax="100" style="width: 100%"></div>
+                            <div class="progress-bar" role="progressbar"
+                                aria-valuenow="{{ $participant->pemeriksaanFisik?->selesai ? 100 : '' }}"
+                                aria-valuemin="{{ $participant->pemeriksaanFisik?->selesai ? 100 :'' }}"
+                                aria-valuemax="{{ $participant->pemeriksaanFisik?->selesai ? 100 : '0' }}"
+                                @if($participant->pemeriksaanFisik?->selesai) style="width: 100%" @endif></div>
                         </div>
                     </div>
                 </div>
@@ -109,8 +116,11 @@
                     </div>
                     <div class="card-body">
                         <div class="progress progress-bar-danger">
-                            <div class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="100"
-                                aria-valuemax="100" style="width: 100%"></div>
+                            <div class="progress-bar" role="progressbar"
+                                aria-valuenow="{{ $participant->laboratorium?->selesai ? 100 : '' }}"
+                                aria-valuemin="{{ $participant->laboratorium?->selesai ? 100 :'' }}"
+                                aria-valuemax="{{ $participant->laboratorium?->selesai ? 100 : '0' }}"
+                                @if($participant->laboratorium?->selesai) style="width: 100%" @endif></div>
                         </div>
                     </div>
                 </div>
@@ -133,130 +143,147 @@
                     </div>
                     <div class="card-body">
                         <div class="progress progress-bar-warning">
-                            <div class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="100"
-                                aria-valuemax="100" style="width: 100%"></div>
+                            <div class="progress-bar" role="progressbar"
+                                aria-valuenow="{{ $participant->radiologi?->selesai ? 100 : '' }}"
+                                aria-valuemin="{{ $participant->radiologi?->selesai ? 100 :'' }}"
+                                aria-valuemax="{{ $participant->radiologi?->selesai ? 100 : '0' }}" @if($participant->
+                                radiologi?->selesai) style="width: 100%" @endif></div>
                         </div>
                     </div>
                 </div>
             </div>
 
             @if ($participant->plan_a)
-                <div class="col-md-4">
-                    <div class="card cursor-pointer edit-detail"
-                        data-url="{{ route('participant.detail.audiometri', $participant->audiometri->id) }}"
-                        data-title="{{ 'Audiometri MCU ID ' . $participant->code . ' | ' . $participant->name }}">
-                        <div class="card-header">
-                            <div>
-                                <h3 class="mb-2">Audiometri</h3>
-                                <p class="card-text">{{ $participant->audiometri?->selesai ? 'SELESAI' : 'BELUM' }}
-                                </p>
-                            </div>
-                            <div class="avatar bg-light-primary p-50 m-0">
-                                <div class="avatar-content">
-                                    <img class="w-100" src="{{ asset('images/dental-checkup.png') }}"
-                                        alt="image">
-                                </div>
-                            </div>
+            <div class="col-md-4">
+                <div class="card cursor-pointer edit-detail"
+                    data-url="{{ route('participant.detail.audiometri', $participant->audiometri->id) }}"
+                    data-title="{{ 'Audiometri MCU ID ' . $participant->code . ' | ' . $participant->name }}">
+                    <div class="card-header">
+                        <div>
+                            <h3 class="mb-2">Audiometri</h3>
+                            <p class="card-text">{{ $participant->audiometri?->selesai ? 'SELESAI' : 'BELUM' }}
+                            </p>
                         </div>
-                        <div class="card-body">
-                            <div class="progress progress-bar-success">
-                                <div class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="100"
-                                    aria-valuemax="100" style="width: 100%"></div>
+                        <div class="avatar bg-light-primary p-50 m-0">
+                            <div class="avatar-content">
+                                <img class="w-100" src="{{ asset('images/dental-checkup.png') }}" alt="image">
                             </div>
                         </div>
                     </div>
+                    <div class="card-body">
+                        <div class="progress progress-bar-success">
+                            <div class="progress-bar" role="progressbar"
+                                aria-valuenow="{{ $participant->audiometri?->selesai ? 100 : '' }}"
+                                aria-valuemin="{{ $participant->audiometri?->selesai ? 100 :'' }}"
+                                aria-valuemax="{{ $participant->audiometri?->selesai ? 100 : '0' }}" @if($participant->
+                                audiometri?->selesai) style="width: 100%" @endif></div>
+                        </div>
+                    </div>
                 </div>
+            </div>
             @endif
 
             @if ($participant->plan_s)
-                <div class="col-md-4">
-                    <div class="card cursor-pointer edit-detail"
-                        data-url="{{ route('participant.detail.spirometri', $participant->rectal->id) }}"
-                        data-title="{{ 'Spirometri MCU ID ' . $participant->code . ' | ' . $participant->name }}">
-                        <div class="card-header">
-                            <div>
-                                <h3 class="mb-2">Spiro</h3>
-                                <p class="card-text">{{ $participant->spirometri?->selesai ? 'SELESAI' : 'BELUM' }}
-                                </p>
-                            </div>
-                            <div class="avatar bg-light-primary p-50 m-0">
-                                <div class="avatar-content">
-                                    <img class="w-100" src="{{ asset('images/dental-checkup.png') }}"
-                                        alt="image">
-                                </div>
-                            </div>
+            <div class="col-md-4">
+                <div class="card cursor-pointer edit-detail"
+                    data-url="{{ route('participant.detail.spirometri', $participant->rectal->id) }}"
+                    data-title="{{ 'Spirometri MCU ID ' . $participant->code . ' | ' . $participant->name }}">
+                    <div class="card-header">
+                        <div>
+                            <h3 class="mb-2">Spiro</h3>
+                            <p class="card-text">{{ $participant->spirometri?->selesai ? 'SELESAI' : 'BELUM' }}
+                            </p>
                         </div>
-                        <div class="card-body">
-                            <div class="progress progress-bar-primary">
-                                <div class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="100"
-                                    aria-valuemax="100" style="width: 100%"></div>
+                        <div class="avatar bg-light-primary p-50 m-0">
+                            <div class="avatar-content">
+                                <img class="w-100" src="{{ asset('images/dental-checkup.png') }}" alt="image">
                             </div>
                         </div>
                     </div>
+                    <div class="card-body">
+                        <div class="progress progress-bar-primary">
+                            <div class="progress-bar" role="progressbar"
+                                aria-valuenow="{{ $participant->spirometri?->selesai ? 100 : '' }}"
+                                aria-valuemin="{{ $participant->spirometri?->selesai ? 100 :'' }}"
+                                aria-valuemax="{{ $participant->spirometri?->selesai ? 100 : '0' }}" @if($participant->
+                                spirometri?->selesai) style="width: 100%" @endif></div>
+                        </div>
+                    </div>
                 </div>
+            </div>
             @endif
 
             @if ($participant->plan_r)
-                <div class="col-md-4">
-                    <div class="card cursor-pointer edit-detail"
-                        data-url="{{ route('participant.detail.rectal', $participant->rectal->id) }}"
-                        data-title="{{ 'Rectal MCU ID ' . $participant->code . ' | ' . $participant->name }}">
-                        <div class="card-header">
-                            <div>
-                                <h3 class="mb-2">Rectal</h3>
-                                <p class="card-text">{{ $participant->rectal?->selesai ? 'SELESAI' : 'BELUM' }}</p>
-                            </div>
-                            <div class="avatar bg-light-primary p-50 m-0">
-                                <div class="avatar-content">
-                                    <img class="w-100" src="{{ asset('images/dental-checkup.png') }}"
-                                        alt="image">
-                                </div>
-                            </div>
+            <div class="col-md-4">
+                <div class="card cursor-pointer edit-detail"
+                    data-url="{{ route('participant.detail.rectal', $participant->rectal->id) }}"
+                    data-title="{{ 'Rectal MCU ID ' . $participant->code . ' | ' . $participant->name }}">
+                    <div class="card-header">
+                        <div>
+                            <h3 class="mb-2">Rectal</h3>
+                            <p class="card-text">{{ $participant->rectal?->selesai ? 'SELESAI' : 'BELUM' }}</p>
                         </div>
-                        <div class="card-body">
-                            <div class="progress progress-bar-primary">
-                                <div class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="100"
-                                    aria-valuemax="100" style="width: 100%"></div>
+                        <div class="avatar bg-light-primary p-50 m-0">
+                            <div class="avatar-content">
+                                <img class="w-100" src="{{ asset('images/dental-checkup.png') }}" alt="image">
                             </div>
                         </div>
                     </div>
+                    <div class="card-body">
+                        <div class="progress progress-bar-primary">
+                            <div class="progress-bar" role="progressbar"
+                                aria-valuenow="{{ $participant->rectal?->selesai ? 100 : '' }}"
+                                aria-valuemin="{{ $participant->rectal?->selesai ? 100 :'' }}"
+                                aria-valuemax="{{ $participant->rectal?->selesai ? 100 : '0' }}" @if($participant->
+                                rectal?->selesai) style="width: 100%" @endif></div>
+                        </div>
+                    </div>
                 </div>
+            </div>
             @endif
 
             @if ($participant->plan_e)
-                <div class="col-md-4">
-                    <div class="card cursor-pointer edit-detail"
-                        data-url="{{ route('participant.detail.ekg', $participant->ekg->id) }}"
-                        data-title="{{ 'EKG MCU ID ' . $participant->code . ' | ' . $participant->name }}">
-                        <div class="card-header">
-                            <div>
-                                <h3 class="mb-2">EKG</h3>
-                                <p class="card-text">{{ $participant->ekg?->selesai ? 'SELESAI' : 'BELUM' }}</p>
-                            </div>
-                            <div class="avatar bg-light-primary p-50 m-0">
-                                <div class="avatar-content">
-                                    <img class="w-100" src="{{ asset('images/dental-checkup.png') }}"
-                                        alt="image">
-                                </div>
-                            </div>
+            <div class="col-md-4">
+                <div class="card cursor-pointer edit-detail"
+                    data-url="{{ route('participant.detail.ekg', $participant->ekg->id) }}"
+                    data-title="{{ 'EKG MCU ID ' . $participant->code . ' | ' . $participant->name }}">
+                    <div class="card-header">
+                        <div>
+                            <h3 class="mb-2">EKG</h3>
+                            <p class="card-text">{{ $participant->ekg?->selesai ? 'SELESAI' : 'BELUM' }}</p>
                         </div>
-                        <div class="card-body">
-                            <div class="progress progress-bar-primary">
-                                <div class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="100"
-                                    aria-valuemax="100" style="width: 100%"></div>
+                        <div class="avatar bg-light-primary p-50 m-0">
+                            <div class="avatar-content">
+                                <img class="w-100" src="{{ asset('images/dental-checkup.png') }}" alt="image">
                             </div>
                         </div>
                     </div>
+                    <div class="card-body">
+                        <div class="progress progress-bar-primary">
+                            <div class="progress-bar" role="progressbar"
+                                aria-valuenow="{{ $participant->ekg?->selesai ? 100 : '' }}"
+                                aria-valuemin="{{ $participant->ekg?->selesai ? 100 :'' }}"
+                                aria-valuemax="{{ $participant->ekg?->selesai ? 100 : '0' }}" @if($participant->
+                                ekg?->selesai) style="width: 100%" @endif></div>
+                        </div>
+                    </div>
                 </div>
+            </div>
             @endif
         </div>
         <div class="row">
             <div class="col-md-7">
                 <a href="#" class="btn btn-primary" id="update-register"
                     data-url="{{ route('participant.update.register', $participant->id) }}">REGISTRASI</a>
-                <a href="#" class="btn btn-info" onclick="window.open('{{ route('report.sticker.lab', $participant->id) }}', '', 'toolbar=yes,scrollbars=yes,resizable=yes,width=900,height=600');">Print Stiker Lab</a>
-                <a href="#" class="btn btn-success" onclick="window.open('{{ route('report.sticker.5pcs', $participant->id) }}', '', 'toolbar=yes,scrollbars=yes,resizable=yes,width=900,height=600');">Print Stiker 5 Pcs</a>
-                <a href="#" class="btn btn-warning" onclick="window.open('{{ route('report.identitas', $participant->id) }}', '', 'toolbar=yes,scrollbars=yes,resizable=yes,width=900,height=600');">Print Identitas</a>
+                <a href="#" class="btn btn-info"
+                    onclick="window.open('{{ route('report.sticker.lab', $participant->id) }}', '', 'toolbar=yes,scrollbars=yes,resizable=yes,width=900,height=600');">Print
+                    Stiker Lab</a>
+                <a href="#" class="btn btn-success"
+                    onclick="window.open('{{ route('report.sticker.5pcs', $participant->id) }}', '', 'toolbar=yes,scrollbars=yes,resizable=yes,width=900,height=600');">Print
+                    Stiker 5 Pcs</a>
+                <a href="#" class="btn btn-warning"
+                    onclick="window.open('{{ route('report.identitas', $participant->id) }}', '', 'toolbar=yes,scrollbars=yes,resizable=yes,width=900,height=600');">Print
+                    Identitas</a>
             </div>
             <div class="col-md-5">
                 <a href="#" class="btn btn-dark edit-detail"
