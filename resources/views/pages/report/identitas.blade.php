@@ -40,7 +40,7 @@
                         <tbody>
                             <tr>
                                 <td style="text-align: center;">
-                                    <p style="padding: 0px; margin: 0px; font-size: 13px;">Klinik dr. Dini <br>
+                                    <p style="padding: 0px; margin: 0px; font-size: 13px;">KLINIK DR. DINI <br>
 		                                MEDICAL CENTER
                                     </p>
                                     <p style="padding: 0px; margin: 0px; font-size: 12px;">No.Izin : 0104220009994 <br>
@@ -56,7 +56,7 @@ Kab.  Sukabumi (0266) 6545065</p>
                     </table>
                 </td>
                 <td>
-                    <img src="data:image/png;base64, {!! base64_encode(\SimpleSoftwareIO\QrCode\Facades\QrCode::size(65)->generate($participant->code)) !!} ">
+                    {{-- <img src="data:image/png;base64, {!! base64_encode(\SimpleSoftwareIO\QrCode\Facades\QrCode::size(65)->generate($participant->code)) !!} "> --}}
                 </td>
             </tr>
         </tbody>
