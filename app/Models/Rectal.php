@@ -13,4 +13,9 @@ class Rectal extends Model
     {
         return $this->belongsTo(Employee::class);
     }
+
+    public function participant()
+    {
+        return $this->belongsTo(Participant::class);
+    }
 }

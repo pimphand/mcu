@@ -6,11 +6,12 @@ $participant = $spirometri->participant;
 $totalItems = count($data);  // Jumlah total data
 $currentPage = $index + 1;
 @endphp
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>SPIROMETRI</title>
+    <title>EKG</title>
     <style>
         table {
             width: 100%;
@@ -65,7 +66,9 @@ $currentPage = $index + 1;
                             <tr>
                                 <td>Tgl Lahir</td>
                                 <td>:</td>
-                                <td>{{ $participant->birthday }}</td>
+                                <td>{{ $participant->birthday }} /
+                                    {{ \Carbon\Carbon::parse($participant->birthday)->diff(\Carbon\Carbon::now())->format('%y tahun %m bulan  %d hari') }}
+                                </td>
                             </tr>
                             <tr>
                                 <td>Usia</td>
@@ -111,9 +114,9 @@ $currentPage = $index + 1;
         </body>
     </table>
     @php
-        $spirometri = $participant->spirometri;
+        $ekg = $participant->ekg;
     @endphp
-    <div class="text-center" style="font-size: 18px; width: 100%; margin-bottom: 10px; margin-top: 10px;">SPIROMETRI</div>
+    <div class="text-center" style="font-size: 18px; width: 100%; margin-bottom: 10px; margin-top: 10px;">EKG</div>
     <table style="border-collapse: collapse;">
         <thead>
             <tr>
@@ -123,26 +126,55 @@ $currentPage = $index + 1;
         </thead>
         <tbody>
             <tr>
-                <td class="border">Hasil Pem. Spirometri</td>
+                <td class="border">Takikardi</td>
                 <td class="border text-center">
-                    {{ $spirometri->hasil }}</td>
+                    {{ $ekg->takikardi ? 'YA' : 'TIDAK' }}</td>
+
             </tr>
             <tr>
-                <td class="border">Retriksi</td>
+                <td class="border">Bradikardi</td>
                 <td class="border text-center">
-                    {{ $spirometri->retriksi }}</td>
+                    {{ $ekg->bradikardi ? 'YA' : 'TIDAK' }}</td>
+
             </tr>
             <tr>
-                <td class="border">Obstruksif</td>
+                <td class="border">Aritmia</td>
                 <td class="border text-center">
-                    {{ $spirometri->obstruksif }}</td>
+                    {{ $ekg->aritmia ? 'YA' : 'TIDAK' }}</td>
+
+            </tr>
+            <tr>
+                <td class="border">Aresst</td>
+                <td class="border text-center">
+                    {{ $ekg->aresst ? 'YA' : 'TIDAK' }}</td>
+
+            </tr>
+            <tr>
+                <td class="border">Penemuan Lain</td>
+                <td class="border text-center">
+                    {{ $ekg->penemuan_lain }}</td>
+
+            </tr>
+            <tr>
+                <td class="border">Keadaan Jantung Normal</td>
+                <td class="border text-center">
+                    {{ $ekg->keadaan_jantung_normal ? 'YA' : 'TIDAK' }}</td>
+
+            </tr>
+            <tr>
+                <td class="border">Kesimpulan Hasil EKG </td>
+                <td class="border text-center">
+                    {!! $ekg->kesimpulan !!}</td>
+
             </tr>
         </tbody>
     </table>
+
     <table style="margin-top: 10px;">
         <tbody>
             <tr>
-                <td style="width: 50%;"></td>
+                <td style="width: 50%;">
+                </td>
                 <td>
                     <table>
                         <tbody>
@@ -154,11 +186,12 @@ $currentPage = $index + 1;
                             </tr>
                             <tr>
                                 <td class="text-center">
-                                    <img src="{{ public_path($spirometri->employee?->ttd ? $spirometri->employee?->ttd : 'images/ttd-kosong.png') }}" width="80" alt="img" alt="img">
+                                    <img src="{{ public_path($ekg->employee?->ttd ? $ekg->employee?->ttd : 'images/ttd-kosong.png') }}"
+                                        width="80" alt="img" alt="img">
                                 </td>
                             </tr>
                             <tr>
-                                <td class="text-center">{{ $spirometri->employee?->nama }}</td>
+                                <td class="text-center">{{ $ekg->employee?->nama }}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -166,13 +199,6 @@ $currentPage = $index + 1;
             </tr>
         </tbody>
     </table>
-
-    <!-- Footer yang menunjukkan nomor halaman -->
-    <div class="footer" style="position: fixed; bottom: 0; left: 0; right: 0; width: 100%; text-align: end; font-size: 12px;">
-        <div class="page-number">
-            Print {{ $currentPage }} dari {{ $totalItems }}
-        </div>
-    </div>
 </body>
 
 </html>

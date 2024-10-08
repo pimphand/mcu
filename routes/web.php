@@ -9,6 +9,7 @@ use App\Http\Controllers\DivisiController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\McuController;
 use App\Http\Controllers\ParticipantController;
+use App\Http\Controllers\RecapController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ReportMultipleController;
 use App\Http\Controllers\RoleController;
@@ -192,8 +193,12 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::middleware('mcu')->get('/participant-register', [ParticipantController::class, 'register'])->name('participant.register');
-    Route::middleware('mcu')->get('/multiple-spirometri', [ReportMultipleController::class, 'spirometri'])->name('multiple.register');
+    Route::middleware('mcu')->get('/multiple-spirometri', [ReportMultipleController::class, 'spirometri'])->name('multiple.spirometri');
     Route::middleware('mcu')->get('/multiple-identitas', [ReportMultipleController::class, 'identitas'])->name('multiple.identitas');
+    Route::middleware('mcu')->get('/multiple-ekg', [ReportMultipleController::class, 'ekg'])->name('multiple.ekg');
+    Route::middleware('mcu')->get('/multiple-rectal', [ReportMultipleController::class, 'rectal'])->name('multiple.rectal');
+    Route::middleware('mcu')->get('/multiple-radiologi', [ReportMultipleController::class, 'radiologi'])->name('multiple.radiologi');
+    Route::middleware('mcu')->get('/multiple-pemeriksaan-fisik', [ReportMultipleController::class, 'pemFisik'])->name('multiple.pemFisik');
 
     Route::middleware('mcu')->get('/participant-print-mcu', action: [ParticipantController::class, 'printMCU'])->name('participant.print.mcu');
 
@@ -201,4 +206,5 @@ Route::middleware('auth')->group(function () {
     //     Route::get('/', [ParticipantController::class,'peserta'])->name('peserta.index');
     // });
 
+    Route::get('report-hasil', [RecapController::class, 'results'])->name('report.results');
 });

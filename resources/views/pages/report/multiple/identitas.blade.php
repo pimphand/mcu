@@ -2,7 +2,6 @@
 <!DOCTYPE html>
 <html lang="en">
 @php
-$participant = $spirometri->participant;
 $totalItems = count($data);  // Jumlah total data
 $currentPage = $index + 1;
 @endphp

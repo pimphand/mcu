@@ -583,15 +583,14 @@ class ParticipantService
     public function getKesimpulan()
     {
         return [
-            'FIT ON JOB' => 'FIT ON JOB',
+            'FIT' => 'FIT',
             'FIT WITH RETRICTION' => 'FIT WITH RETRICTION',
-            'TEMPORARY UNFIT' => 'TEMPORARY UNFIT',
+            'UNFIT' => 'UNFIT',
             '---- UNTUK GSI 1 PILIH DIBAWAH INI ----' => '---- UNTUK GSI PILIH DIBAWAH INI ----',
             'GSI1 - FIT WITH JOB' => 'FIT WITH JOB',
             'GSI1 - FIT WITH NOTE' => 'FIT WITH NOTE',
-            'GSI1 - TEMPORARY UNFIT' => 'TEMPORARY UNFIT',
-            'GSI1 - DEFINITELY UNFIT' => 'DEFINITELY UNFIT',
             'GSI1 - UNFIT' => 'UNFIT',
+            'GSI1 - DEFINITELY UNFIT' => 'DEFINITELY UNFIT',
         ];
     }
     public function getRetriksi()

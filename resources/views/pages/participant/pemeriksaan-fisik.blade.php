@@ -328,12 +328,15 @@
         <div class="col-md-3">
             <div class="form-group">
                 <label for="" class="form-label">Palpasi</label>
-                <select name="paru_palpasi" id="paru_palpasi" class="form-select">
+                {{-- <select name="paru_palpasi" id="paru_palpasi" class="form-select">
                     <option value="">Pilih</option>
                     @foreach ($participants->getPalpasi() as $key => $item)
                         <option value="{{ $key }}" {{ $pemeriksaanFisik->paru_palpasi == $key ? 'selected' : null }}>{{ $item }}</option>
                     @endforeach
-                </select>
+                </select> --}}
+
+                <input type="text" name="paru_palpasi" id="paru_palpasi"
+                    class="form-control" value="{{ $pemeriksaanFisik->paru_palpasi }}">
             </div>
         </div>
         <div class="col-md-3">
@@ -662,9 +665,9 @@ document.getElementById('nilai_normal').addEventListener('click', function (e) {
 
     document.getElementById('paru_auskultasi_ronkhi').value = '- / -';
     document.getElementById('paru_auskultasi_wheezing').value = '- / -';
-    document.getElementById('paru_palpasi').value = 'IC TERABA';
+    document.getElementById('paru_palpasi').value = 'Revitasi ( - )';
     document.getElementById('paru_perkusi').value = 'SONOR';
-    document.getElementById('abdomen_inspeksi').value = 'TIDAK';
+    document.getElementById('abdomen_inspeksi').value = 'SUPEL';
     document.getElementById('abdomen_auskultasi').value = 'BISING USUS NORMAL';
     document.getElementById('abdomen_palpasi').value = 'Nyeri Tekan Epigastrium ( - )';
     document.getElementById('abdomen_perkusi').value = 'TIMPANI';

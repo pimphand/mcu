@@ -73,40 +73,40 @@
 
             <div class="row mt-2">
                 <div class="col-md-3">
-                    <input type="text" id="start" class="form-sm form-control "
+                    <input type="text" id="start" class="form-sm form-control" value="1"
                             placeholder="Dari No" />
                 </div>
                 <div class="col-md-3">
-                    <input type="text" id="end" class="form-sm form-control "
+                    <input type="text" id="end" class="form-sm form-control " value="50"
                             placeholder="Sampai No" />
                 </div>
                 <div class="col-md-6">
                 <div class="btn-group" role="group" aria-label="First group">
-                    <button type="button" class="btn btn-sm btn-outline-info waves-effect import" data-url="{{ route('multiple.register') }}">
+                    <button type="button" class="btn btn-sm btn-outline-info waves-effect import" data-type="identitas" data-url="{{ route('multiple.identitas') }}">
                      Stiker
                     </button>
                     <button type="button" class="btn btn-sm btn-outline-info waves-effect import">
                      Resume
                     </button>
-                    <button type="button" class="btn btn-sm btn-outline-primary waves-effect import">
+                    <button type="button" class="btn btn-sm btn-outline-primary waves-effect import"  data-url="{{ route('multiple.pemFisik') }}">
                       Pem. Fisik
                     </button>
                     <button type="button" class="btn btn-sm btn-outline-primary waves-effect import">
                      Lab
                     </button>
-                    <button type="button" class="btn btn-sm btn-outline-warning waves-effect import">
+                    <button type="button" class="btn btn-sm btn-outline-warning waves-effect import" data-url="{{ route('multiple.radiologi') }}">
                      Rad
                     </button>
                     <button type="button" class="btn btn-sm btn-outline-warning waves-effect import">
                      Audiometri
                     </button>
-                    <button type="button" class="btn btn-sm btn-outline-success waves-effect import">
+                    <button type="button" class="btn btn-sm btn-outline-success waves-effect import" data-url="{{ route('multiple.ekg') }}">
                      EKG
                     </button>
-                    <button type="button" class="btn btn-sm btn-outline-success waves-effect import">
+                    <button type="button" class="btn btn-sm btn-outline-success waves-effect import" data-url="{{ route('multiple.spirometri') }}">
                      Spiro
                     </button>
-                    <button type="button" class="btn btn-sm btn-outline-success waves-effect import">
+                    <button type="button" class="btn btn-sm btn-outline-success waves-effect import" data-url="{{ route('multiple.rectal') }}">
                      Rectal
                     </button>
                   </div>
@@ -159,12 +159,13 @@
 
                             </td>
                             <td class="border-bottom border-top text-center hilang">
-                                @if($item->tandaVital->selesai)
+                            onproses
+                                {{-- @if($item->tandaVital->selesai)
                                     <button type="button" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-original-title="Print Tanda Vital"
                                     class="text-center btn btn-sm btn-info font-weight-medium btn-circle printFisik" onclick="window.open('{{ route('report.tanda.vital', $item->id) }}', '', 'toolbar=yes,scrollbars=yes,resizable=yes,width=900,height=600');"> <i class="fa fa-print" aria-hidden="true"></i></button>
                                @else
                                     <span class="text-center text-danger">TIDAK</span>
-                               @endif
+                               @endif --}}
                             </td>
                             <td class="border-bottom border-top text-center hilang">
                                @if($item->pemeriksaanFisik->selesai)
@@ -259,7 +260,13 @@
             let url = $(this).data('url');
             let start = $('#start').val();
             let end = $('#end').val();
-            url = url + '?start=' + start + '&end=' + end+"filter[date_range]="+ $('#fp-range').val()+`&filter[participant.client_id]=${$('#client_id').val()}`;
+
+            if($(this).data('type') == "identitas"){
+                 url = url + '?start=' + start + '&end=' + end+"filter[date_range]="+ $('#fp-range').val()+`&filter[client_id]=${$('#client_id').val()}`;
+            }else{
+                url = url + '?start=' + start + '&end=' + end+"filter[date_range]="+ $('#fp-range').val()+`&filter[participant.client_id]=${$('#client_id').val()}`;
+            }
+
             window.open(url, '', 'toolbar=yes,scrollbars=yes,resizable=yes,width=900,height=600');
         });
 
