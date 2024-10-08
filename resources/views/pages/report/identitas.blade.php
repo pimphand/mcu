@@ -7,6 +7,9 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>IDENTITAS</title>
     <style>
+        @page {
+            size: 150mm 100mm;
+        }
         table {
             width: 100%;
         }
@@ -20,20 +23,51 @@
         }
 
         td {
-            padding: 5px;
+
         }
     </style>
 </head>
 
 <body>
-    @include('pages.report.header', $participant)
     <table>
-
-        <body>
+        <tbody>
             <tr>
                 <td>
+                    <img src="{{ public_path('logo.png') }}" width="60" alt="img" alt="img">
+                </td>
+                <td class="text-center">
                     <table>
                         <tbody>
+                            <tr>
+                                <td style="text-align: center;">
+                                    <p style="padding: 0px; margin: 0px; font-size: 13px;">Klinik dr. Dini <br>
+		                                MEDICAL CENTER
+                                    </p>
+                                    <p style="padding: 0px; margin: 0px; font-size: 12px;">No.Izin : 0104220009994 <br>
+Jln. Raya Karang Hilir no 815 Desa Karangtengah Kec. Cibadak
+Kab.  Sukabumi (0266) 6545065</p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-center" style="font-size: 10px; color: rgb(157, 155, 155);">
+                                    {{ $participant->client?->address }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+                <td>
+                    <img src="data:image/png;base64, {!! base64_encode(\SimpleSoftwareIO\QrCode\Facades\QrCode::size(65)->generate($participant->code)) !!} ">
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <hr>
+
+    <table>
+       <tr>
+                <td>
+                    <table>
+                        <tbody style="padding: 0px; margin: 0px; font-size: 11px;">
                             <tr>
                                 <td>MCU ID</td>
                                 <td>:</td>
@@ -84,10 +118,10 @@
                     </table>
                 </td>
                 <td>
-                    <img src="data:image/png;base64, {!! base64_encode(\SimpleSoftwareIO\QrCode\Facades\QrCode::size(180)->generate(route('login.peserta.token', $participant->code))) !!} ">
+                    <img src="data:image/png;base64, {!! base64_encode(\SimpleSoftwareIO\QrCode\Facades\QrCode::size(150)->generate(route('login.peserta.token', $participant->code))) !!} ">
                 </td>
             </tr>
-        </body>
+
     </table>
 
 </body>

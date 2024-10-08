@@ -36,7 +36,7 @@ Kab.  Sukabumi (0266) 6545065</p>
         <tbody>
             <tr>
                 <td>
-                    <img src="{{ public_path('images/dental-checkup.png') }}" width="80" alt="img" alt="img">
+                    <img src="{{ public_path('logo.png') }}" width="80" alt="img" alt="img">
                 </td>
                 <td class="text-center">
                     <table>
