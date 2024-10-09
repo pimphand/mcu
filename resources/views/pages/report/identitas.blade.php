@@ -44,13 +44,10 @@
 		                                MEDICAL CENTER
                                     </p>
                                     <p style="padding: 0px; margin: 0px; font-size: 12px;">No.Izin : 0104220009994 <br>
-Jln. Raya Karang Hilir no 815 Desa Karangtengah Kec. Cibadak
-Kab.  Sukabumi (0266) 6545065</p>
+                                        Jln. Raya Karang Hilir no 815 Desa Karangtengah Kec. Cibadak
+                                        Kab.  Sukabumi (0266) 6545065
+                                    </p>
                                 </td>
-                            </tr>
-                            <tr>
-                                <td class="text-center" style="font-size: 10px; color: rgb(157, 155, 155);">
-                                    {{ $participant->client?->address }}</td>
                             </tr>
                         </tbody>
                     </table>

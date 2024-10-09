@@ -52,10 +52,6 @@ Jln. Raya Karang Hilir no 815 Desa Karangtengah Kec. Cibadak
 Kab.  Sukabumi (0266) 6545065</p>
                                 </td>
                             </tr>
-                            <tr>
-                                <td class="text-center" style="font-size: 10px; color: rgb(157, 155, 155);">
-                                    {{ $participant->client?->address }}</td>
-                            </tr>
                         </tbody>
                     </table>
                 </td>
