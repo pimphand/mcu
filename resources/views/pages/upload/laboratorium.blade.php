@@ -1,6 +1,6 @@
 @extends('layouts.main')
 
-@section('title', 'Upload Validasi Dokter')
+@section('title', 'Upload Laboratorium')
 
 @section('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/vendors/css/pickers/pickadate/pickadate.css') }}">
@@ -10,6 +10,9 @@
 
 @section('content')
     <div class="card">
+        <div class="card-header">
+           <h3> Upload Laboratorium</h3>
+        </div>
         <div class="card-body">
             <form action="{{ route('participant.print.mcu') }}" method="get">
                 <div class="row">
@@ -65,7 +68,6 @@
                                     </button>
                                 </div>
                             </div>
-
                         </div>
                     </form>
                     <div id="progress">
@@ -128,46 +130,18 @@
             let formData = new FormData(form);  // Buat objek FormData dari elemen form
 
             $.ajax({
-                url: "{{ route('upload.validasi.dokter') }}",  // URL untuk mengirim data
+                url: "{{ route('upload.laboratorium') }}",  // URL untuk mengirim data
                 type: 'POST',
-                data: formData,  // Data yang dikirim adalah FormData
-                processData: false,  // Jangan proses data
-                contentType: false,  // Jangan tentukan jenis konten (biarkan browser melakukannya)
+                data: formData,
+                processData: false,
+                contentType: false,
                 beforeSend: function() {
-                    // Mungkin tampilkan loading atau disable tombol upload
                     $('#upload_btn').attr('disabled', true).text('Uploading...');
                 },
                 success: function(response) {
-                    alert(`${response.data.length} Data berhasil di import`);
-
-                    // Clear the current data in the tbody
-                    $('#data').empty();
-
-                    // Get today's date formatted
-                    var todayDate = new Date().toLocaleDateString(); // Format today's date as needed
-
-                    // Iterate over the response data
-                    $.each(response.data, function(index, item) {
-                        // Create a new row for each item
-                        var row = '<tr>' +
-                            '<td>' + (index + 1) + '</td>' + // Use index + 1 for 1-based index
-                            '<td>' + todayDate + '</td>' + // Today's date
-                            '<td>' + (new Date((item.tgl_mcu - 25569) * 86400 * 1000).toLocaleDateString()) + '</td>' +
-                            '<td>' + item.no_mcu + '</td>' +
-                            '<td>' + item.nama + '</td>' +
-                            '<td>' + item.gender + '</td>' +
-                            '<td>' + item.hasil_mcu + '</td>' +
-                            '<td>' + item.catatan + '</td>' +
-                            '<td>' + item.dokter_pemeriksa + '</td>' +
-                            '</tr>';
-
-                        // Append the new row to the tbody
-                        $('#data').append(row);
-                    });
+                    alert('Data sedang di proses')
                 },
                 error: function(xhr, status, error) {
-                    // Proses jika terjadi error
-                    console.log(xhr.responseText);
                     alert('Upload failed. Please try again.');
                 },
                 complete: function() {
@@ -177,6 +151,4 @@
             });
         });
     </script>
-
-
 @endsection
