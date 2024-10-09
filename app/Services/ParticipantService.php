@@ -212,106 +212,199 @@ class ParticipantService
     {
         $user = Auth::user();
         $data['updated_by'] = $user->id;
-        $data['merokok'] = isset($data['merokok']);
-        $data['alergi'] = isset($data['alergi']);
-        $data['keluhan_utama'] = isset($data['keluhan_utama']);
-        $data['konsumsi_alkohol'] = isset($data['konsumsi_alkohol']);
-        $data['riwayat_penyakit_sekarang'] = isset($data['riwayat_penyakit_sekarang']);
-        $data['riwayat_penyakit_terdahulu'] = isset($data['riwayat_penyakit_terdahulu']);
-        $data['riwayat_trauma'] = isset($data['riwayat_trauma']);
-        $data['selesai'] = isset($data['selesai']);
-        $data['ttv_diperiksa'] = isset($data['ttv_diperiksa']);
-        $data['vaksin_hepatitis'] = isset($data['vaksin_hepatitis']);
-        $data['vaksin_tetanus'] = isset($data['vaksin_tetanus']);
-        $data['ibu_hamil'] = isset($data['ibu_hamil']);
-        $updated = TandaVital::where(['participant_id' => $participantId])->update($data);
-        return ['success' => $updated];
+
+        // Normalize boolean fields if needed
+        $data['merokok'] = isset($data['merokok']) ? 1 : 0;
+        $data['alergi'] = isset($data['alergi']) ? 1 : 0;
+        $data['keluhan_utama'] = isset($data['keluhan_utama']) ? 1 : 0;
+        $data['konsumsi_alkohol'] = isset($data['konsumsi_alkohol']) ? 1 : 0;
+        $data['riwayat_penyakit_sekarang'] = isset($data['riwayat_penyakit_sekarang']) ? 1 : 0;
+        $data['riwayat_penyakit_terdahulu'] = isset($data['riwayat_penyakit_terdahulu']) ? 1 : 0;
+        $data['riwayat_trauma'] = isset($data['riwayat_trauma']) ? 1 : 0;
+        $data['selesai'] = isset($data['selesai']) ? 1 : 0;
+        $data['ttv_diperiksa'] = isset($data['ttv_diperiksa']) ? 1 : 0;
+        $data['vaksin_hepatitis'] = isset($data['vaksin_hepatitis']) ? 1 : 0;
+        $data['vaksin_tetanus'] = isset($data['vaksin_tetanus']) ? 1 : 0;
+        $data['ibu_hamil'] = isset($data['ibu_hamil']) ? 1 : 0;
+
+        // Use updateOrCreate to find by participant_id and update or create accordingly
+        $tandaVital = TandaVital::updateOrCreate(
+            ['participant_id' => $participantId], // Conditions to find the record
+            $data // Data to update or create
+        );
+
+        return [
+            'success' => true,
+            'message' => 'Tanda Vital record saved successfully.',
+            'data' => $tandaVital // Returning the created or updated record
+        ];
     }
 
     public function updateEkg(array $data, $participantId)
     {
         $user = Auth::user();
         $data['updated_by'] = $user->id;
-        $data['aresst'] = isset($data['aresst']);
-        $data['aritmia'] = isset($data['aritmia']);
-        $data['bradikardi'] = isset($data['bradikardi']);
-        $data['keadaan_jantung_normal'] = isset($data['keadaan_jantung_normal']);
-        $data['selesai'] = isset($data['selesai']);
-        $data['takikardi'] = isset($data['takikardi']);
-        $updated = Ekg::where(['participant_id' => $participantId])->update($data);
-        return ['success' => $updated];
+        $data['created_by'] = $user->id;
+
+        // Normalize boolean fields to store 1 or 0
+        $booleanFields = ['aresst', 'aritmia', 'bradikardi', 'keadaan_jantung_normal', 'selesai', 'takikardi'];
+        foreach ($booleanFields as $field) {
+            $data[$field] = isset($data[$field]) ? 1 : 0; // Convert to 1 (true) or 0 (false)
+        }
+
+        // Use updateOrCreate to find by participant_id and update or create accordingly
+        $updated = Ekg::updateOrCreate(
+            ['participant_id' => $participantId], // Conditions to find the record
+            $data // Data to update or create
+        );
+
+        return ['success' => true, 'data' => $updated];
     }
 
     public function updateRectal(array $data, $participantId)
     {
         $user = Auth::user();
         $data['updated_by'] = $user->id;
-        $data['selesai'] = isset($data['selesai']);
-        $updated = Rectal::where(['participant_id' => $participantId])->update($data);
-        return ['success' => $updated];
+
+        // Normalize boolean fields if needed
+        $data['selesai'] = isset($data['selesai']) ? 1 : 0; // Convert to 1 (true) or 0 (false)
+
+        // Use updateOrCreate to find by participant_id and update or create accordingly
+        $rectal = Rectal::updateOrCreate(
+            ['participant_id' => $participantId], // Conditions to find the record
+            $data // Data to update or create
+        );
+
+        return [
+            'success' => true,
+            'message' => 'Rectal record saved successfully.',
+            'data' => $rectal // Returning the created or updated record
+        ];
     }
 
     public function updateAudiometri(array $data, $participantId)
     {
         $user = Auth::user();
         $data['updated_by'] = $user->id;
-        $data['selesai'] = isset($data['selesai']);
-        $updated = Audiometri::where(['participant_id' => $participantId])->update($data);
-        return ['success' => $updated];
+
+        // Normalize boolean fields if needed
+        $data['selesai'] = isset($data['selesai']) ? 1 : 0; // Convert to 1 (true) or 0 (false)
+
+        $audiometri = Audiometri::updateOrCreate(
+            ['participant_id' => $participantId], // Conditions to find the record
+            $data // Data to update or create
+        );
+
+        return [
+            'success' => true,
+            'message' => 'Audiometri record saved successfully.',
+            'data' => $audiometri // Returning the created or updated record
+        ];
     }
     public function updateSpirometri(array $data, $participantId)
     {
         $user = Auth::user();
         $data['updated_by'] = $user->id;
-        $data['selesai'] = isset($data['selesai']);
-        $data['lainnya'] = isset($data['lainnya']);
-        $data['mixed'] = isset($data['mixed']);
-        $data['normal'] = isset($data['normal']);
-        $data['obstructive'] = isset($data['obstructive']);
-        $data['restrictive'] = isset($data['restrictive']);
-        $updated = Spirometri::where(['participant_id' => $participantId])->update($data);
-        return ['success' => $updated];
+
+        // Normalize boolean fields if needed
+        $data['selesai'] = isset($data['selesai']) ? 1 : 0; // Convert to 1 (true) or 0 (false)
+        $data['lainnya'] = isset($data['lainnya']) ? 1 : 0;
+        $data['mixed'] = isset($data['mixed']) ? 1 : 0;
+        $data['normal'] = isset($data['normal']) ? 1 : 0;
+        $data['obstructive'] = isset($data['obstructive']) ? 1 : 0;
+        $data['restrictive'] = isset($data['restrictive']) ? 1 : 0;
+
+        // Use updateOrCreate to find by participant_id and update or create accordingly
+        $spirometri = Spirometri::updateOrCreate(
+            ['participant_id' => $participantId], // Conditions to find the record
+            $data // Data to update or create
+        );
+
+        return [
+            'success' => true,
+            'message' => 'Spirometri record saved successfully.',
+            'data' => $spirometri // Returning the created or updated record
+        ];
     }
 
     public function updateRadiologi(array $data, $participantId)
     {
         $user = Auth::user();
         $data['updated_by'] = $user->id;
-        $data['selesai'] = isset($data['selesai']);
-        $updated = Radiologi::where(['participant_id' => $participantId])->update($data);
-        return ['success' => $updated];
+
+        // Normalize the 'selesai' field to boolean
+        $data['selesai'] = isset($data['selesai']) ? 1 : 0; // Convert to 1 (true) or 0 (false)
+
+        // Use updateOrCreate to find by participant_id and update or create accordingly
+        $radiologi = Radiologi::updateOrCreate(
+            ['participant_id' => $participantId], // Conditions to find the record
+            $data // Data to update or create
+        );
+
+        return [
+            'success' => true,
+            'message' => 'Radiologi record saved successfully.',
+            'data' => $radiologi // Returning the created or updated record
+        ];
     }
+
     public function updateLaboratorium(array $data, $participantId)
     {
         $user = Auth::user();
         $data['updated_by'] = $user->id;
-        $data['selesai'] = isset($data['selesai']);
-        $updated = Laboratorium::where(['participant_id' => $participantId])->update($data);
-        return ['success' => $updated];
+
+        // Normalize the 'selesai' field to boolean
+        $data['selesai'] = isset($data['selesai']) ? 1 : 0; // Convert to 1 (true) or 0 (false)
+
+        // Use updateOrCreate to find by participant_id and update or create accordingly
+        $laboratorium = Laboratorium::updateOrCreate(
+            ['participant_id' => $participantId], // Conditions to find the record
+            $data // Data to update or create
+        );
+
+        return [
+            'success' => true,
+            'message' => 'Laboratorium record saved successfully.',
+            'data' => $laboratorium // Returning the created or updated record
+        ];
     }
+
     public function updatePemeriksaanFisik(array $data, $participantId)
     {
         $user = Auth::user();
         $data['updated_by'] = $user->id;
-        $data['audiometri_diperiksa'] = isset($data['audiometri_diperiksa']);
-        $data['ekg_diperiksa'] = isset($data['ekg_diperiksa']);
-        $data['ekg_bdn'] = isset($data['ekg_bdn']);
-        $data['ekg_tidak_diperiksa'] = isset($data['ekg_tidak_diperiksa']);
-        $data['fisik_diperiksa'] = isset($data['fisik_diperiksa']);
-        $data['kepala'] = isset($data['kepala']);
-        $data['lab_diperiksa'] = isset($data['lab_diperiksa']);
-        $data['neurologis_bdn'] = isset($data['neurologis_bdn']);
-        $data['neurologis_tidak_diperiksa'] = isset($data['neurologis_tidak_diperiksa']);
-        $data['radiologi_diperiksa'] = isset($data['radiologi_diperiksa']);
-        $data['rectal_diperiksa'] = isset($data['rectal_diperiksa']);
-        $data['selesai_visus'] = isset($data['selesai_visus']);
-        $data['spiro_diperiksa'] = isset($data['spiro_diperiksa']);
-        $data['tenggorokan'] = isset($data['tenggorokan']);
-        $data['visus_diperiksa'] = isset($data['visus_diperiksa']);
-        $data['selesai'] = isset($data['selesai']);
-        $updated = PemeriksaanFisik::where(['participant_id' => $participantId])->update($data);
-        return ['success' => $updated];
+
+        // Normalize boolean fields
+        $data['audiometri_diperiksa'] = isset($data['audiometri_diperiksa']) ? 1 : 0;
+        $data['ekg_diperiksa'] = isset($data['ekg_diperiksa']) ? 1 : 0;
+        $data['ekg_bdn'] = isset($data['ekg_bdn']) ? 1 : 0;
+        $data['ekg_tidak_diperiksa'] = isset($data['ekg_tidak_diperiksa']) ? 1 : 0;
+        $data['fisik_diperiksa'] = isset($data['fisik_diperiksa']) ? 1 : 0;
+        $data['kepala'] = isset($data['kepala']) ? 1 : 0;
+        $data['lab_diperiksa'] = isset($data['lab_diperiksa']) ? 1 : 0;
+        $data['neurologis_bdn'] = isset($data['neurologis_bdn']) ? 1 : 0;
+        $data['neurologis_tidak_diperiksa'] = isset($data['neurologis_tidak_diperiksa']) ? 1 : 0;
+        $data['radiologi_diperiksa'] = isset($data['radiologi_diperiksa']) ? 1 : 0;
+        $data['rectal_diperiksa'] = isset($data['rectal_diperiksa']) ? 1 : 0;
+        $data['selesai_visus'] = isset($data['selesai_visus']) ? 1 : 0;
+        $data['spiro_diperiksa'] = isset($data['spiro_diperiksa']) ? 1 : 0;
+        $data['tenggorokan'] = isset($data['tenggorokan']) ? 1 : 0;
+        $data['visus_diperiksa'] = isset($data['visus_diperiksa']) ? 1 : 0;
+        $data['selesai'] = isset($data['selesai']) ? 1 : 0;
+
+        // Use updateOrCreate to find by participant_id and update or create accordingly
+        $pemeriksaanFisik = PemeriksaanFisik::updateOrCreate(
+            ['participant_id' => $participantId], // Conditions to find the record
+            $data // Data to update or create
+        );
+
+        return [
+            'success' => true,
+            'message' => 'Pemeriksaan Fisik record saved successfully.',
+            'data' => $pemeriksaanFisik // Returning the created or updated record
+        ];
     }
+
 
     public function updateFotoKamera(array $data, $participantId)
     {

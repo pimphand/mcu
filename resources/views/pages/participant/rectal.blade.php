@@ -17,7 +17,7 @@
             <label for="" class="form-label required">Salmonella Thypi</label>
         </div>
         <div class="col-md-4">
-            <input type="text" name="salmonella_thypi" id="salmonella_thypi" class="form-control" value="{{ $rectal->salmonella_thypi }}">
+            <input type="text" name="salmonella_thypi" id="salmonella_thypi" class="form-control" value="{{ $rectal?->salmonella_thypi }}">
         </div>
         <div class="col-md-4">
             Negatif
@@ -28,7 +28,7 @@
             <label for="" class="form-label required">Shigella SP</label>
         </div>
         <div class="col-md-4">
-            <input type="text" name="shigella_sp" id="shigella_sp" class="form-control"value="{{ $rectal->shigella_sp }}">
+            <input type="text" name="shigella_sp" id="shigella_sp" class="form-control"value="{{ $rectal?->shigella_sp }}">
         </div>
         <div class="col-md-4">
             Negatif
@@ -39,7 +39,7 @@
             <label for="" class="form-label required">E. Coli Pathogen</label>
         </div>
         <div class="col-md-4">
-            <input type="text" name="e_coli_pathogen" id="e_coli_pathogen" class="form-control" value="{{ $rectal->e_coli_pathogen }}">
+            <input type="text" name="e_coli_pathogen" id="e_coli_pathogen" class="form-control" value="{{ $rectal?->e_coli_pathogen }}">
         </div>
         <div class="col-md-4">
             Negatif
@@ -49,16 +49,16 @@
         <div class="col-md-6">
             <div class="form-group">
                 <label for="" class="form-label">Kesimpulan Hasil</label>
-                <textarea name="kesimpulan" id="kesimpulan" cols="30" rows="2" class="form-control">{{ $rectal->kesimpulan }}</textarea>
+                <textarea name="kesimpulan" id="kesimpulan" cols="30" rows="2" class="form-control">{{ $rectal?->kesimpulan }}</textarea>
             </div>
         </div>
         <div class="col-md-4">
             <div class="form-group">
                 <label class="form-label required" for="">Petugas Pemeriksa</label>
                 <select name="employee_id" id="" class="form-control form-select employee_id" required>
-                    {{-- <option value="{{ $rectal->employee?->id }}">{{ $rectal->employee?->nama }}</option> --}}
+                    {{-- <option value="{{ $rectal?->employee?->id }}">{{ $rectal?->employee?->nama }}</option> --}}
                     @foreach($employees as $employee)
-                        <option  value="{{ $employee->id }}" {{$employee->id == $rectal->employee?->id ? "selected" : ''  }}>{{ $employee?->nama }}</option>
+                        <option  value="{{ $employee->id }}" {{$employee->id == $rectal?->employee?->id ? "selected" : ''  }}>{{ $employee?->nama }}</option>
                     @endforeach
                 </select>
                 <div class="invalid-feedback">Please select a valid state.</div>
@@ -71,7 +71,7 @@
                 <label class="form-check-label h-3 fw-bold" for="">Selesai
                     &nbsp;</label>
                 <div class="form-check form-check-success form-switch ml-2">
-                    <input type="checkbox" name="selesai" class="form-check-input" id="selesai" {{ $rectal->selesai ? 'checked' : null }} />
+                    <input type="checkbox" name="selesai" class="form-check-input" id="selesai" {{ $rectal?->selesai ? 'checked' : null }} />
                 </div>
             </div>
         </div>

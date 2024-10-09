@@ -18,7 +18,7 @@
                 <label class="form-check-label h-3 fw-bold" for="">NORMAL
                     &nbsp;</label>
                 <div class="form-check form-check-success form-switch ml-2">
-                    <input type="checkbox" name="normal" class="form-check-input hasil-spirometri" id="normal" {{ $spirometri->normal ? 'checked' : null }} />
+                    <input type="checkbox" name="normal" class="form-check-input hasil-spirometri" id="normal" {{ $spirometri?->normal ? 'checked' : null }} />
                 </div>
             </div>
         </div>
@@ -27,7 +27,7 @@
                 <label class="form-check-label h-3 fw-bold" for="">RESTRICTIVE
                     &nbsp;</label>
                 <div class="form-check form-check-success form-switch ml-2">
-                    <input type="checkbox" name="restrictive" class="form-check-input hasil-spirometri" id="restrictive" {{ $spirometri->restrictive ? 'checked' : null }} />
+                    <input type="checkbox" name="restrictive" class="form-check-input hasil-spirometri" id="restrictive" {{ $spirometri?->restrictive ? 'checked' : null }} />
                 </div>
             </div>
         </div>
@@ -36,7 +36,7 @@
                 <label class="form-check-label h-3 fw-bold" for="">OBSTRUCTIVE
                     &nbsp;</label>
                 <div class="form-check form-check-success form-switch ml-2">
-                    <input type="checkbox" name="obstructive" class="form-check-input hasil-spirometri" id="obstructive" {{ $spirometri->obstructive ? 'checked' : null }} />
+                    <input type="checkbox" name="obstructive" class="form-check-input hasil-spirometri" id="obstructive" {{ $spirometri?->obstructive ? 'checked' : null }} />
                 </div>
             </div>
         </div>
@@ -45,7 +45,7 @@
                 <label class="form-check-label h-3 fw-bold" for="">MIXED
                     &nbsp;</label>
                 <div class="form-check form-check-success form-switch ml-2">
-                    <input type="checkbox" name="mixed" class="form-check-input hasil-spirometri" id="mixed" {{ $spirometri->mixed ? 'checked' : null }} />
+                    <input type="checkbox" name="mixed" class="form-check-input hasil-spirometri" id="mixed" {{ $spirometri?->mixed ? 'checked' : null }} />
                 </div>
             </div>
         </div>
@@ -54,12 +54,12 @@
                 <label class="form-check-label h-3 fw-bold" for="">LAINNYA
                     &nbsp;</label>
                 <div class="form-check form-check-success form-switch ml-2">
-                    <input type="checkbox" name="lainnya" class="form-check-input hasil-spirometri" id="lainnya" {{ $spirometri->lainnya ? 'checked' : null }} />
+                    <input type="checkbox" name="lainnya" class="form-check-input hasil-spirometri" id="lainnya" {{ $spirometri?->lainnya ? 'checked' : null }} />
                 </div>
             </div>
         </div>
         <div class="col-md-12">
-            <input type="text" name="hasil" id="hasil" class="form-control" value="{{ $spirometri->hasil }}">
+            <input type="text" name="hasil" id="hasil" class="form-control" value="{{ $spirometri?->hasil }}">
         </div>
     </div>
     <div class="row mt-3">
@@ -68,7 +68,7 @@
                 <label class="form-label required" for="">Petugas Pemeriksa</label>
                 <select name="employee_id" id="" class="employee_id form-control form-select" required>
                     @foreach($employees as $employee)
-                        <option  value="{{ $employee->id }}" {{$employee->id == $spirometri->employee?->id ? "selected" : ''  }}>{{ $employee?->nama }}</option>
+                        <option  value="{{ $employee->id }}" {{$employee->id == $spirometri?->employee?->id ? "selected" : ''  }}>{{ $employee?->nama }}</option>
                     @endforeach
                 </select>
                 <div class="invalid-feedback">Please select a valid state.</div>
@@ -80,7 +80,7 @@
                 <select name="retriksi" id="retriksi" class="form-select">
                     <option value="">Pilih</option>
                     @foreach ($participants->getRetriksi() as $key => $item)
-                        <option value="{{ $key }}" {{ $spirometri->retriksi == $key ? 'selected' : null }}>{{ $item }}</option>
+                        <option value="{{ $key }}" {{ $spirometri?->retriksi == $key ? 'selected' : null }}>{{ $item }}</option>
                     @endforeach
                 </select>
             </div>
@@ -91,7 +91,7 @@
                 <select name="obstruksif" id="obstruksif" class="form-select">
                     <option value="">Pilih</option>
                     @foreach ($participants->getObstruksif() as $key => $item)
-                        <option value="{{ $key }}" {{ $spirometri->obstruksif == $key ? 'selected' :  null }}>{{ $item }}</option>
+                        <option value="{{ $key }}" {{ $spirometri?->obstruksif == $key ? 'selected' :  null }}>{{ $item }}</option>
                     @endforeach
                 </select>
             </div>
@@ -103,7 +103,7 @@
                 <label class="form-check-label h-3 fw-bold" for="">Selesai
                     &nbsp;</label>
                 <div class="form-check form-check-success form-switch ml-2">
-                    <input type="checkbox" name="selesai" class="form-check-input" id="selesai" {{ $spirometri->selesai ? 'checked' : null }} />
+                    <input type="checkbox" name="selesai" class="form-check-input" id="selesai" {{ $spirometri?->selesai ? 'checked' : null }} />
                 </div>
             </div>
         </div>

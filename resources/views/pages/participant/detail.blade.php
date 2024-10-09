@@ -48,7 +48,7 @@
         <div class="row">
             <div class="col-md-4">
                 <div class="card cursor-pointer edit-detail"
-                    data-url="{{ route('participant.detail.tanda.vital', $participant->tandaVital->id) }}"
+                    data-url="{{ route('participant.detail.tanda.vital', $participant->id) }}"
                     data-title="{{ 'Tanda Vital MCU ID ' . $participant->code . ' | ' . $participant->name }}">
                     <div class="card-header">
                         <div>
@@ -74,7 +74,7 @@
             </div>
             <div class="col-md-4">
                 <div class="card cursor-pointer edit-detail"
-                    data-url="{{ route('participant.detail.pemeriksaan.fisik', $participant->pemeriksaanFisik->id) }}"
+                    data-url="{{ route('participant.detail.pemeriksaan.fisik', $participant->id) }}"
                     data-title="{{ 'Pemeriksaan Fisik MCU ID ' . $participant->code . ' | ' . $participant->name }}">
                     <div class="card-header">
                         <div>
@@ -101,7 +101,7 @@
             </div>
             <div class="col-md-4">
                 <div class="card cursor-pointer edit-detail"
-                    data-url="{{ route('participant.detail.laboratorium', $participant->laboratorium->id) }}"
+                    data-url="{{ route('participant.detail.laboratorium', $participant->id) }}"
                     data-title="{{ 'Laboratorium MCU ID ' . $participant->code . ' | ' . $participant->name }}">
                     <div class="card-header">
                         <div>
@@ -128,7 +128,7 @@
 
             <div class="col-md-4">
                 <div class="card cursor-pointer edit-detail"
-                    data-url="{{ route('participant.detail.radiologi', $participant->radiologi->id) }}"
+                    data-url="{{ route('participant.detail.radiologi', $participant->id) }}"
                     data-title="{{ 'Radiologi MCU ID ' . $participant->code . ' | ' . $participant->name }}">
                     <div class="card-header">
                         <div>
@@ -156,7 +156,7 @@
             @if ($participant->plan_a)
             <div class="col-md-4">
                 <div class="card cursor-pointer edit-detail"
-                    data-url="{{ route('participant.detail.audiometri', $participant->audiometri->id) }}"
+                    data-url="{{ route('participant.detail.audiometri', $participant->id) }}"
                     data-title="{{ 'Audiometri MCU ID ' . $participant->code . ' | ' . $participant->name }}">
                     <div class="card-header">
                         <div>
@@ -186,7 +186,7 @@
             @if ($participant->plan_s)
             <div class="col-md-4">
                 <div class="card cursor-pointer edit-detail"
-                    data-url="{{ route('participant.detail.spirometri', $participant->rectal->id) }}"
+                    data-url="{{ route('participant.detail.spirometri', $participant->id) }}"
                     data-title="{{ 'Spirometri MCU ID ' . $participant->code . ' | ' . $participant->name }}">
                     <div class="card-header">
                         <div>
@@ -216,7 +216,7 @@
             @if ($participant->plan_r)
             <div class="col-md-4">
                 <div class="card cursor-pointer edit-detail"
-                    data-url="{{ route('participant.detail.rectal', $participant->rectal->id) }}"
+                    data-url="{{ route('participant.detail.rectal', $participant->id) }}"
                     data-title="{{ 'Rectal MCU ID ' . $participant->code . ' | ' . $participant->name }}">
                     <div class="card-header">
                         <div>
@@ -245,7 +245,7 @@
             @if ($participant->plan_e)
             <div class="col-md-4">
                 <div class="card cursor-pointer edit-detail"
-                    data-url="{{ route('participant.detail.ekg', $participant->ekg->id) }}"
+                    data-url="{{ route('participant.detail.ekg', $participant->id) }}"
                     data-title="{{ 'EKG MCU ID ' . $participant->code . ' | ' . $participant->name }}">
                     <div class="card-header">
                         <div>
@@ -287,13 +287,14 @@
             </div>
             <div class="col-md-5">
                 <a href="#" class="btn btn-dark edit-detail"
-                    data-url="{{ route('participant.detail.foto.kamera', $participant->ekg->id) }}">Ambil Foto Via
+                    data-url="{{ route('participant.detail.foto.kamera', $participant->id) }}">Ambil Foto Via
                     Kamera</a>
                 <a href="#" class="btn btn-outline-dark edit-detail"
-                    data-url="{{ route('participant.detail.foto.komputer', $participant->ekg->id) }}">Ambil Foto Via
+                    data-url="{{ route('participant.detail.foto.komputer', $participant->id) }}">Ambil Foto Via
                     Komputer</a>
             </div>
         </div>
     </div>
     <!--/ User Content -->
 </div>
+

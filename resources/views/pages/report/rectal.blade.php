@@ -125,19 +125,19 @@
             <tr>
                 <td class="border">Salmonella Thypi</td>
                 <td class="border text-center">
-                    {{ $rectal->salmonella_thypi }}</td>
+                    {{ $rectal?->salmonella_thypi }}</td>
                 <td class="border text-center">Negatif</td>
             </tr>
             <tr>
                 <td class="border">Shigella SP</td>
                 <td class="border text-center">
-                    {{ $rectal->shigella_sp }}</td>
+                    {{ $rectal?->shigella_sp }}</td>
                 <td class="border text-center">Negatif</td>
             </tr>
             <tr>
                 <td class="border">E. Coli Pathogen </td>
                 <td class="border text-center">
-                    {{ $rectal->e_coli_pathogen }}</td>
+                    {{ $rectal?->e_coli_pathogen }}</td>
                 <td class="border text-center">Negatif</td>
             </tr>
         </tbody>
@@ -154,7 +154,7 @@
                             </tr>
                             <tr>
                                 <td>
-                                    {!! $rectal->kesimpulan !!}
+                                    {!! $rectal?->kesimpulan !!}
                                 </td>
                             </tr>
                         </tbody>
@@ -171,12 +171,12 @@
                             </tr>
                             <tr>
                                 <td class="text-center">
-                                    <img src="{{ public_path($rectal->employee?->ttd ? $rectal->employee?->ttd : 'images/ttd-kosong.png') }}" width="80"
+                                    <img src="{{ public_path($rectal?->employee?->ttd ? $rectal?->employee?->ttd : 'images/ttd-kosong.png') }}" width="80"
                                         alt="img" alt="img">
                                 </td>
                             </tr>
                             <tr>
-                                <td class="text-center">{{ $rectal->employee?->nama }}</td>
+                                <td class="text-center">{{ $rectal?->employee?->nama }}</td>
                             </tr>
                         </tbody>
                     </table>

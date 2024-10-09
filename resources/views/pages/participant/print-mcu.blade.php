@@ -159,7 +159,7 @@
                             </td>
                             <td class="border-bottom border-top text-center hilang">
 
-                                 @if($item->tandaVital->selesai)
+                                 @if($item->tandaVital?->selesai)
                                     <button type="button" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-original-title="Print Tanda Vital"
                                     class="text-center btn btn-sm btn-info font-weight-medium btn-circle printFisik" onclick="window.open('{{ route('report.resume', $item->id) }}', '', 'toolbar=yes,scrollbars=yes,resizable=yes,width=900,height=600');"> <i class="fa fa-print" aria-hidden="true"></i></button>
                                @else
@@ -167,7 +167,7 @@
                                @endif
                             </td>
                             <td class="border-bottom border-top text-center hilang">
-                               @if($item->pemeriksaanFisik->selesai)
+                               @if($item->pemeriksaanFisik?->selesai)
                                 <button type="button" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-original-title="Print Pemeriksaan Fisik"
                                 class="text-center btn btn-sm btn-primary font-weight-medium btn-circle printFisik" onclick="window.open('{{ route('report.pemeriksaan.fisik', $item->id) }}', '', 'toolbar=yes,scrollbars=yes,resizable=yes,width=900,height=600');"> <i class="fa fa-print" aria-hidden="true"></i></button>
                                @else
@@ -175,7 +175,7 @@
                                @endif
                             </td>
                             <td class="border-bottom border-top text-left hilang">
-                                @if($item->laboratorium->selesai)
+                                @if($item->laboratorium?->selesai)
                                 <button type="button" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-original-title="Print Laboratorium"
                                 class="text-center btn btn-sm btn-primary font-weight-medium btn-circle laboratorium" onclick="window.open('{{ route('report.laboratorium', $item->id) }}', '', 'toolbar=yes,scrollbars=yes,resizable=yes,width=900,height=600');"> <i class="fa fa-print" aria-hidden="true"></i></button>
                                @else
@@ -183,7 +183,7 @@
                                @endif
                             </td>
                             <td class="border-bottom border-top text-left hilang">
-                                @if($item->radiologi->selesai)
+                                @if($item->radiologi?->selesai)
                                     <button type="button" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-original-title="Print Radiologi"
                                     class="text-center btn btn-sm btn-warning font-weight-medium btn-circle printRad" onclick="window.open('{{ route('report.radiologi', $item->id) }}', '', 'toolbar=yes,scrollbars=yes,resizable=yes,width=900,height=600');"> <i class="fa fa-print" aria-hidden="true"></i></button>
                                @else
@@ -191,7 +191,7 @@
                                @endif
                             </td>
                             <td class="border-bottom border-top text-left hilang">
-                                @if($item->audiometri->selesai)
+                                @if($item->audiometri?->selesai)
                                     <button type="button" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-original-title="Print audiometri"
                                     class="text-center btn btn-sm btn-warning font-weight-medium btn-circle printRad" onclick="window.open('{{ route('report.audiometri', $item->id) }}', '', 'toolbar=yes,scrollbars=yes,resizable=yes,width=900,height=600');"> <i class="fa fa-print" aria-hidden="true"></i></button>
                                 @else
@@ -199,7 +199,7 @@
                                 @endif
                             </td>
                             <td class="border-bottom border-top text-left hilang">
-                                @if($item->ekg->selesai)
+                                @if($item->ekg?->selesai)
                                     <button type="button" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-original-title="Print EKG"
                                     class="text-center btn btn-sm btn-success font-weight-medium btn-circle printEkg" onclick="window.open('{{ route('report.ekg', $item->id) }}', '', 'toolbar=yes,scrollbars=yes,resizable=yes,width=900,height=600');"> <i class="fa fa-print" aria-hidden="true"></i></button>
                                 @else
@@ -207,7 +207,7 @@
                                 @endif
                             </td>
                             <td class="border-bottom border-top text-left hilang">
-                                @if($item->spirometri->selesai)
+                                @if($item->spirometri?->selesai)
                                     <button type="button" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-original-title="Print Spirometri"
                                     class="text-center btn btn-sm btn-success font-weight-medium btn-circle printEkg" onclick="window.open('{{ route('report.spirometri', $item->id) }}', '', 'toolbar=yes,scrollbars=yes,resizable=yes,width=900,height=600');"> <i class="fa fa-print" aria-hidden="true"></i></button>
                                 @else
@@ -215,7 +215,7 @@
                                 @endif
                             </td>
                             <td class="border-bottom border-top text-left hilang">
-                                @if($item->rectal->selesai)
+                                @if($item->rectal?->selesai)
                                     <button type="button" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-original-title="Print Rectal"
                                     class="text-center btn btn-sm btn-success font-weight-medium btn-circle printEkg" onclick="window.open('{{ route('report.rectal', $item->id) }}', '', 'toolbar=yes,scrollbars=yes,resizable=yes,width=900,height=600');"> <i class="fa fa-print" aria-hidden="true"></i></button>
                                 @else

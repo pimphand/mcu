@@ -40,42 +40,42 @@ class Participant extends Model
 
     public function tandaVital()
     {
-        return $this->hasOne(TandaVital::class, 'participant_id', 'id')->with('employee');
+        return $this->belongsTo(TandaVital::class, 'id', 'participant_id')->with('employee');
     }
 
     public function pemeriksaanFisik()
     {
-        return $this->hasOne(PemeriksaanFisik::class, 'participant_id', 'id')->with('employee');
+        return $this->belongsTo(PemeriksaanFisik::class, 'id', 'participant_id')->with('employee');
     }
 
     public function laboratorium()
     {
-        return $this->hasOne(Laboratorium::class, 'participant_id', 'id')->with('employee');
+        return $this->belongsTo(Laboratorium::class, 'id', 'participant_id')->with('employee');
     }
 
     public function radiologi()
     {
-        return $this->hasOne(Radiologi::class, 'participant_id', 'id')->with('employee');
+        return $this->belongsTo(Radiologi::class, 'id', 'participant_id')->with('employee');
     }
 
     public function audiometri()
     {
-        return $this->hasOne(Audiometri::class, 'participant_id', 'id')->with('employee');
+        return $this->belongsTo(Audiometri::class, 'id', 'participant_id')->with('employee');
     }
 
     public function spirometri()
     {
-        return $this->hasOne(Spirometri::class, 'participant_id', 'id')->with('employee');
+        return $this->belongsTo(Spirometri::class, 'id', 'participant_id')->with('employee');
     }
 
     public function rectal()
     {
-        return $this->hasOne(Rectal::class, 'participant_id', 'id')->with('employee');
+        return $this->belongsTo(Rectal::class, 'id', 'participant_id')->with('employee');
     }
 
     public function ekg()
     {
-        return $this->hasOne(Ekg::class, 'participant_id', 'id')->with('employee');
+        return $this->belongsTo(Ekg::class, 'id', 'participant_id')->with('employee');
     }
 
     public function validateDoctor()
