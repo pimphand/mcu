@@ -380,19 +380,11 @@
     <script src="{{ asset('app-assets/vendors/js/pickers/pickadate/picker.time.js') }}"></script>
     <script src="{{ asset('app-assets/vendors/js/pickers/pickadate/legacy.js') }}"></script>
     <script src="{{ asset('app-assets/vendors/js/pickers/flatpickr/flatpickr.min.js') }}"></script>
-    @php
-        $date1 = now()->subDay()->format('Y-m-d');
-        $date2 = now()->format('Y-m-d');
-        if (request()->get('date_range')) {
-            $date1 = explode(' to ', request()->get('date_range'))[0];
-            $date2 = explode(' to ', request()->get('date_range'))[1] ?? null;
-        }
-    @endphp
+   
     <script>
         let rangePickr = $('.flatpickr-range').flatpickr({
             mode: 'range',
             maxDate: 'today',
-            defaultDate: ["{{ $date1 }}", "{{ $date2 }}"]
         });
 
         $('.import').click(function(){
@@ -408,6 +400,28 @@
 
             window.open(url, '', 'toolbar=yes,scrollbars=yes,resizable=yes,width=900,height=600');
         });
+$(document).ready(function() {
+        // Ambil parameter dari URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const dateRange = urlParams.get('filter[date_range]');
+        
+        let date1, date2;
 
+        if (dateRange) {
+            // Jika date_range ada di URL, pecah menjadi dua tanggal
+            [date1, date2] = dateRange.split(' to ');
+        } else {
+            // Set tanggal default: dua hari lalu hingga hari ini
+            date1 = moment().subtract(2, 'days').format('YYYY-MM-DD');
+            date2 = moment().format('YYYY-MM-DD');
+        }
+
+        // Inisialisasi Flatpickr dengan tanggal default
+        let rangePickr = $('.flatpickr-range').flatpickr({
+            mode: 'range',
+            maxDate: 'today',
+            defaultDate: [date1, date2] // Set tanggal default
+        });
+    });
     </script>
 @endsection

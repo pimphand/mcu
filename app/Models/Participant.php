@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
@@ -80,7 +81,17 @@ class Participant extends Model
     public function scopeDateRange(Builder $query, $date)
     {
         $date = explode(' to ', $date);
-        // dd($date);
-        return $query->whereBetween('created_at', [$date[0], $date[1]]);
+        // dd(count($date));
+        // Jika hanya ada satu tanggal
+        if (count($date) == 1) {
+            $startDate = Carbon::parse($date[0])->startOfDay();
+            $endDate = Carbon::parse($date[0])->endOfDay();
+        } else {
+            // Jika ada dua tanggal
+            $startDate = Carbon::parse($date[0])->startOfDay();
+            $endDate = Carbon::parse($date[1])->endOfDay();
+        }
+
+        return $query->whereBetween('register_date', [$startDate, $endDate]);
     }
 }
