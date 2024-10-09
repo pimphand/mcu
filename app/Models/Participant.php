@@ -78,6 +78,11 @@ class Participant extends Model
         return $this->hasOne(Ekg::class, 'participant_id', 'id')->with('employee');
     }
 
+    public function validateDoctor()
+    {
+        return $this->hasOne(ValidateDoctor::class, 'no_mcu', 'code');
+    }
+
     public function scopeDateRange(Builder $query, $date)
     {
         $date = explode(' to ', $date);

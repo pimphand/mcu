@@ -158,13 +158,13 @@
 
                             </td>
                             <td class="border-bottom border-top text-center hilang">
-                            onproses
-                                {{-- @if($item->tandaVital->selesai)
+
+                                 @if($item->tandaVital->selesai)
                                     <button type="button" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-original-title="Print Tanda Vital"
-                                    class="text-center btn btn-sm btn-info font-weight-medium btn-circle printFisik" onclick="window.open('{{ route('report.tanda.vital', $item->id) }}', '', 'toolbar=yes,scrollbars=yes,resizable=yes,width=900,height=600');"> <i class="fa fa-print" aria-hidden="true"></i></button>
+                                    class="text-center btn btn-sm btn-info font-weight-medium btn-circle printFisik" onclick="window.open('{{ route('report.resume', $item->id) }}', '', 'toolbar=yes,scrollbars=yes,resizable=yes,width=900,height=600');"> <i class="fa fa-print" aria-hidden="true"></i></button>
                                @else
                                     <span class="text-center text-danger">TIDAK</span>
-                               @endif --}}
+                               @endif
                             </td>
                             <td class="border-bottom border-top text-center hilang">
                                @if($item->pemeriksaanFisik->selesai)
@@ -240,7 +240,7 @@
     <script src="{{ asset('app-assets/vendors/js/pickers/pickadate/picker.time.js') }}"></script>
     <script src="{{ asset('app-assets/vendors/js/pickers/pickadate/legacy.js') }}"></script>
     <script src="{{ asset('app-assets/vendors/js/pickers/flatpickr/flatpickr.min.js') }}"></script>
-    
+
     <script>
         let rangePickr = $('.flatpickr-range').flatpickr({
             mode: 'range',
@@ -265,7 +265,7 @@
                 // Ambil parameter dari URL
                 const urlParams = new URLSearchParams(window.location.search);
                 const dateRange = urlParams.get('filter[date_range]');
-                
+
                 let date1, date2;
 
                 if (dateRange) {

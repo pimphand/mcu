@@ -162,4 +162,12 @@ class ReportController extends Controller
         // Menampilkan PDF hasil gabungan
         return $mergedPdf->Output('I', 'merged_audiometri.pdf');
     }
+
+    public function resume($participantId)
+    {
+        $participant = $this->participantService->find($participantId);
+        $pdf = Pdf::loadView('pages.report.resume', compact('participant'));
+
+        return $pdf->stream(sprintf('%s.pdf', $participant->code));
+    }
 }

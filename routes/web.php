@@ -194,6 +194,7 @@ Route::middleware('auth')->group(function () {
             Route::get('sticker-lab/{participantId}', [ReportController::class, 'stickerLab'])->name('report.sticker.lab');
             Route::get('sticker-5pcs/{participantId}', [ReportController::class, 'sticker5pcs'])->name('report.sticker.5pcs');
             Route::get('report-register/{id}', [ReportController::class, 'register'])->name('report.register');
+            Route::get('report-resume/{id}', [ReportController::class, 'resume'])->name('report.resume');
         });
     });
 

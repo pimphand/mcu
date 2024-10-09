@@ -5,40 +5,78 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>LABORATORIUM</title>
+    <title>MEDICAL RECORD</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-
+        @page {
+            size: 21cm 33cm;
+        }
         table {
             width: 100%;
         }
-
-        .text-center {
+        .container {
+            padding: 2px;
+        }
+        .header {
             text-align: center;
+            margin-bottom: 16px;
         }
-
-
-        td {
-            padding: 3px;
+        .header h3 {
+            background-color: #5f8a8b;
+            color: #fff;
+            padding: 10px;
+            border-radius: 10px;
+            display: inline-block;
         }
-
-        .border {
-            border: 1px solid black;
+        .info {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .info p {
+            margin: 5px 0;
+        }
+        .data-table {
+            width: 100%;
             border-collapse: collapse;
-            width: 50%;
-            padding: 3px;
-            font-size: 14px;
+            margin-bottom: 10px;
+        }
+        .data-table th, .data-table td {
+            border: 1px solid #000;
+            /*padding: 10px;*/
+            text-align: left;
+        }
+        .data-table th {
+            background-color: #f2f2f2;
+        }
+        .footer {
+            text-align: center;
+            border: #0C102A;
+            font-weight: bold;
+            font-size: 20px;
+        }
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .data-table th, .data-table td {
+            border: 1px solid black;
+            /*padding: 10px;*/
+            text-align: left;
+        }
+
+        .data-table th {
+            background-color: #E0E0E0; /* Light gray background for the header */
+            text-align: center;
         }
     </style>
 </head>
 
 <body>
 @include('pages.report.header', $participant)
-<table>
-
-    <body>
+<table style="font-size: 12px">
     <tr>
         <td>
             <table>
@@ -61,7 +99,7 @@
                 <tr>
                     <td>Tgl Lahir</td>
                     <td>:</td>
-                    <td>{{ $participant->birthday }} /
+                    <td> {{\Carbon\Carbon::parse($participant->birthday)->format('d-m-Y')}} /
                         {{ \Carbon\Carbon::parse($participant->birthday)->diff(\Carbon\Carbon::now())->format('%y tahun %m bulan  %d hari') }}
                     </td>
                 </tr>
@@ -76,11 +114,7 @@
                     <td>:</td>
                     <td>{{ $participant->client?->name }}</td>
                 </tr>
-                <tr>
-                    <td>Status</td>
-                    <td>:</td>
-                    <td>{{ $participant->status }}</td>
-                </tr>
+
                 <tr>
                     <td>Dept. ID</td>
                     <td>:</td>
@@ -91,230 +125,169 @@
                     <td>:</td>
                     <td>{{ $participant->department?->name }}</td>
                 </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
                 </tbody>
             </table>
         </td>
     </tr>
-    </body>
+
 </table>
-@php
-    $laboratorium = $participant->laboratorium;
-@endphp
-<table style="border-collapse: collapse;">
-    <thead>
-    <tr>
-        <th class="border">PEMERIKSAAN</th>
-        <th class="border">HASIL</th>
-        <th class="border">NILAI NORMAL</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr>
-        <td colspan="3" class="border">HEMATOLOGI</td>
-    </tr>
-    <tr>
-        <td class="border">Hemoglobin</td>
-        <td class="border text-center">
-            {{ $laboratorium->hemoglobin }}</td>
-        <td class="border text-center">P: 12 - 16 , L: 13 – 17 g/dl</td>
-    </tr>
-    <tr>
-        <td class="border">Hematokrit</td>
-        <td class="border text-center">
-            {{ $laboratorium->hematokrit }}</td>
-        <td class="border text-center">P: 35–47% , L: 40–52%</td>
-    </tr>
-    <tr>
-        <td class="border">Lekosit</td>
-        <td class="border text-center">
-            {{ $laboratorium->lekosit }}</td>
-        <td class="border text-center">5.000 / µl – 10.000 / µ</td>
-    </tr>
-    <tr>
-        <td class="border">Trombosit</td>
-        <td class="border text-center">
-            {{ $laboratorium->trombosit }}</td>
-        <td class="border text-center">150.000 – 450.000 / µl</td>
-    </tr>
-    <tr>
-        <td class="border">Eritrosit</td>
-        <td class="border text-center">
-            {{ $laboratorium->eritrosit }}</td>
-        <td class="border text-center">P: 4,0 – 5,5 juta / µl , L: 4,5 – 6,0 juta / µl</td>
-    </tr>
-    <tr>
-        <td class="border">Basofil</td>
-        <td class="border text-center">
-            {{ $laboratorium->basofil }}</td>
-        <td class="border text-center">0 – 1 %</td>
-    </tr>
-    <tr>
-        <td class="border">Eosinofil</td>
-        <td class="border text-center">
-            {{ $laboratorium->eosinofil }}</td>
-        <td class="border text-center">1 – 3 %</td>
-    </tr>
-    <tr>
-        <td class="border">Batang</td>
-        <td class="border text-center">
-            {{ $laboratorium->batang }}</td>
-        <td class="border text-center">2 – 6 %</td>
-    </tr>
-    <tr>
-        <td class="border">Segmen</td>
-        <td class="border text-center">
-            {{ $laboratorium->segmen }}</td>
-        <td class="border text-center">50 – 70 %</td>
-    </tr>
-    <tr>
-        <td class="border">Limfosit</td>
-        <td class="border text-center">
-            {{ $laboratorium->limfosit }}</td>
-        <td class="border text-center">20 – 40 %</td>
-    </tr>
-    <tr>
-        <td class="border">Monosit</td>
-        <td class="border text-center">
-            {{ $laboratorium->monosit }}</td>
-        <td class="border text-center">2 – 6%</td>
-    </tr>
-    <tr>
-        <td colspan="3" class="border">KIMIA KLINIK</td>
-    </tr>
-    <tr>
-        <td class="border">SGOT</td>
-        <td class="border text-center">
-            {{ $laboratorium->sgot }}</td>
-        <td class="border text-center">P: < 31 µl, L: < 34 µl</td>
-    </tr>
-    <tr>
-        <td class="border">SGPT</td>
-        <td class="border text-center">
-            {{ $laboratorium->sgpt }}</td>
-        <td class="border text-center">0 - 45 µl</td>
-    </tr>
-    <tr>
-        <td class="border">Ureum</td>
-        <td class="border text-center">
-            {{ $laboratorium->ureum }}</td>
-        <td class="border text-center">10 - 40 mg</td>
-    </tr>
-    <tr>
-        <td class="border">Creatinin</td>
-        <td class="border text-center">
-            {{ $laboratorium->creatinin }}</td>
-        <td class="border text-center">P: < 0.6 - 1.2 mg/dL, L: < 0.6 - 1.4 mg/dL</td>
-    </tr>
-    <tr>
-        <td colspan="3" class="border">URINE LENGKAP</td>
-    </tr>
-    <tr>
-        <td class="border">Reduksi</td>
-        <td class="border text-center">
-            {{ $laboratorium->reduksi }}</td>
-        <td class="border text-center">Negatif</td>
-    </tr>
-    <tr>
-        <td class="border">Berat Jenis</td>
-        <td class="border text-center">
-            {{ $laboratorium->berat_jenis }}</td>
-        <td class="border text-center"></td>
-    </tr>
-    <tr>
-        <td class="border">PH / Reaksi</td>
-        <td class="border text-center">
-            {{ $laboratorium->ph_reaksi }}</td>
-        <td class="border text-center"></td>
-    </tr>
-    <tr>
-        <td class="border">Warna</td>
-        <td class="border text-center">
-            {{ $laboratorium->warna }}</td>
-        <td class="border text-center"></td>
-    </tr>
-    <tr>
-        <td class="border">Kekeruhan</td>
-        <td class="border text-center">
-            {{ $laboratorium->kekeruhan }}</td>
-        <td class="border text-center"></td>
-    </tr>
-    <tr>
-        <td class="border">Urobilinogen</td>
-        <td class="border text-center">
-            {{ $laboratorium->urobilinogen }}</td>
-        <td class="border text-center">Normal</td>
-    </tr>
-    <tr>
-        <td class="border">Bilirubin</td>
-        <td class="border text-center">
-            {{ $laboratorium->bilirubin }}</td>
-        <td class="border text-center">Negatif</td>
-    </tr>
-    <tr>
-        <td class="border">Eritrosit</td>
-        <td class="border text-center">
-            {{ $laboratorium->eritrosit_urine }}</td>
-        <td class="border text-center">Negatif</td>
-    </tr>
-    <tr>
-        <td class="border">Keton</td>
-        <td class="border text-center">
-            {{ $laboratorium->keton }}</td>
-        <td class="border text-center">Negatif</td>
-    </tr>
-    <tr>
-        <td class="border">Protein</td>
-        <td class="border text-center">
-            {{ $laboratorium->protein }}</td>
-        <td class="border text-center">Negatif</td>
-    </tr>
-    <tr>
-        <td class="border">Sedimen – Epitel </td>
-        <td class="border text-center">
-            {{ $laboratorium->sedimen_epitel }}</td>
-        <td class="border text-center">Negatif</td>
-    </tr>
-    <tr>
-        <td class="border">Sedimen – Eritrosit </td>
-        <td class="border text-center">
-            {{ $laboratorium->sedimen_eritrosit }}</td>
-        <td class="border text-center">0 – 1 / Lpb</td>
-    </tr>
-    <tr>
-        <td class="border">Sedimen – Leukosit </td>
-        <td class="border text-center">
-            {{ $laboratorium->sedimen_leukosit }}</td>
-        <td class="border text-center">0 – 5 / Lpb</td>
-    </tr>
+<div class="container">
+    <div class="header">
+        <h3>MEDICAL RECORD</h3>
+    </div>
 
-    <tr>
-        <td class="border">Sedimen - Bakteri</td>
-        <td class="border text-center">
-            {{ $laboratorium->sedimen_bakteri }}</td>
-        <td class="border text-center">Negatif</td>
-    </tr>
+    <table class="data-table" style="font-size: 12px">
+        <tr>
+            <th colspan="4">Data Peserta MCU</th>
+        </tr>
+        <tr>
+             <td  style="border-bottom-color: #fff;border-right-color: #fff"></td>
+            <td  style="border-bottom-color: #fff"></td>
+            <td style="border-bottom-color: #fff;border-right-color: #fff">Tgl Register : </td>
+            <td style="border-bottom-color: #fff">: {{\Carbon\Carbon::parse($participant->register_date)->format('d-m-Y')}}</td>
 
-    <tr>
-        <td class="border">Sedimen – Kristal </td>
-        <td class="border text-center">
-            {{ $laboratorium->sedimen_kristal }}</td>
-        <td class="border text-center">Negatif</td>
-    </tr>
 
-    </tbody>
-</table>
-<table style="margin-top: 10px;">
-    <tbody>
+        </tr>
+        <tr>
+             <td  style="border-bottom-color: #fff;border-right-color: #fff"></td>
+            <td  style="border-bottom-color: #fff"></td>
+            <td style="border-bottom-color: #fff;border-right-color: #fff">MCU ID</td>
+            <td style="border-bottom-color: #fff">: {{ $participant->code }}</td>
+        </tr>
+        <tr>
+             <td  style="border-bottom-color: #fff;border-right-color: #fff"></td>
+            <td  style="border-bottom-color: #fff"></td>
+            <td style="border-bottom-color: #fff;border-right-color: #fff">Nama</td>
+            <td style="border-bottom-color: #fff">: {{ $participant->name }} [{{ $participant->gender }}]</td>
+        </tr>
+        <tr>
+             <td  style="border-bottom-color: #fff;border-right-color: #fff"></td>
+            <td  style="border-bottom-color: #fff"></td>
+            <td style="border-bottom-color: #fff;border-right-color: #fff">Tgl Lahir</td>
+            <td style="border-bottom-color: #fff">: {{\Carbon\Carbon::parse($participant->birthday)->format('d-m-Y')}}</td>
+        </tr>
+        <tr>
+             <td  style="border-bottom-color: #fff;border-right-color: #fff"></td>
+            <td  style="border-bottom-color: #fff"></td>
+            <td style="border-bottom-color: #fff;border-right-color: #fff">Umur</td>
+            <td style="border-bottom-color: #fff">: {{ \Carbon\Carbon::parse($participant->birthday)->diff(\Carbon\Carbon::now())->format('%y tahun %m bulan  %d hari') }}</td>
+        </tr>
+        <tr>
+             <td  style="border-bottom-color: #fff;border-right-color: #fff"></td>
+            <td  style="border-bottom-color: #fff"></td>
+            <td style="border-bottom-color: #fff;border-right-color: #fff">Perusahaan</td>
+            <td style="border-bottom-color: #fff">: {{ $participant->client->name }}</td>
+        </tr>
+        <tr>
+             <td  style="border-bottom-color: #fff;border-right-color: #fff"></td>
+            <td  style="border-bottom-color: #fff"></td>
+            <td style="border-bottom-color: #fff;border-right-color: #fff">NIK</td>
+            <td style="border-bottom-color: #fff">: {{ $participant->nik }}</td>
+        </tr>
+        <tr>
+             <td  style="border-bottom-color: #fff;border-right-color: #fff"></td>
+            <td  style="border-bottom-color: #fff"></td>
+            <td style="border-bottom-color: #fff;border-right-color: #fff">Divisi</td>
+            <td style="border-bottom-color: #fff">: {{ $participant->divisi?->name}}</td>
+        </tr>
+        <tr>
+             <td  style="border-bottom-color: #fff;border-right-color: #fff"></td>
+            <td  style="border-bottom-color: #fff"></td>
+            <td style="border-bottom-color: #fff;border-right-color: #fff">Departement</td>
+            <td style="border-bottom-color: #fff">: {{ $participant->department?->name }}</td>
+        </tr>
+        <tr>
+            <td  style=";border-right-color: #fff"></td>
+            <td ></td>
+            <td style="border-right-color: #fff">Paket MCU</td>
+            <td>: {{ $participant->department?->packet_name }}</td>
+        </tr>
+    </table>
+    <table>
+        <tr style="text-align: center;border-color: #0C102A">
+            <td colspan="4" class="footer" style="text-align: center;border-color: #0C102A"> {{ $participant->client?->name }}</td>
+        </tr>
+    </table>
+</div>
+
+</body>
+
+</html>
+
+{{--Page 2--}}
+<html>
+<head>
+    <title>KESIMPULAN DAN SARAN</title>
+    <style>
+        .center-text {
+            text-align: center;
+            font-weight: normal;
+            margin-top: 20px;
+            font-size: 20px;
+        }
+        .main {
+            border: 1px solid black;
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .status-fit {
+            background-color: #e0e0e0;
+            padding: 5px;
+            border-bottom: 1px solid black;
+            text-align: left;
+        }
+        .status-fit h1 {
+            margin: 0;
+            font-size: 15px;
+        }
+        .status {
+            background-color: #a8d0d0;
+            padding: 10px;
+            text-align: center;
+        }
+        .status h2 {
+            margin: 0;
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body>
+@include('pages.report.header', $participant)
+<div class="center-text">
+    KESIMPULAN DAN SARAN
+    <hr>
+</div>
+<table style="font-size: 12px" class="data-table">
     <tr>
-        <td style="width: 50%;">
+        <td>
             <table>
                 <tbody>
                 <tr>
-                    <td>Kesimpulan</td>
+                    <td style="border: white">MCU ID</td>
+                    <td style="border: white">:</td>
+                    <td style="border: white">{{ $participant->code }}</td>
                 </tr>
                 <tr>
-                    <td>
-                        {!! $laboratorium->kesimpulan !!}
+                    <td style="border: white">NIK</td>
+                    <td style="border: white">:</td>
+                    <td style="border: white">{{ $participant->nik }}</td>
+                </tr>
+                <tr>
+                    <td style="border: white">Nama</td>
+                    <td style="border: white">:</td>
+                    <td style="border: white">{{ $participant->name }} [{{ $participant->gender }}]</td>
+                </tr>
+                <tr>
+                    <td style="border: white">Tgl Lahir</td>
+                    <td style="border: white">:</td>
+                    <td style="border: white"> {{\Carbon\Carbon::parse($participant->birthday)->format('d-m-Y')}} /
+                        {{ \Carbon\Carbon::parse($participant->birthday)->diff(\Carbon\Carbon::now())->format('%y tahun %m bulan  %d hari') }}
                     </td>
                 </tr>
                 </tbody>
@@ -324,19 +297,132 @@
             <table>
                 <tbody>
                 <tr>
-                    <td class="text-center">{{ config('app.city') }}, {{ now()->format('d M Y') }}</td>
+                    <td  style="border: white">Perusahaan</td>
+                    <td  style="border: white">:</td>
+                    <td  style="border: white">{{ $participant->client?->name }}</td>
                 </tr>
                 <tr>
-                    <td class="text-center">Pemeriksa,</td>
+                    <td  style="border: white">Dept. ID</td>
+                    <td  style="border: white">:</td>
+                    <td  style="border: white">{{ $participant->department?->code }}</td>
                 </tr>
                 <tr>
-                    <td class="text-center">
-                        <img src="{{ public_path($laboratorium->employee?->ttd ? $laboratorium->employee?->ttd : 'images/ttd-kosong.png') }}" width="80"
-                             alt="img" alt="img">
+                    <td style="border: white">Department</td>
+                    <td style="border: white">:</td>
+                    <td style="border: white">{{ $participant->department?->name }}</td>
+                </tr>
+                <tr>
+                    <td style="border: white">Status</td>
+                    <td style="border: white">:</td>
+                    <td style="border: white">{{ $participant->status ?? "-" }}</td>
+                </tr>
+                </tbody>
+            </table>
+        </td>
+    </tr>
+</table >
+<br>
+<table class="data-table" style="font-size: 12px">
+    <tr>
+        <th colspan="2">PEMERIKSAAN</th>
+        <th>HASIL</th>
+    </tr>
+    <tr>
+        <td colspan="2">LABORATORIUM (TERLAMPIR)</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td colspan="2">Hasil Laboratorium</td>
+
+        <td>Normal</td>
+    </tr>
+    <tr>
+        <td colspan="2">HASIL PHOTO THORAX (TERLAMPIR)</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td colspan="2">Hasil dan Kesan</td>
+
+        <td>Cor dan Pulmo tidak tampak kelainan radiologis</td>
+    </tr>
+    <tr>
+        <td colspan="2">AUDIOMETRI (TERLAMPIR)</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td colspan="2">Pendengaran Telinga Kanan</td>
+        <td>TIDAK DIPERIKSA</td>
+    </tr>
+    <tr>
+        <td colspan="2">Pendengaran Telinga Kiri</td>
+        <td>TIDAK DIPERIKSA</td>
+    </tr>
+    <tr>
+        <td colspan="2">EKG (TERLAMPIR)</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td colspan="2">Kesimpulan EKG</td>
+        <td>TIDAK DIPERIKSA</td>
+    </tr>
+    <tr>
+        <td colspan="2">SPIROMETRI (TERLAMPIR)</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td colspan="2">Kesimpulan Spiro</td>
+
+        <td>TIDAK DIPERIKSA</td>
+    </tr>
+    <tr>
+        <td colspan="2">HASIL MCU</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td colspan="2">Saran</td>
+        <td>
+            <div class="suggestions">
+                <div>- Olah raga teratur</div>
+                <div>- Jaga pola makan</div>
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2"></td>
+        <td style="word-break: break-word; white-space: normal;">
+            {!! str_replace(',', ',<br>', $participant->validateDoctor?->notes) !!}
+        </td>
+    </tr>
+</table>
+
+<div class="main">
+    <div class="status-fit">
+        <h1>FIT STATUS</h1>
+    </div>
+    <div class="status">
+        <h2>FIT WITH JOB</h2>
+    </div>
+</div>
+<table style="margin-top: 10px;">
+    <tbody>
+    <tr>
+        <td style="width: 70%;"></td>
+        <td style="text-align: center">
+            <table>
+                <tbody>
+                <tr>
+                    <td style="text-align: center" class="text-center">{{ config('app.city') }}, {{ now()->format('d M Y') }}</td>
+                </tr>
+                <tr>
+                    <td style="text-align: center" class="text-center">Dokter Pemeriksa,</td>
+                </tr>
+                <tr>
+                    <td style="text-align: center" class="text-center">
+                        <img src="{{ public_path($participant->pemeriksaanFisik->employee?->ttd ? $participant->pemeriksaanFisik->employee?->ttd : 'images/ttd-kosong.png') }}" width="100" alt="img" alt="img">
                     </td>
                 </tr>
                 <tr>
-                    <td class="text-center">{{ $laboratorium->employee?->nama }}</td>
+                    <td style="text-align: center" class="text-center">{{ $participant->pemeriksaanFisik->employee?->nama }}</td>
                 </tr>
                 </tbody>
             </table>
@@ -345,5 +431,5 @@
     </tbody>
 </table>
 </body>
-
 </html>
+
