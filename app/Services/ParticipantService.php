@@ -129,45 +129,63 @@ class ParticipantService
 
     public function create(array $data)
     {
-        // dd($data);
         \DB::beginTransaction();
         try {
             $user = Auth::user();
             $data = $this->mapingPaket($data);
-            $sequence = $this->participant->count();
-            $data['code'] = sprintf('%s%s', self::PREFIX, str_pad($sequence + 1, 5, '0', STR_PAD_LEFT));
+
+            // Generate a unique code
+            $data['code'] = $this->generateUniqueCode();
+
             $data['created_by'] = $user->id;
             $insert = $this->participant->create($data);
+
             $role = Role::where('level', RoleService::LEVEL_PARTICIPANT)->first();
             $insertUser = User::create([
                 'name' => $data['name'],
-                'username' => $data['code'],
+                'username' => $data['code'] ."_".$insert->id,
                 'password' => bcrypt($data['birthday']),
                 'role_id' => $role->id,
                 'client_id' => $data['client_id'],
                 'is_active' => 1
             ]);
+
             $this->participant->where(['id' => $insert->id])->update(['user_id' => $insertUser->id]);
+
             $dataParticipant = [
                 'participant_id' => $insert->id,
                 'created_by' => $user->id,
                 'selesai' => false
             ];
-            TandaVital::create($dataParticipant);
-            PemeriksaanFisik::create($dataParticipant);
-            Laboratorium::create($dataParticipant);
-            Radiologi::create($dataParticipant);
-            Audiometri::create($dataParticipant);
-            Spirometri::create($dataParticipant);
-            Rectal::create($dataParticipant);
-            Ekg::create($dataParticipant);
+
+            // Add any other logic as needed
+
             \DB::commit();
             return $insert;
+
         } catch (\Throwable $th) {
             \DB::rollBack();
             Log::error($th);
             return false;
         }
+    }
+
+    /**
+     * Generate a unique code for the participant.
+     */
+    protected function generateUniqueCode()
+    {
+        $sequence = $this->participant->count();
+        $prefix = self::PREFIX;
+        $code = sprintf('%s%s', $prefix, str_pad($sequence + 1, 5, '0', STR_PAD_LEFT));
+
+        // Check for duplicates
+        while ($this->participant->where('code', $code)->exists()) {
+            $sequence++;
+            $code = sprintf('%s%s', $prefix, str_pad($sequence + 1, 5, '0', STR_PAD_LEFT));
+        }
+
+        return $code;
     }
 
     public function update(array $data, $id)
