@@ -70,14 +70,14 @@
                                                                       <td class="border-bottom border-top text-center text-success">59</td>
                                   <td class="border-bottom border-top text-center text-success">49</td>
                                   <td class="border-bottom border-top text-center text-success">0</td>
-                                  
+
                                   <td class="border-bottom border-top text-center text-success">108</td>
                                   <td class="border-bottom border-top text-center text-success">108</td>
                                   <td class="border-bottom border-top text-center text-success">108</td>
                                   <td class="border-bottom border-top text-center text-success">107</td>
                                   <td class="border-bottom border-top text-center text-success">0</td>
                                   <td class="border-bottom border-top text-center text-success">0</td>
-                                  
+
                                   <td class="border-bottom border-top text-center">59</td>
                                   <td class="border-bottom border-top text-center text-success">59</td>
                                   <td class="border-bottom border-top text-center">37</td>
@@ -86,7 +86,7 @@
                                   <td class="border-bottom border-top text-center text-success">82</td>
                                   <td class="border-bottom border-top text-center">0</td>
                                   <td class="border-bottom border-top text-center text-success">0</td>
-                                  <td class="border-bottom border-top text-center">1</td>   
+                                  <td class="border-bottom border-top text-center">1</td>
                               </tr>
                     </tbody>
                 </table>
@@ -102,7 +102,7 @@
         $(function() {
             loadDataTable();
             function loadDataTable() {
-                $.get('{{ route('report.register') }}', function(response) {
+                $.get('{{ route('recap.register') }}', function(response) {
                     console.log(response)
                 })
             }

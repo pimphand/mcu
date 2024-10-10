@@ -477,7 +477,7 @@
     </div>
 </div>
 <div class="modal-footer">
-    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Batal</button>
+    <button type="button" class="btn btn-danger _btn_danger" data-bs-dismiss="modal">Batal</button>
     <button type="button" class="btn btn-success" id="" onclick="window.open('{{ route('report.laboratorium.lab.driver', $participant->id) }}', '', 'toolbar=yes,scrollbars=yes,resizable=yes,width=900,height=600');">Print Lab Driver</button>
     <button type="button" class="btn btn-warning" id="" onclick="window.open('{{ route('report.laboratorium.sgpt.ureum', $participant->id) }}', '', 'toolbar=yes,scrollbars=yes,resizable=yes,width=900,height=600');">Print SGBT & Ureum</button>
     <button type="button" class="btn btn-info" id="" onclick="window.open('{{ route('report.laboratorium', $participant->id) }}', '', 'toolbar=yes,scrollbars=yes,resizable=yes,width=900,height=600');">Print</button>

@@ -53,7 +53,7 @@
                     <div class="card-header">
                         <div>
                             <h3 class="mb-2">Tanda Vital</h3>
-                            <p class="card-text">{{ $participant->tandaVital?->selesai ? 'SELESAI' : 'BELUM' }}</p>
+                            <p class="card-text" id="tandaVital">{{ $participant->tandaVital?->selesai ? 'SELESAI' : 'BELUM' }}</p>
                         </div>
                         <div class="avatar bg-light-primary p-50 m-0">
                             <div class="avatar-content">
@@ -62,8 +62,8 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <div class="progress progress-bar-primary">
-                            <div class="progress-bar" role="progressbar"
+                        <div class="progress progress-bar-primary ">
+                            <div class="progress-bar tandaVital" role="progressbar"
                                 aria-valuenow="{{ $participant->tandaVital?->selesai ? 100 : '' }}"
                                 aria-valuemin="{{ $participant->tandaVital?->selesai ? 100 :'' }}"
                                 aria-valuemax="{{ $participant->tandaVital?->selesai ? 100 : '0' }}" @if($participant->
@@ -79,7 +79,7 @@
                     <div class="card-header">
                         <div>
                             <h3 class="mb-2">Pemeriksaan Fisik</h3>
-                            <p class="card-text">{{ $participant->pemeriksaanFisik?->selesai ? 'SELESAI' : 'BELUM' }}
+                            <p class="card-text" id="pemeriksaanFisik">{{ $participant->pemeriksaanFisik?->selesai ? 'SELESAI' : 'BELUM' }}
                             </p>
                         </div>
                         <div class="avatar bg-light-primary p-50 m-0">
@@ -90,7 +90,7 @@
                     </div>
                     <div class="card-body">
                         <div class="progress progress-bar-info">
-                            <div class="progress-bar" role="progressbar"
+                            <div class="progress-bar pemeriksaanFisik" role="progressbar"
                                 aria-valuenow="{{ $participant->pemeriksaanFisik?->selesai ? 100 : '' }}"
                                 aria-valuemin="{{ $participant->pemeriksaanFisik?->selesai ? 100 :'' }}"
                                 aria-valuemax="{{ $participant->pemeriksaanFisik?->selesai ? 100 : '0' }}"
@@ -106,7 +106,7 @@
                     <div class="card-header">
                         <div>
                             <h3 class="mb-2">Laboratorium</h3>
-                            <p class="card-text">{{ $participant->laboratorium?->selesai ? 'SELESAI' : 'BELUM' }}</p>
+                            <p class="card-text" id="laboratorium">{{ $participant->laboratorium?->selesai ? 'SELESAI' : 'BELUM' }}</p>
                         </div>
                         <div class="avatar bg-light-primary p-50 m-0">
                             <div class="avatar-content">
@@ -116,7 +116,7 @@
                     </div>
                     <div class="card-body">
                         <div class="progress progress-bar-danger">
-                            <div class="progress-bar" role="progressbar"
+                            <div class="progress-bar laboratorium" role="progressbar"
                                 aria-valuenow="{{ $participant->laboratorium?->selesai ? 100 : '' }}"
                                 aria-valuemin="{{ $participant->laboratorium?->selesai ? 100 :'' }}"
                                 aria-valuemax="{{ $participant->laboratorium?->selesai ? 100 : '0' }}"
@@ -133,7 +133,7 @@
                     <div class="card-header">
                         <div>
                             <h3 class="mb-2">Radiologi</h3>
-                            <p class="card-text">{{ $participant->radiologi?->selesai ? 'SELESAI' : 'BELUM' }}</p>
+                            <p class="card-text" id="radiologi">{{ $participant->radiologi?->selesai ? 'SELESAI' : 'BELUM' }}</p>
                         </div>
                         <div class="avatar bg-light-primary p-50 m-0">
                             <div class="avatar-content">
@@ -143,7 +143,7 @@
                     </div>
                     <div class="card-body">
                         <div class="progress progress-bar-warning">
-                            <div class="progress-bar" role="progressbar"
+                            <div class="progress-bar radiologi" role="progressbar"
                                 aria-valuenow="{{ $participant->radiologi?->selesai ? 100 : '' }}"
                                 aria-valuemin="{{ $participant->radiologi?->selesai ? 100 :'' }}"
                                 aria-valuemax="{{ $participant->radiologi?->selesai ? 100 : '0' }}" @if($participant->
@@ -161,7 +161,7 @@
                     <div class="card-header">
                         <div>
                             <h3 class="mb-2">Audiometri</h3>
-                            <p class="card-text">{{ $participant->audiometri?->selesai ? 'SELESAI' : 'BELUM' }}
+                            <p class="card-text" id="audiometri">{{ $participant->audiometri?->selesai ? 'SELESAI' : 'BELUM' }}
                             </p>
                         </div>
                         <div class="avatar bg-light-primary p-50 m-0">
@@ -172,7 +172,7 @@
                     </div>
                     <div class="card-body">
                         <div class="progress progress-bar-success">
-                            <div class="progress-bar" role="progressbar"
+                            <div class="progress-bar audiometri" role="progressbar"
                                 aria-valuenow="{{ $participant->audiometri?->selesai ? 100 : '' }}"
                                 aria-valuemin="{{ $participant->audiometri?->selesai ? 100 :'' }}"
                                 aria-valuemax="{{ $participant->audiometri?->selesai ? 100 : '0' }}" @if($participant->
@@ -191,7 +191,7 @@
                     <div class="card-header">
                         <div>
                             <h3 class="mb-2">Spiro</h3>
-                            <p class="card-text">{{ $participant->spirometri?->selesai ? 'SELESAI' : 'BELUM' }}
+                            <p class="card-text" id="spirometri">{{ $participant->spirometri?->selesai ? 'SELESAI' : 'BELUM' }}
                             </p>
                         </div>
                         <div class="avatar bg-light-primary p-50 m-0">
@@ -202,7 +202,7 @@
                     </div>
                     <div class="card-body">
                         <div class="progress progress-bar-primary">
-                            <div class="progress-bar" role="progressbar"
+                            <div class="progress-bar spirometri" role="progressbar"
                                 aria-valuenow="{{ $participant->spirometri?->selesai ? 100 : '' }}"
                                 aria-valuemin="{{ $participant->spirometri?->selesai ? 100 :'' }}"
                                 aria-valuemax="{{ $participant->spirometri?->selesai ? 100 : '0' }}" @if($participant->
@@ -221,7 +221,7 @@
                     <div class="card-header">
                         <div>
                             <h3 class="mb-2">Rectal</h3>
-                            <p class="card-text">{{ $participant->rectal?->selesai ? 'SELESAI' : 'BELUM' }}</p>
+                            <p class="card-text" id="rectal">{{ $participant->rectal?->selesai ? 'SELESAI' : 'BELUM' }}</p>
                         </div>
                         <div class="avatar bg-light-primary p-50 m-0">
                             <div class="avatar-content">
@@ -231,7 +231,7 @@
                     </div>
                     <div class="card-body">
                         <div class="progress progress-bar-primary">
-                            <div class="progress-bar" role="progressbar"
+                            <div class="progress-bar rectal" role="progressbar"
                                 aria-valuenow="{{ $participant->rectal?->selesai ? 100 : '' }}"
                                 aria-valuemin="{{ $participant->rectal?->selesai ? 100 :'' }}"
                                 aria-valuemax="{{ $participant->rectal?->selesai ? 100 : '0' }}" @if($participant->
@@ -250,7 +250,7 @@
                     <div class="card-header">
                         <div>
                             <h3 class="mb-2">EKG</h3>
-                            <p class="card-text">{{ $participant->ekg?->selesai ? 'SELESAI' : 'BELUM' }}</p>
+                            <p class="card-text" id="ekg">{{ $participant->ekg?->selesai ? 'SELESAI' : 'BELUM' }}</p>
                         </div>
                         <div class="avatar bg-light-primary p-50 m-0">
                             <div class="avatar-content">
@@ -260,7 +260,7 @@
                     </div>
                     <div class="card-body">
                         <div class="progress progress-bar-primary">
-                            <div class="progress-bar" role="progressbar"
+                            <div class="progress-bar ekg" role="progressbar"
                                 aria-valuenow="{{ $participant->ekg?->selesai ? 100 : '' }}"
                                 aria-valuemin="{{ $participant->ekg?->selesai ? 100 :'' }}"
                                 aria-valuemax="{{ $participant->ekg?->selesai ? 100 : '0' }}" @if($participant->

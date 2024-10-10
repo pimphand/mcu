@@ -254,7 +254,8 @@ class ParticipantService
         return [
             'success' => true,
             'message' => 'Tanda Vital record saved successfully.',
-            'data' => $tandaVital // Returning the created or updated record
+            'data' => $tandaVital,
+            'class' => "tandaVital"
         ];
     }
 
@@ -276,7 +277,7 @@ class ParticipantService
             $data // Data to update or create
         );
 
-        return ['success' => true, 'data' => $updated];
+        return ['success' => true, 'data' => $updated,'class' => "ekg"];
     }
 
     public function updateRectal(array $data, $participantId)
@@ -296,7 +297,8 @@ class ParticipantService
         return [
             'success' => true,
             'message' => 'Rectal record saved successfully.',
-            'data' => $rectal // Returning the created or updated record
+            'data' => $rectal, // Returning the created or updated record
+            'class' => "rectal"
         ];
     }
 
@@ -316,7 +318,8 @@ class ParticipantService
         return [
             'success' => true,
             'message' => 'Audiometri record saved successfully.',
-            'data' => $audiometri // Returning the created or updated record
+            'data' => $audiometri, // Returning the created or updated record
+            'class' => "audiometri"
         ];
     }
     public function updateSpirometri(array $data, $participantId)
@@ -341,7 +344,8 @@ class ParticipantService
         return [
             'success' => true,
             'message' => 'Spirometri record saved successfully.',
-            'data' => $spirometri // Returning the created or updated record
+            'data' => $spirometri, // Returning the created or updated record
+            'class' => "spirometri"
         ];
     }
 
@@ -362,7 +366,8 @@ class ParticipantService
         return [
             'success' => true,
             'message' => 'Radiologi record saved successfully.',
-            'data' => $radiologi // Returning the created or updated record
+            'data' => $radiologi, // Returning the created or updated record
+            'class' => "radiologi"
         ];
     }
 
@@ -383,7 +388,8 @@ class ParticipantService
         return [
             'success' => true,
             'message' => 'Laboratorium record saved successfully.',
-            'data' => $laboratorium // Returning the created or updated record
+            'data' => $laboratorium, // Returning the created or updated record
+            'class' => "laboratorium"
         ];
     }
 
@@ -419,7 +425,8 @@ class ParticipantService
         return [
             'success' => true,
             'message' => 'Pemeriksaan Fisik record saved successfully.',
-            'data' => $pemeriksaanFisik // Returning the created or updated record
+            'data' => $pemeriksaanFisik ,// Returning the created or updated record
+            'class' => "pemeriksaanFisik"
         ];
     }
 

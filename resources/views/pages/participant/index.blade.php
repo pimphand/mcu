@@ -110,7 +110,7 @@
                         <td>{{ $item->nik }}</td>
                         <td>
                             <a href="{{ route('participant.detail', $item->id) }}"
-                                data-url="{{ route('participant.detail', $item->id) }}" class="btn btn-link detail">
+                                data-url="{{ route('participant.detail', $item->id) }}" class="btn btn-link detail detail_{{$item->id}}">
                                 {{ $item->name }}
                             </a>
                         </td>
@@ -342,12 +342,7 @@
 <script src="{{ asset('app-assets/vendors/js/forms/select/select2.full.min.js') }}"></script>
 <script>
     $(function() {
-        $(document).ready(function () {
-                //#nilai_normal
-                $('#nilai_normal').click(function(){
-                    alert('adf')
-                })
-            })
+
             // button delete
             $('table').on('click', '.delete', function() {
                 const url = $(this).data('url');
@@ -809,6 +804,17 @@
                         success: (data) => {
                             if (data.success) {
                                 toastSuccess('Data berhasil disimpan');
+                                if (data.data.selesai == 1){
+
+                                    $('.'+data.class).attr('aria-valuenow', 100);
+                                    $('.'+data.class).attr('aria-valuemin', 100);
+                                    $('.'+data.class).attr('aria-valuemax', 100);
+
+                                    // Update the width of the progress bar
+                                    $('.'+data.class).css('width', '100%');
+                                    $('#'+data.class).text('SELESAI')
+                                }
+                                $('._btn_danger').click()
                                 return;
                             }
                             toastError('Data tidak ada perubahan');
@@ -826,6 +832,17 @@
                         success: (data) => {
                             if (data.success) {
                                 toastSuccess('Data berhasil disimpan');
+                                $('._btn_danger').click()
+                               if (data.data.selesai == 1){
+
+                                   $('.'+data.class).attr('aria-valuenow', 100);
+                                   $('.'+data.class).attr('aria-valuemin', 100);
+                                   $('.'+data.class).attr('aria-valuemax', 100);
+
+                                   // Update the width of the progress bar
+                                   $('.'+data.class).css('width', '100%');
+                                   $('#'+data.class).text('SELESAI')
+                               }
                                 return;
                             }
                             toastError('Data tidak ada perubahan');

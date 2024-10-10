@@ -626,9 +626,9 @@
     </div>
 </div>
 <div class="modal-footer">
-    <button type="button" class="btn" data-bs-dismiss="modal">Batal</button>
+    <button type="button" class="btn _btn_danger btn-danger" data-bs-dismiss="modal">Batal</button>
     <button type="button" class="btn btn-info" onclick="window.open('{{ route('report.pemeriksaan.fisik', $participant->id) }}', '', 'toolbar=yes,scrollbars=yes,resizable=yes,width=900,height=600');">Print</button>
-    <button type="submit" class="btn btn-primary" id="submit-edit-detail">Sumbit</button>
+    <button type="submit" class="btn btn-primary" id="submit-edit-detail">Submit</button>
 </div>
 
 <script>

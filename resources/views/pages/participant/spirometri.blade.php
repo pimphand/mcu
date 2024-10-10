@@ -110,9 +110,9 @@
     </div>
 </div>
 <div class="modal-footer">
-    <button type="button" class="btn" data-bs-dismiss="modal">Batal</button>
+    <button type="button" class="btn btn-danger _btn_danger" data-bs-dismiss="modal">Batal</button>
     <button type="button" class="btn btn-info" id="" onclick="window.open('{{ route('report.spirometri', $participant->id) }}', '', 'toolbar=yes,scrollbars=yes,resizable=yes,width=900,height=600');">Print</button>
-    <button type="submit" class="btn btn-primary" id="submit-edit-detail">Sumbit</button>
+    <button type="submit" class="btn btn-primary" id="submit-edit-detail">Submit</button>
 </div>
 
 

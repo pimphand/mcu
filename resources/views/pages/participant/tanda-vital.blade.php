@@ -163,7 +163,7 @@
         <div class="col-md-3">
             <div class="form-group">
                 <label class="form-label required" for="">Tekanan Darah</label>
-                <input type="number" name="tekanan_darah" id="tekanan_darah" class="form-control"
+                <input type="text" name="tekanan_darah" id="tekanan_darah" class="form-control"
                     value="{{ $tandaVital?->tekanan_darah }}">
             </div>
         </div>
@@ -255,10 +255,9 @@
 
 </div>
 <div class="modal-footer">
-    <button type="button" class="btn" data-bs-dismiss="modal">Batal</button>
-    <button type="submit" class="btn btn-primary" id="submit-edit-detail">Sumbit</button>
+    <button type="button" class="btn btn-danger _btn_danger" id="" data-bs-dismiss="modal">Batal</button>
+    <button type="submit" class="btn btn-primary" id="submit-edit-detail">Submit</button>
 </div>
-
 
 <script>
     // Menggunakan querySelector
