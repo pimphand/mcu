@@ -14,7 +14,7 @@ use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithStartRow;
 
 date_default_timezone_set('Asia/Jakarta');
-class DoctorValidateImport implements  ToModel, WithStartRow, WithChunkReading, WithHeadingRow, ShouldQueue
+class DoctorValidateImport implements ToModel, WithStartRow, WithChunkReading, WithHeadingRow, ShouldQueue
 {
     protected  $client_id;
 
@@ -23,8 +23,8 @@ class DoctorValidateImport implements  ToModel, WithStartRow, WithChunkReading, 
         $this->client_id = $client_id;
     }
     /**
-    * @param array $row
-    */
+     * @param array $row
+     */
     public function model(array $row)
     {
         $unixTimestamp = ($row['tgl_mcu'] - 25569) * 86400;
@@ -33,20 +33,20 @@ class DoctorValidateImport implements  ToModel, WithStartRow, WithChunkReading, 
         ValidateDoctor::updateOrCreate([
             'client_id' => $this->client_id,
             'no_mcu' => $row['no_mcu'],
-        ],[
+        ], [
             'date_mcu' => $formattedDate,
             'name' => $row['nama'],
             'gender' => $row['gender'],
-            'result_mcu'=> $row['hasil_mcu'],
+            'result_mcu' => $row['hasil_mcu'],
             'doctor' => $row['dokter_pemeriksa'],
             'notes' => $row['catatan'],
         ]);
 
-        $pemeriksaan = Participant::with('pemeriksaanFisik')->where('code',$row['no_mcu'])->first();
+        $pemeriksaan = Participant::with('pemeriksaanFisik')->where('code', $row['no_mcu'])->first();
 
-        if($pemeriksaan){
+        if ($pemeriksaan) {
             $pemeriksaan->pemeriksaanFisik->kesimpulan = $row['hasil_mcu'];
-            $pemeriksaan->pemeriksaanFisik->saran = $row['catatan'];
+            // $pemeriksaan->pemeriksaanFisik->saran = $row['catatan'];
             $pemeriksaan->save();
         }
     }

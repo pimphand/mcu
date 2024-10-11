@@ -218,7 +218,7 @@
                     @foreach($data as $key=> $item)
                       <tr style="background-color: {{
                                 ($item->pemeriksaanFisik?->kesimpulan == "UNFIT") ? '#eadafd' :
-                                (($item->pemeriksaanFisik?->kesimpulan == "FIT WITH RETRICTION") ? '#9bdeee' : '')
+                                (($item->pemeriksaanFisik?->kesimpulan == "FIT WITH RESTRICTION") ? '#9bdeee' : '')
                             }}">
 
                             <td nowrap="">{{ $key +1 }}</td>
@@ -380,7 +380,7 @@
     <script src="{{ asset('app-assets/vendors/js/pickers/pickadate/picker.time.js') }}"></script>
     <script src="{{ asset('app-assets/vendors/js/pickers/pickadate/legacy.js') }}"></script>
     <script src="{{ asset('app-assets/vendors/js/pickers/flatpickr/flatpickr.min.js') }}"></script>
-   
+
     <script>
         let rangePickr = $('.flatpickr-range').flatpickr({
             mode: 'range',
@@ -404,7 +404,7 @@ $(document).ready(function() {
         // Ambil parameter dari URL
         const urlParams = new URLSearchParams(window.location.search);
         const dateRange = urlParams.get('filter[date_range]');
-        
+
         let date1, date2;
 
         if (dateRange) {

@@ -124,7 +124,7 @@ class ParticipantService
         }
 
         // $query = $query->where('client_id', Auth::user()->client_id);
-        return $query->orderBy('no_form','asc')->paginate($limit)->withQueryString();
+        return $query->orderBy('no_form', 'asc')->paginate($limit)->withQueryString();
     }
 
     public function create(array $data)
@@ -702,7 +702,7 @@ class ParticipantService
     {
         return [
             'FIT' => 'FIT',
-            'FIT WITH RETRICTION' => 'FIT WITH RETRICTION',
+            'FIT WITH RESTRICTION' => 'FIT WITH RESTRICTION',
             'UNFIT' => 'UNFIT',
             '---- UNTUK GSI 1 PILIH DIBAWAH INI ----' => '---- UNTUK GSI PILIH DIBAWAH INI ----',
             'GSI1 - FIT WITH JOB' => 'FIT WITH JOB',

@@ -56,7 +56,7 @@ class RecapController extends Controller
                 DB::raw('COUNT(pemeriksaan_fisiks.id) as total_pemeriksaan_fisiks'), // Count total pemeriksaan fisiks records
                 DB::raw('SUM(CASE WHEN pemeriksaan_fisiks.selesai = 1 THEN 1 ELSE 0 END) as total_selesai_pemeriksaan_fisiks'),
                 DB::raw('SUM(CASE WHEN pemeriksaan_fisiks.kesimpulan = "FIT" THEN 1 ELSE 0 END) as total_selesai_pemeriksaan_fit'),
-                DB::raw('SUM(CASE WHEN pemeriksaan_fisiks.kesimpulan = "FIT WITH RETRICTION" THEN 1 ELSE 0 END) as total_selesai_pemeriksaan_frw'),
+                DB::raw('SUM(CASE WHEN pemeriksaan_fisiks.kesimpulan = "FIT WITH RESTRICTION" THEN 1 ELSE 0 END) as total_selesai_pemeriksaan_frw'),
                 DB::raw('SUM(CASE WHEN pemeriksaan_fisiks.kesimpulan = "UNFIT" THEN 1 ELSE 0 END) as total_selesai_pemeriksaan_unfit'),
                 DB::raw('COUNT(laboratoria.id) as total_laboratoria'), // Count total laboratoria records
                 DB::raw('SUM(CASE WHEN laboratoria.selesai = 1 THEN 1 ELSE 0 END) as total_selesai_laboratoria'),
@@ -81,7 +81,7 @@ class RecapController extends Controller
                 ->leftJoin('tanda_vitals', 'participants.id', '=', 'tanda_vitals.participant_id')
                 ->leftJoin('ekgs', 'participants.id', '=', 'ekgs.participant_id')
                 ->groupBy(DB::raw('DATE(participants.register_date)'))
-                ->where(function ($query)use ($request) {
+                ->where(function ($query) use ($request) {
                     $date = explode(' to ', $request->date_range);
                     // dd(count($date));
                     // Jika hanya ada satu tanggal
@@ -95,17 +95,15 @@ class RecapController extends Controller
                     }
 
                     $query->whereBetween('register_date', [$startDate, $endDate]);
-                    if ($request->contract_id){
-                        $query->where('contract_id',$request->contract_id);
+                    if ($request->contract_id) {
+                        $query->where('contract_id', $request->contract_id);
                     }
-                    if ($request->divisi_id){
-                        $query->where('divisi_id',$request->divisi_id);
+                    if ($request->divisi_id) {
+                        $query->where('divisi_id', $request->divisi_id);
                     }
-                    if ($request->client_id){
-                        $query->where('client_id',$request->client_id);
+                    if ($request->client_id) {
+                        $query->where('client_id', $request->client_id);
                     }
-
-
                 })
                 ->get();
 

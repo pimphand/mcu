@@ -685,16 +685,27 @@ document.getElementById('nilai_normal').addEventListener('click', function (e) {
     document.getElementById('ekg_text').value = 'DBN';
     document.getElementById('neurologis_text').value = 'DBN';
 });
+    document.getElementById('kesimpulan').addEventListener('change', function() {
+        const saranElement = document.getElementById('saran');
+        const selectedValue = this.value;
 
+        switch (selectedValue) {
+            case "FIT":
+                saranElement.value = `
+                - Olahraga teratur
+                - Jaga pola makan dan olahraga`;
+                break;
+            case "UNFIT":
+                saranElement.value = `Konsultasi ke dokter/faskes untuk pemeriksaan lebih lanjut`;
+                break;
+            case "FIT WITH RESTRICTION":
+                saranElement.value = `
+                - Olahraga teratur
+                - Jaga pola makan
+                - Konsultasi ke dokter/faskes untuk pemeriksaan lebih lanjut`;
+                break;
+            default:
+                saranElement.value = ''; // Optional: Clear the input if none match
+        }
+    });
 </script>
-
-
-<script>
-    // Menggunakan querySelector
-    var selectElement = document.querySelector('.employee_id');
-    selectElement.value = "1";
-    // Jika perlu memicu event 'change'
-    var event = new Event('change');
-    selectElement.dispatchEvent(event);
-</script>
-
