@@ -491,7 +491,7 @@
             </tr>
             <tr>
                 <td class="border">Saran</td>
-                <td class="border text-center">{!! $pemeriksaanFisik->saran !!}</td>
+                <td class="border text-start">{!! nl2br($pemeriksaanFisik->saran) !!}</td>
             </tr>
         </tbody>
     </table>

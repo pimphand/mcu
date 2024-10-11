@@ -691,21 +691,17 @@ document.getElementById('nilai_normal').addEventListener('click', function (e) {
 
         switch (selectedValue) {
             case "FIT":
-                saranElement.value = `
-                - Olahraga teratur
-                - Jaga pola makan dan olahraga`;
+                saranElement.value = `- Olahraga teratur\n- Jaga pola makan dan olahraga`;
                 break;
             case "UNFIT":
                 saranElement.value = `Konsultasi ke dokter/faskes untuk pemeriksaan lebih lanjut`;
                 break;
             case "FIT WITH RESTRICTION":
-                saranElement.value = `
-                - Olahraga teratur
-                - Jaga pola makan
-                - Konsultasi ke dokter/faskes untuk pemeriksaan lebih lanjut`;
+                saranElement.value = `- Olahraga teratur\n- Jaga pola makan\n- Konsultasi ke dokter/faskes untuk pemeriksaan lebih lanjut`;
                 break;
             default:
                 saranElement.value = ''; // Optional: Clear the input if none match
         }
+
     });
 </script>
