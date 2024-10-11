@@ -157,7 +157,7 @@
             <tr>
                 <td class="borde$pemeriksaanFisikr">Riwayat Trauma</td>
                 <td class="border text-center">
-                    {{ $tandaVital->riwayat_trauma }}</td>
+                    {{ $tandaVital->riwayat_trauma_text }}</td>
 
             </tr>
             <tr>
