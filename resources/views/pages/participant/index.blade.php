@@ -104,7 +104,7 @@
                         </td>
                         @if ($isRegisterPage)
                         <td>{{ $item->register_date }}</td>
-                        <td>{{ $item->register_number }}</td>
+                        <td>{{ $item->register_number }} ({{$item->no_form}})</td>
                         @endif
                         <td>{{ $item->code }}</td>
                         <td>{{ $item->nik }}</td>

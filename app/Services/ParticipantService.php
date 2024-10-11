@@ -124,7 +124,7 @@ class ParticipantService
         }
 
         // $query = $query->where('client_id', Auth::user()->client_id);
-        return $query->latest()->paginate($limit)->withQueryString();
+        return $query->orderBy('no_form','asc')->paginate($limit)->withQueryString();
     }
 
     public function create(array $data)

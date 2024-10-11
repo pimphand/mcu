@@ -38,7 +38,8 @@ class ParticipantController extends Controller
     public function register(Request $request)
     {
         $request->merge(['is_register_page' => true]);
-        $participants = $this->participantService->paginate($request->get('limit', 10));
+        $participants = $this->participantService
+            ->paginate($request->get('limit', 10));
         $isRegisterPage = true;
 
         return view('pages.participant.index', compact('participants', 'isRegisterPage'));
