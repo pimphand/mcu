@@ -204,7 +204,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn" data-bs-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-primary" id="submit-create">Sumbit</button>
+                    <button type="submit" class="btn btn-primary" id="submit-create">Submit</button>
                 </div>
             </div>
         </div>

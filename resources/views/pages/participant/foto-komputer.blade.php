@@ -17,5 +17,5 @@
 </div>
 <div class="modal-footer">
     <button type="button" class="btn" data-bs-dismiss="modal">Batal</button>
-    <button type="submit" class="btn btn-primary" id="submit-edit-detail">Sumbit</button>
+    <button type="submit" class="btn btn-primary" id="submit-edit-detail">Submit</button>
 </div>

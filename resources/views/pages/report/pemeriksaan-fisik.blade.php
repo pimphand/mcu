@@ -85,12 +85,12 @@
                             <tr>
                                 <td>Status</td>
                                 <td>:</td>
-                                <td>{{ $participant->status }}</td>
+                                <td>{{ $participant->status ?? "-" }}</td>
                             </tr>
                             <tr>
                                 <td>Dept. ID</td>
                                 <td>:</td>
-                                <td>{{ $participant->department?->code }}</td>
+                                <td>{{ $participant->divisi?->name }}</td>
                             </tr>
                             <tr>
                                 <td>Department</td>
@@ -416,11 +416,15 @@
                 <td class="border text-center">
                     {{ $participant->radiologi?->kesan }}</td>
             </tr>
+            {{--  --}}
+            @if ($pemeriksaanFisik->neurologis_tidak_diperiksa)
             <tr>
                 <td class="border">Neurologis</td>
                 <td class="border text-center">
                     {{ $pemeriksaanFisik->neurologis_text == 'BDN' ? 'DALAM BATAS NORMAL' : $pemeriksaanFisik->neurologis_text }}</td>
             </tr>
+            @endif
+            @if($participant->audiometri)
             <tr>
                 <td colspan="2" class="border">HASIL AUDIOMETRI (TERLAMPIR)</td>
             </tr>
@@ -434,7 +438,10 @@
                 <td class="border text-center">
                     {{ $participant->audiometri->audiometri_telinga_kiri ?? "TIDAK DIPERIKSA" }}</td>
             </tr>
-            <tr>
+            @endif
+
+            @if ($participant->ekg)
+                <tr>
                 <td colspan="2" class="border">EKG (TERLAMPIR)</td>
             </tr>
             <tr>
@@ -442,6 +449,8 @@
                 <td class="border text-center">
                     {{ $participant->ekg->kesimpulan ?? "TIDAK DIPERIKSA" }}</td>
             </tr>
+            @endif
+            @if ($participant->spirometri)
             <tr>
                 <td colspan="2" class="border">SPIROMETRI (TERLAMPIR)</td>
             </tr>
@@ -450,6 +459,8 @@
                 <td class="border text-center">
                     {{ $participant->spirometri->hasil ?? "TIDAK DIPERIKSA" }}</td>
             </tr>
+            @endif
+            @if ($participant->rectal)
             <tr>
                 <td colspan="2" class="border">RECTAL SWAB (TERLAMPIR)</td>
             </tr>
@@ -468,6 +479,8 @@
                 <td class="border text-center">
                     {{ $participant->rectal->e_coli_pathogen ?? "TIDAK DIPERIKSA"  }}</td>
             </tr>
+            @endif
+
             <tr>
                 <td colspan="2" class="border">HASIL MCU</td>
             </tr>

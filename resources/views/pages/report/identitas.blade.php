@@ -94,7 +94,7 @@
                             <tr>
                                 <td>Status</td>
                                 <td>:</td>
-                                <td>{{ $participant->status }}</td>
+                                <td>{{ $participant->status ?? "-" }}</td>
                             </tr>
                             <tr>
                                 <td>Department</td>
