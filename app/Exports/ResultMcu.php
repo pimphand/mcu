@@ -2,25 +2,32 @@
 
 namespace App\Exports;
 
-use App\Models\Participant;
-use Illuminate\View\View;
-use Maatwebsite\Excel\Concerns\FromCollection;
+use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\FromView;
 
 class ResultMcu implements FromView
 {
-    private $participant;
-    public function __construct($participant){
-        $this->participant = $participant;
-    }
+    private $participants;
+
     /**
-    * @return \Illuminate\Support\Collection
-    */
+     * Constructor to pass participants data
+     *
+     * @param $participants
+     */
+    public function __construct($participants)
+    {
+        $this->participants = $participants;
+    }
+
+    /**
+     * Export data using view
+     *
+     * @return View
+     */
     public function view(): View
     {
-        $data = $this->participant;
-        return view('exports.result_mcu', [
-            "data" => $data
+        return view('exports.resultMcu', [
+            'data' => $this->participants
         ]);
     }
 }

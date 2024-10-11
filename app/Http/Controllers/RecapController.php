@@ -16,6 +16,8 @@ use App\Services\ParticipantService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Queue;
+use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -53,9 +55,25 @@ class RecapController extends Controller
                 AllowedFilter::exact('contract_id'),
                 AllowedFilter::exact('divisi_id'),
                 AllowedFilter::scope('date_range'),
+                AllowedFilter::scope('form_range'),
             ])
             ->get();
-        Excel::download(new ResultMcu($data), 'results.xlsx');
+
+        // Use a queue to process the export
+        $fileName = 'results_' . time() . '.xlsx';
+
+        Queue::push(function () use ($data, $fileName) {
+            // Store the file in the 'public' directory
+            Excel::store(new ResultMcu($data), 'hasil_mcu/' . $fileName);
+        });
+
+        // Return the public URL for the user to download the file
+        $fileUrl = Storage::url('hasil_mcu/' . $fileName);
+
+        return response()->json([
+            'status' => 'success',
+            'download_url' => $fileUrl
+        ]);
     }
 
     public function register(Request $request)

@@ -99,4 +99,11 @@ class Participant extends Model
 
         return $query->whereBetween('register_date', [$startDate, $endDate]);
     }
+    public function scopeFormRange(Builder $query, $numberno)
+    {
+        // Split the range by '-' and ensure both numbers are integers
+        $number = explode('-', $numberno);
+
+        return $query->whereBetween('no_form', [(int)$number[0], (int)$number[1]]);
+    }
 }

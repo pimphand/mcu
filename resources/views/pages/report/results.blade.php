@@ -68,13 +68,18 @@
                         <label for="" class="form-label text-white">cari</label>
                         <button type="submit" class="btn btn-primary">Cari</button>
                     </div>
+                    <div class="col-md-2 mt-1">
+                        <button class="btn btn-success export" type="button" data-type="identitas">Simpan Excel</button>
+                    </div>
+                    
                 </div>
             </form>
 
+            
         </div>
         <div class="card-body">
             <div class="table-responsive table-responsive small textkecil">
-                <table class="dt-responsive table mt-1 textkecil" id="table">
+                <table class="dt-responsive table textkecil" id="table">
                     <thead>
                                 <tr>
                                  <th class="border-bottom textkecil border-top">No.</th>
@@ -400,7 +405,7 @@
 
             window.open(url, '', 'toolbar=yes,scrollbars=yes,resizable=yes,width=900,height=600');
         });
-$(document).ready(function() {
+    $(document).ready(function() {
         // Ambil parameter dari URL
         const urlParams = new URLSearchParams(window.location.search);
         const dateRange = urlParams.get('filter[date_range]');
@@ -421,6 +426,30 @@ $(document).ready(function() {
             mode: 'range',
             maxDate: 'today',
             defaultDate: [date1, date2] // Set tanggal default
+        });
+    });
+
+    $('.export').click(function(){
+        let exportButton = $(this); // Save reference to the button
+        let originalText = exportButton.text(); // Save original button text
+        let url = "{{ route('report.importResultMcu') }}"+'?'+`filter[date_range]=${$('#fp-range').val()}&client_id=${$('#client_id').val()}&contract_id=${$('#contract_id').val()}&divisi_id=${$('#divisi_id').val()}`;
+        
+        // Disable the button and change the text to show the process is ongoing
+        exportButton.prop('disabled', true).text('Sedang di proses...');
+
+        $.get(url, function(data){
+            if(data.status == 'success'){
+                window.open(data.download_url, '_blank');
+            } else {
+                alert('Data tidak ditemukan');
+            }
+        })
+        .fail(function() {
+            alert('Terjadi kesalahan saat memproses permintaan.');
+        })
+        .always(function() {
+            // Re-enable the button and restore the original text
+            exportButton.prop('disabled', false).text(originalText);
         });
     });
     </script>
