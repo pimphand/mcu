@@ -10,7 +10,9 @@
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        
+        @page {
+            size: 21cm 33cm;
+        }
         table {
             width: 100%;
         }
@@ -29,7 +31,7 @@
             border-collapse: collapse;
             width: 50%;
             padding: 3px;
-            font-size: 14px;
+            font-size: 12px;
         }
     </style>
 </head>
@@ -42,7 +44,7 @@
             <tr>
                 <td>
                     <table>
-                        <tbody>
+                        <tbody style="font-size: 12px">
                             <tr>
                                 <td>MCU ID</td>
                                 <td>:</td>
@@ -70,7 +72,7 @@
                 </td>
                 <td>
                     <table>
-                        <tbody>
+                        <tbody style="font-size: 12px">
                             <tr>
                                 <td>Perusahaan</td>
                                 <td>:</td>
@@ -181,24 +183,28 @@
             <tr>
                 <td colspan="3" class="border">KIMIA KLINIK</td>
             </tr>
-            <tr>
-                <td class="border">SGOT</td>
-                <td class="border text-center">
-                    {{ $laboratorium->sgot }}</td>
-                <td class="border text-center">P: < 31 µl, L: < 34 µl</td>
-            </tr>
+            @if($laboratorium->sgot)
+{{--            <tr>--}}
+{{--                <td class="border">SGOT</td>--}}
+{{--                <td class="border text-center">--}}
+{{--                    {{ $laboratorium->sgot }}</td>--}}
+{{--                <td class="border text-center">P: < 31 µl, L: < 34 µl</td>--}}
+{{--            </tr>--}}
+            @endif
             <tr>
                 <td class="border">SGPT</td>
                 <td class="border text-center">
                     {{ $laboratorium->sgpt }}</td>
                 <td class="border text-center">0 - 45 µl</td>
             </tr>
-            <tr>
-                <td class="border">Ureum</td>
-                <td class="border text-center">
-                    {{ $laboratorium->ureum }}</td>
-                <td class="border text-center">10 - 40 mg</td>
-            </tr>
+            @if($laboratorium->ureum)
+{{--                <tr>--}}
+{{--                    <td class="border">Ureum</td>--}}
+{{--                    <td class="border text-center">--}}
+{{--                        {{ $laboratorium->ureum }}</td>--}}
+{{--                    <td class="border text-center">10 - 40 mg</td>--}}
+{{--                </tr>--}}
+            @endif
             <tr>
                 <td class="border">Creatinin</td>
                 <td class="border text-center">
