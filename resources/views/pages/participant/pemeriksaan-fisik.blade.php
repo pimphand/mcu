@@ -643,7 +643,7 @@ document.getElementById('nilai_normal').addEventListener('click', function (e) {
     document.getElementById('visus').value = 'Mata Kanan 6/6 , Mata Kiri 6/6';
     document.getElementById('buta_warna').value = 'NORMAL';
     document.getElementById('kelainan_telinga').value = 'NORMAL';
-    document.getElementById('gigi').value = 'NORMAL';
+    document.getElementById('gigi').value = 'DBN';
     document.getElementById('telinga').value = 'Serumen ( - / - )';
      document.getElementById('tenggorokan').checked = true;
     document.getElementById('tenggorokan_text').value = "TAK";
@@ -682,8 +682,8 @@ document.getElementById('nilai_normal').addEventListener('click', function (e) {
     document.getElementById('neurologis_bdn').checked = true;
     document.getElementById('fisik_diperiksa').checked = true;
     document.getElementById('selesai').checked = true;
-    document.getElementById('ekg_text').value = 'BDN';
-    document.getElementById('neurologis_text').value = 'BDN';
+    document.getElementById('ekg_text').value = 'DBN';
+    document.getElementById('neurologis_text').value = 'DBN';
 });
 
 </script>
