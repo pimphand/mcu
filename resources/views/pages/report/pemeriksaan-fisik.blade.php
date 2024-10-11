@@ -422,17 +422,17 @@
                     {{ $pemeriksaanFisik->neurologis_text == 'BDN' ? 'DALAM BATAS NORMAL' : $pemeriksaanFisik->neurologis_text }}</td>
             </tr>
             <tr>
-                <td colspan="2" class="border">HASIL PHOTO THORAX (TERLAMPIR)</td>
+                <td colspan="2" class="border">HASIL AUDIOMETRI (TERLAMPIR)</td>
             </tr>
             <tr>
                 <td class="border">Pendengaran Telinga Kanan </td>
                 <td class="border text-center">
-                    {{ $participant->audiometri?->audiometri_telinga_kanan }}</td>
+                    {{ $participant->audiometri->audiometri_telinga_kanan ?? "TIDAK DIPERIKSA" }}</td>
             </tr>
             <tr>
                 <td class="border">Pendengaran Telinga Kiri </td>
                 <td class="border text-center">
-                    {{ $participant->audiometri?->audiometri_telinga_kiri }}</td>
+                    {{ $participant->audiometri->audiometri_telinga_kiri ?? "TIDAK DIPERIKSA" }}</td>
             </tr>
             <tr>
                 <td colspan="2" class="border">EKG (TERLAMPIR)</td>
@@ -440,7 +440,7 @@
             <tr>
                 <td class="border">Kesimpulan EKG </td>
                 <td class="border text-center">
-                    {{ $participant->ekg?->kesimpulan }}</td>
+                    {{ $participant->ekg->kesimpulan ?? "TIDAK DIPERIKSA" }}</td>
             </tr>
             <tr>
                 <td colspan="2" class="border">SPIROMETRI (TERLAMPIR)</td>
@@ -448,7 +448,7 @@
             <tr>
                 <td class="border">Kesimpulan Spiro </td>
                 <td class="border text-center">
-                    {{ $participant->spirometri?->hasil }}</td>
+                    {{ $participant->spirometri->hasil ?? "TIDAK DIPERIKSA" }}</td>
             </tr>
             <tr>
                 <td colspan="2" class="border">RECTAL SWAB (TERLAMPIR)</td>
@@ -456,17 +456,17 @@
             <tr>
                 <td class="border">Salmonella Thypi</td>
                 <td class="border text-center">
-                    {{ $participant->rectal?->salmonella_thypi }}</td>
+                    {{ $participant->rectal->salmonella_thypi ?? "TIDAK DIPERIKSA"  }}</td>
             </tr>
             <tr>
                 <td class="border">Shigella SP</td>
                 <td class="border text-center">
-                    {{ $participant->rectal?->shigella_sp }}</td>
+                    {{ $participant->rectal->shigella_sp ?? "TIDAK DIPERIKSA" }}</td>
             </tr>
             <tr>
                 <td class="border">E. Coli Pathogen</td>
                 <td class="border text-center">
-                    {{ $participant->rectal?->e_coli_pathogen }}</td>
+                    {{ $participant->rectal->e_coli_pathogen ?? "TIDAK DIPERIKSA"  }}</td>
             </tr>
             <tr>
                 <td colspan="2" class="border">HASIL MCU</td>
@@ -474,7 +474,7 @@
             <tr>
                 <td class="border">Kesimpulan</td>
                 <td class="border text-center">
-                    {{ $pemeriksaanFisik->kesimpulan }}</td>
+                    {{ $pemeriksaanFisik->kesimpulan ?? "TIDAK DIPERIKSA"  }}</td>
             </tr>
             <tr>
                 <td class="border">Saran</td>
