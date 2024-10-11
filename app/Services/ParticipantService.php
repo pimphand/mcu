@@ -143,7 +143,7 @@ class ParticipantService
             $role = Role::where('level', RoleService::LEVEL_PARTICIPANT)->first();
             $insertUser = User::create([
                 'name' => $data['name'],
-                'username' => $data['code'] ."_".$insert->id,
+                'username' => $data['code'] . "_" . $insert->id,
                 'password' => bcrypt($data['birthday']),
                 'role_id' => $role->id,
                 'client_id' => $data['client_id'],
@@ -162,7 +162,6 @@ class ParticipantService
 
             \DB::commit();
             return $insert;
-
         } catch (\Throwable $th) {
             \DB::rollBack();
             Log::error($th);
@@ -244,6 +243,7 @@ class ParticipantService
         $data['vaksin_hepatitis'] = isset($data['vaksin_hepatitis']) ? 1 : 0;
         $data['vaksin_tetanus'] = isset($data['vaksin_tetanus']) ? 1 : 0;
         $data['ibu_hamil'] = isset($data['ibu_hamil']) ? 1 : 0;
+        $data['imt_nilai'] = isset($data['imt_nilai']) ? $data['imt_nilai'] : null;
 
         // Use updateOrCreate to find by participant_id and update or create accordingly
         $tandaVital = TandaVital::updateOrCreate(
@@ -277,7 +277,7 @@ class ParticipantService
             $data // Data to update or create
         );
 
-        return ['success' => true, 'data' => $updated,'class' => "ekg"];
+        return ['success' => true, 'data' => $updated, 'class' => "ekg"];
     }
 
     public function updateRectal(array $data, $participantId)
@@ -425,7 +425,7 @@ class ParticipantService
         return [
             'success' => true,
             'message' => 'Pemeriksaan Fisik record saved successfully.',
-            'data' => $pemeriksaanFisik ,// Returning the created or updated record
+            'data' => $pemeriksaanFisik, // Returning the created or updated record
             'class' => "pemeriksaanFisik"
         ];
     }

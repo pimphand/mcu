@@ -213,6 +213,7 @@ class ParticipantController extends Controller
             'frekuensi_nafas' => '',
             'ttv_diperiksa' => '',
             'ibu_hamil' => '',
+            'imt_nilai' => '',
             'selesai' => '',
             'employee_id' => '',
             'vaksin_hepatitis' => '',
