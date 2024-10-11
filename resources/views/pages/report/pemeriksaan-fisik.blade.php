@@ -90,7 +90,8 @@
                             <tr>
                                 <td>Dept. ID</td>
                                 <td>:</td>
-                                <td>{{ $participant->divisi?->name }}</td>
+                                                               <td>{{ $participant->divisi?->name }}</td>
+
                             </tr>
                             <tr>
                                 <td>Department</td>
@@ -214,7 +215,7 @@
                     {{ $tandaVital->ibu_hamil ? 'YA' : 'TIDAK' }}</td>
 
             </tr>
-            <tr>
+            {{-- <tr>
                 <td class="border">Vaksin Hepatitis</td>
                 <td class="border text-center">
                     {{ $tandaVital->vaksin_hepatitis ? 'YA' : 'TIDAK' }}</td>
@@ -224,8 +225,7 @@
                 <td class="border">Vaksin Tetanus</td>
                 <td class="border text-center">
                     {{ $tandaVital->vaksin_tetanus ? 'YA' : 'TIDAK' }}</td>
-
-            </tr>
+            </tr> --}}
             <tr>
                 <td colspan="2" class="border">KEADAAN UMUM</td>
             </tr>

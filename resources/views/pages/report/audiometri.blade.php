@@ -87,7 +87,7 @@
                             <tr>
                                 <td>Dept. ID</td>
                                 <td>:</td>
-                                <td>{{ $participant->department?->code }}</td>
+                                <td>{{ $participant->divisi?->name }}</td>
                             </tr>
                             <tr>
                                 <td>Department</td>
