@@ -217,5 +217,6 @@ Route::middleware('auth')->group(function () {
     // });
 
     Route::get('report-hasil', [RecapController::class, 'results'])->name('report.results');
+    Route::get('report-import-result-mcu', [RecapController::class, 'importResultMcu'])->name('report.importResultMcu');
     Route::middleware('mcu')->get('report-recap-register', [RecapController::class, 'register'])->name('recap.register');
 });

@@ -88,7 +88,7 @@
                                   <th class="border-bottom textkecil border-top">Dept</th>
                                   <th class="border-bottom textkecil border-top">Bagian/ Unit</th>
                                   <th class="border-bottom textkecil border-top">Perusahaan</th>
-																	<th class="border-bottom textkecil border-top">Gedung</th>
+								   <th class="border-bottom textkecil border-top">Gedung</th>
                                   <th class="border-bottom textkecil border-top">Paket MCU</th>
                                   <th class="border-bottom textkecil border-top">TTV </th>
                                   <th class="border-bottom textkecil border-top">Keluhan Utama</th>
@@ -147,35 +147,35 @@
                                   <th class="border-bottom textkecil border-top">Lab </th>
                                  <th class="border-bottom textkecil border-top" nowrap="">Hemoglobin</th>
                                  <th class="border-bottom textkecil border-top" nowrap="">Reduksi</th>
-                                 <th class="border-bottom textkecil border-top" nowrap="">       Hematokrit</th>
-                                 <th class="border-bottom textkecil border-top" nowrap="">       Lekosit</th>
-                                 <th class="border-bottom textkecil border-top" nowrap="">       Trombosit</th>
-                                 <th class="border-bottom textkecil border-top" nowrap="">       Eritrosit</th>
-                                 <th class="border-bottom textkecil border-top" nowrap="">            Basofil</th>
-                                 <th class="border-bottom textkecil border-top" nowrap="">            Eosinofil </th>
-                                 <th class="border-bottom textkecil border-top" nowrap="">            N Batang </th>
-                                 <th class="border-bottom textkecil border-top" nowrap="">            N Segmen</th>
-                                 <th class="border-bottom textkecil border-top" nowrap="">            Limfosit </th>
-                                 <th class="border-bottom textkecil border-top" nowrap="">            Monosit </th>
+                                 <th class="border-bottom textkecil border-top" nowrap="">Hematokrit</th>
+                                 <th class="border-bottom textkecil border-top" nowrap="">Lekosit</th>
+                                 <th class="border-bottom textkecil border-top" nowrap="">Trombosit</th>
+                                 <th class="border-bottom textkecil border-top" nowrap="">Eritrosit</th>
+                                 <th class="border-bottom textkecil border-top" nowrap="">Basofil</th>
+                                 <th class="border-bottom textkecil border-top" nowrap="">Eosinofil </th>
+                                 <th class="border-bottom textkecil border-top" nowrap="">N Batang </th>
+                                 <th class="border-bottom textkecil border-top" nowrap="">N Segmen</th>
+                                 <th class="border-bottom textkecil border-top" nowrap="">Limfosit </th>
+                                 <th class="border-bottom textkecil border-top" nowrap="">Monosit </th>
                                  <th class="border-bottom textkecil border-top" nowrap="">SGOT</th>
-                                 <th class="border-bottom textkecil border-top" nowrap="">       SGPT</th>
+                                 <th class="border-bottom textkecil border-top" nowrap="">SGPT</th>
                                  <th class="border-bottom textkecil border-top" nowrap="">Ureum</th>
-                                 <th class="border-bottom textkecil border-top" nowrap="">       Creatinin</th>
+                                 <th class="border-bottom textkecil border-top" nowrap="">Creatinin</th>
                                  <th class="border-bottom textkecil border-top" nowrap="">Glukosa Puasa</th>
-                                 <th class="border-bottom textkecil border-top" nowrap="">            Berat Jenis</th>
-                                 <th class="border-bottom textkecil border-top" nowrap="">            PH / Reaksi </th>
-                                 <th class="border-bottom textkecil border-top" nowrap="">            Warna </th>
-                                 <th class="border-bottom textkecil border-top" nowrap="">            Kekeruhan</th>
-                                 <th class="border-bottom textkecil border-top" nowrap="">            Urobilinogen</th>
-                                 <th class="border-bottom textkecil border-top" nowrap="">            Bilirubin</th>
-                                 <th class="border-bottom textkecil border-top" nowrap="">            Eritrosit</th>
-                                 <th class="border-bottom textkecil border-top" nowrap="">            Keton</th>
-                                 <th class="border-bottom textkecil border-top" nowrap="">            Protein</th>
-                                 <th class="border-bottom textkecil border-top" nowrap="">            Sedimen – Epitel</th>
-                                 <th class="border-bottom textkecil border-top" nowrap="">            Sedimen – Eritrosit</th>
-                                 <th class="border-bottom textkecil border-top" nowrap="">            Sedimen – Leukosit</th>
-                                 <th class="border-bottom textkecil border-top" nowrap="">            Sedimen - Bakteri</th>
-                                 <th class="border-bottom textkecil border-top" nowrap="">            Sedimen – Kristal</th>
+                                 <th class="border-bottom textkecil border-top" nowrap="">Berat Jenis</th>
+                                 <th class="border-bottom textkecil border-top" nowrap="">PH / Reaksi </th>
+                                 <th class="border-bottom textkecil border-top" nowrap="">Warna </th>
+                                 <th class="border-bottom textkecil border-top" nowrap="">Kekeruhan</th>
+                                 <th class="border-bottom textkecil border-top" nowrap="">Urobilinogen</th>
+                                 <th class="border-bottom textkecil border-top" nowrap="">Bilirubin</th>
+                                 <th class="border-bottom textkecil border-top" nowrap="">Eritrosit</th>
+                                 <th class="border-bottom textkecil border-top" nowrap="">Keton</th>
+                                 <th class="border-bottom textkecil border-top" nowrap="">Protein</th>
+                                 <th class="border-bottom textkecil border-top" nowrap="">Sedimen – Epitel</th>
+                                 <th class="border-bottom textkecil border-top" nowrap="">Sedimen – Eritrosit</th>
+                                 <th class="border-bottom textkecil border-top" nowrap="">Sedimen – Leukosit</th>
+                                 <th class="border-bottom textkecil border-top" nowrap="">Sedimen - Bakteri</th>
+                                 <th class="border-bottom textkecil border-top" nowrap="">Sedimen – Kristal</th>
                                  <th class="border-bottom textkecil border-top" nowrap="">Cholesterol Total</th>
                                  <th class="border-bottom textkecil border-top" nowrap="">Asam Urat</th>
                                  <th class="border-bottom textkecil border-top" nowrap="">Glukosa Sewaktu</th>
@@ -183,19 +183,19 @@
                                  <th class="border-bottom textkecil border-top" nowrap="">HDL Cholesterol</th>
                                  <th class="border-bottom textkecil border-top" nowrap="">LDL Cholestero</th>
                                  <th class="border-bottom textkecil border-top" nowrap="">Kesimpulan Hasil</th>
-                                     <th class="border-bottom textkecil border-top">Rad </th>
-                                  <th class="border-bottom textkecil border-top">COR </th>
-                                  <th class="border-bottom textkecil border-top">Diafragma Sinus </th>
-                                  <th class="border-bottom textkecil border-top">Pulmo</th>
-                                  <th class="border-bottom textkecil border-top">Kesan</th>
-                                  <th class="border-bottom textkecil border-top">Audiometri </th>
+                                <th class="border-bottom textkecil border-top">Rad </th>
+                                <th class="border-bottom textkecil border-top">COR </th>
+                                <th class="border-bottom textkecil border-top">Diafragma Sinus </th>
+                                <th class="border-bottom textkecil border-top">Pulmo</th>
+                                <th class="border-bottom textkecil border-top">Kesan</th>
+                                <th class="border-bottom textkecil border-top">Audiometri </th>
                                  <th class="border-bottom textkecil border-top">Audiometri Telinga Kanan</th>
                                  <th class="border-bottom textkecil border-top">Audiometri Telinga Kiri</th>
                                  <th class="border-bottom textkecil border-top">Pendengaran Telinga Kanan</th>
                                  <th class="border-bottom textkecil border-top">Pendengaran Telinga Kiri</th>
                                  <th class="border-bottom textkecil border-top">Kesimpulan Pem. Audiometri</th>
                                  <th class="border-bottom textkecil border-top">Saran Hasil Pem. Auidometri</th>
-                                     <th class="border-bottom textkecil border-top">EKG </th>
+                                 <th class="border-bottom textkecil border-top">EKG </th>
                                  <th class="border-bottom textkecil border-top">Takikardi</th>
                                  <th class="border-bottom textkecil border-top">Bradikardi</th>
                                  <th class="border-bottom textkecil border-top">Aritmia</th>

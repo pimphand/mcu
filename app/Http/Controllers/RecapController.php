@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ResultMcu;
 use App\Models\Audiometri;
 use App\Models\Ekg;
 use App\Models\Laboratorium;
@@ -15,6 +16,7 @@ use App\Services\ParticipantService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
@@ -41,6 +43,19 @@ class RecapController extends Controller
                 ->get();
         }
         return view('pages.report.results', compact('data', 'client'));
+    }
+
+    public function importResultMcu(Request $request)
+    {
+        $data = QueryBuilder::for(Participant::class)
+            ->allowedFilters([
+                AllowedFilter::exact('client_id'),
+                AllowedFilter::exact('contract_id'),
+                AllowedFilter::exact('divisi_id'),
+                AllowedFilter::scope('date_range'),
+            ])
+            ->get();
+        Excel::download(new ResultMcu($data), 'results.xlsx');
     }
 
     public function register(Request $request)
