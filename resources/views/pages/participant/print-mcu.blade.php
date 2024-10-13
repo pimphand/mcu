@@ -284,5 +284,21 @@
                     defaultDate: [date1, date2] // Set tanggal default
                 });
             });
+            
     </script>
+    <script>
+    // Enable pusher logging - don't include this in production
+    Pusher.logToConsole = true;
+
+    var pusher = new Pusher('23ac53d7303716c97001', {
+        cluster: 'ap1'
+    });
+
+    var channel = pusher.subscribe('report-channel');
+    channel.bind('pdf-generated', function(data) {
+        // Handle the received data
+        alert('Report generated: ' + data.filename);
+        // Optionally update your UI here
+    });
+</script>
 @endsection

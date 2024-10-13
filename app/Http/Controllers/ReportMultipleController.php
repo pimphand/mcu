@@ -86,7 +86,7 @@ class ReportMultipleController extends Controller
             ->take($end - $start + 1)  // Ambil sejumlah 'end - start + 1' data
             ->get();
 
-        $pdf = Pdf::loadView('pages.report.multiple.spirometri', compact('data'));
+        $pdf = Pdf::loadView('pages.report.multiple.pemeriksaan-fisik', compact('data'));
 
         return $pdf->stream(sprintf('%s-%s.pdf', "spirometri", $start . '-' . $end));
     }

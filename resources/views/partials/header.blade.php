@@ -42,7 +42,9 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/style.css') }}">
     <!-- END: Custom CSS-->
     @yield('css')
-
+      <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
+    @vite(['resources/js/app.js']);
+   
     <style>
         .required:after {
             content: "*";
