@@ -5,6 +5,7 @@ namespace App\Imports;
 use App\Models\Laboratorium;
 use App\Models\Participant;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
@@ -24,20 +25,21 @@ class LaboratoriumImport implements ToModel, WithStartRow, WithChunkReading, Wit
      */
     public function model(array $row)
     {
-        if ($row['code'] != null) {
+        //        Log::alert("array : $row"  );
+        if (isset($row['code']) && $row['code'] != null) {
             $data = [
-                "name" => $row['name'],
-                "hemoglobin" => $row['hemoglobin'],
-                "hematokrit" => $row['hematokrit'],
-                "lekosit" => $row['lekosit'],
-                "trombosit" => $row['trombosit'],
-                "eritrosit" => $row['eritrosit'],
-                "basofil" => $row['basofil'],
-                "eosinofil" => $row['eosinofil'],
-                "batang" => $row['nbatang'],
-                "segmen" => $row['nsegmen'],
-                "limfosit" => $row['limfosit'],
-                "monosit" => $row['monosit'],
+                "name" => $row['name'] ?? null,
+                "hemoglobin" => $row['hemoglobin'] ?? null,
+                "hematokrit" => $row['hematokrit'] ?? null,
+                "lekosit" => $row['lekosit'] ?? null,
+                "trombosit" => $row['trombosit'] ?? null,
+                "eritrosit" => $row['eritrosit'] ?? null,
+                "basofil" => $row['basofil'] ?? null,
+                "eosinofil" => $row['eosinofil'] ?? null,
+                "batang" => $row['nbatang'] ?? null,
+                "segmen" => $row['nsegmen'] ?? null,
+                "limfosit" => $row['limfosit'] ?? null,
+                "monosit" => $row['monosit'] ?? null,
                 "sgpt" => $row['sgpt'] ?? null,
                 "creatinin" => $row['creatinin'] ?? null,
                 "glukosa_puasa" => $row['glukosa_puasa'] ?? null,
@@ -45,31 +47,34 @@ class LaboratoriumImport implements ToModel, WithStartRow, WithChunkReading, Wit
                 "asam_urat" => $row['asam_urat'] ?? null,
                 "sgot" => $row['sgot'] ?? null,
                 "ureum" => $row['ureum'] ?? null,
-                "berat_jenis" => $row['beratjenis'],
-                "ph_reaksi" => $row['phreaksi'],
-                "warna" => $row['warna'],
-                "kekeruhan" => $row['kekeruhan'],
-                "urobilinogen" => $row['urobilinogen'],
-                "bilirubin" => $row['bilirubin'],
-                "eritrosit_urine" => $row['eritrosit_urine'],
-                "keton" => $row['keton'],
-                "protein" => $row['protein'],
-                "sedimen_epitel" => $row['sedimenepitel'],
-                "sedimen_eritrosit" => $row['sedimeneritrosit'],
-                "sedimen_leukosit" => $row['sedimenleukosit'],
-                "sedimen_bakteri" => $row['sedimenbakteri'],
-                "sedimen_kristal" => $row['sedimenkristal'],
-                "user_lab" => $row['user_lab'],
-                "lab_date" => $row['lab_date'],
-                "kesimpulan" => $row['kesimpulan_lab'],
-                "pemeriksa_lab" => $row['pemeriksa_lab'],
-                "reduksi" => $row['reduksi'],
+                "berat_jenis" => $row['beratjenis'] ?? null,
+                "ph_reaksi" => $row['phreaksi'] ?? null,
+                "warna" => $row['warna'] ?? null,
+                "kekeruhan" => $row['kekeruhan'] ?? null,
+                "urobilinogen" => $row['urobilinogen'] ?? null,
+                "bilirubin" => $row['bilirubin'] ?? null,
+                "eritrosit_urine" => $row['eritrosit_urine'] ?? null,
+                "keton" => $row['keton'] ?? null,
+                "protein" => $row['protein'] ?? null,
+                "sedimen_epitel" => $row['sedimenepitel'] ?? null,
+                "sedimen_eritrosit" => $row['sedimeneritrosit'] ?? null,
+                "sedimen_leukosit" => $row['sedimenleukosit'] ?? null,
+                "sedimen_bakteri" => $row['sedimenbakteri'] ?? null,
+                "sedimen_kristal" => $row['sedimenkristal'] ?? null,
+                "user_lab" => $row['user_lab'] ?? null,
+                "lab_date" => $row['lab_date'] ?? null,
+                "kesimpulan" => $row['kesimpulan_lab'] ?? null,
+                "pemeriksa_lab" => $row['pemeriksa_lab'] ?? null,
+                "reduksi" => $row['reduksi'] ?? null,
+                "selesai" => 1
             ];
 
             $pemeriksaan = Participant::with('laboratorium')->where('code', $row['code'])->first();
             if ($pemeriksaan) {
-                $pemeriksaan->laboratorium()->updateOrCreate(['participant_id' => $pemeriksaan->id,], $data);
+                $pemeriksaan->laboratorium()->updateOrCreate(['participant_id' => $pemeriksaan->id], $data);
             }
+        } else {
+            //            Log::alert("array : ${$row}"  );
         }
     }
 
@@ -80,6 +85,6 @@ class LaboratoriumImport implements ToModel, WithStartRow, WithChunkReading, Wit
 
     public function chunkSize(): int
     {
-        return 50;
+        return 10;
     }
 }
