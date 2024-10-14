@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Imports\DoctorValidateImport;
 use App\Imports\LaboratoriumImport;
 use App\Imports\RadiologiImport;
+use App\Jobs\TestJob;
 use App\Models\Radiologi;
 use App\Services\ParticipantService;
 use Illuminate\Http\Request;
@@ -56,15 +57,16 @@ class UploadFileController extends Controller
         $participantService = new ParticipantService();
         $client = $participantService->getClient();
 
-        if ($request->ajax()){
+        if ($request->ajax()) {
             $data = QueryBuilder::for(Radiologi::class)
-                ->withWhereHas('participant',function ($query)use($request){
-                    $query->where('client_id',Session::get('client_id'))
-                    ->DateRange($request->date_range);
+                ->withWhereHas('participant', function ($query) use ($request) {
+                    $query->where('client_id', Session::get('client_id'))
+                        ->DateRange($request->date_range);
                 })
                 ->get();
+            TestJob::dispatch();
             return [
-                "data" =>$data
+                "data" => $data
             ];
         }
         return view('pages.upload.radiologi', compact('client'));
@@ -76,7 +78,7 @@ class UploadFileController extends Controller
             'fileExcel' => 'required|mimes:xlsx,xls'
         ]);
 
-        Excel::import(new RadiologiImport(Session::get('client_id')), $request->file('fileExcel'));
+        Excel::queueImport(new RadiologiImport(Session::get('client_id')), $request->file('fileExcel'));
 
         return ['status' => 'success'];
     }

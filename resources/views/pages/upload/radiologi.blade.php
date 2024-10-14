@@ -196,7 +196,7 @@
                             <td class="border-bottom border-top">${item.diafragma_sinus}</td>
                             <td class="border-bottom border-top">${item.pulmo}</td>
                             <td class="border-bottom border-top">${item.kesan}</td>
-                            <td class="border-bottom border-top">dr. Mahendro A.P Sp.Rad</td>
+                            <td class="border-bottom border-top">${item.diperiksa}</td>
                         </tr>`;
                     });
                     $('#tabelLap tbody').html(tableRows);  // Populate the table body
@@ -210,4 +210,16 @@
             });
         })
     </script>
+    <script>
+        // Inisialisasi Pusher
+        var pusher = new Pusher('23ac53d7303716c97001', {
+            cluster: 'ap1'
+        });
+
+        var channel = pusher.subscribe('notification-channel');
+        channel.bind('import-completed', function(data) {
+            alert(data.message); // Atau gunakan metode lain untuk menampilkan notifikasi
+        });
+    </script>
+
 @endsection

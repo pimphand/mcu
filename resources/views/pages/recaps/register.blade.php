@@ -72,7 +72,7 @@
                         <tr class="textkecil" style="font-weight:500">
                             <th rowspan="2" style="font-family:bold;color:#000;border-color:#000" class="border-bottom textkecil border-top border-left border-right text-center align-middle">Tgl</th>
                             <th rowspan="2" style="font-family:bold;color:#000;border-color:#000" class="border-bottom textkecil border-top border-left border-right text-center align-middle">Jml Peserta</th>
-                            <th colspan="10" style="font-family:bold;color:#000;border-color:#000" class="border-bottom textkecil border-top border-left border-right text-center">U</th>
+                            <th colspan="8" style="font-family:bold;color:#000;border-color:#000" class="border-bottom textkecil border-top border-left border-right text-center">U</th>
                             <th colspan="2" style="font-family:bold;color:#000;border-color:#000" class="border-bottom textkecil border-top border-left border-right text-center">Audiometri</th>
                             <th colspan="2" style="font-family:bold;color:#000;border-color:#000" class="border-bottom textkecil border-top border-left border-right text-center">EKG</th>
                             <th colspan="2" style="font-family:bold;color:#000;border-color:#000" class="border-bottom textkecil border-top border-left border-right text-center">Spiro</th>
@@ -81,15 +81,15 @@
                         </tr>
                         <tr>
                             <th style="font-family:bold;color:#000;border-color:#000" class="border-bottom textkecil border-top border-left border-right text-center">Jml</th>
-                            <th style="font-family:bold;color:#000;border-color:#000" class="border-bottom textkecil border-top border-left border-right text-center">FOJ</th>
+                            <th style="font-family:bold;color:#000;border-color:#000" class="border-bottom textkecil border-top border-left border-right text-center">F</th>
                             <th style="font-family:bold;color:#000;border-color:#000" class="border-bottom textkecil border-top border-left border-right text-center">FWR</th>
-                            <th style="font-family:bold;color:#000;border-color:#000" class="border-bottom textkecil border-top border-left border-right text-center">TUF</th>
+                            <th style="font-family:bold;color:#000;border-color:#000" class="border-bottom textkecil border-top border-left border-right text-center">UF</th>
                             <th style="font-family:bold;color:#000;border-color:#000" class="border-bottom textkecil border-top border-left border-right text-center">TTV</th>
                             <th style="font-family:bold;color:#000;border-color:#000" class="border-bottom textkecil border-top border-left border-right text-center">Fisik</th>
                             <th style="font-family:bold;color:#000;border-color:#000" class="border-bottom textkecil border-top border-left border-right text-center">Lab</th>
                             <th style="font-family:bold;color:#000;border-color:#000" class="border-bottom textkecil border-top border-left border-right text-center">Rad</th>
-                            <th style="font-family:bold;color:#000;border-color:#000" class="border-bottom textkecil border-top border-left border-right text-center">Hep</th>
-                            <th style="font-family:bold;color:#000;border-color:#000" class="border-bottom textkecil border-top border-left border-right text-center">Ten</th>
+                            {{-- <th style="font-family:bold;color:#000;border-color:#000" class="border-bottom textkecil border-top border-left border-right text-center">Hep</th> --}}
+                            {{-- <th style="font-family:bold;color:#000;border-color:#000" class="border-bottom textkecil border-top border-left border-right text-center">Ten</th> --}}
                             <th style="font-family:bold;color:#000;border-color:#000" class="border-bottom textkecil border-top border-left border-right text-center">Jml</th>
                             <th style="font-family:bold;color:#000;border-color:#000" class="border-bottom textkecil border-top border-left border-right text-center">Selesai</th>
                             <th style="font-family:bold;color:#000;border-color:#000" class="border-bottom textkecil border-top border-left border-right text-center">Jml</th>
@@ -213,8 +213,6 @@
                                 <td class="border-bottom border-top text-center text-success">${data.total_pemeriksaan_fisiks	}</td>
                                 <td class="border-bottom border-top text-center text-success">${data.total_laboratoria}</td>
                                 <td class="border-bottom border-top text-center text-success">${data.total_radiologis}</td>
-                                <td class="border-bottom border-top text-center text-success">${data.field10}</td>
-                                <td class="border-bottom border-top text-center text-success">${data.field11}</td>
                                 <td class="border-bottom border-top text-center">${data.total_audiometris}</td>
                                 <td class="border-bottom border-top text-center text-success">${data.total_selesai_audiometris}</td>
                                 <td class="border-bottom border-top text-center">${data.total_ekgs}</td>
@@ -244,8 +242,6 @@
                             <td class="border-bottom border-top text-center text-success">${totalPemeriksaanFisiks}</td>
                             <td class="border-bottom border-top text-center text-success">${totalLaboratoria}</td>
                             <td class="border-bottom border-top text-center text-success">${totalRadiologis}</td>
-                            <td class="border-bottom border-top text-center text-success">${totalField10}</td>
-                            <td class="border-bottom border-top text-center text-success">${totalField11}</td>
                             <td class="border-bottom border-top text-center">${totalAudiometris}</td>
                             <td class="border-bottom border-top text-center text-success">${totalSelesaiAudiometris}</td>
                             <td class="border-bottom border-top text-center">${totalEkgs}</td>

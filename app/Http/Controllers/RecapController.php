@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exports\ResultMcu;
+use App\Jobs\TestJob;
 use App\Models\Audiometri;
 use App\Models\Ekg;
 use App\Models\Laboratorium;
@@ -93,7 +94,7 @@ class RecapController extends Controller
                 DB::raw('SUM(CASE WHEN pemeriksaan_fisiks.kesimpulan = "UNFIT" THEN 1 ELSE 0 END) as total_selesai_pemeriksaan_unfit'),
                 DB::raw('COUNT(laboratoria.id) as total_laboratoria'), // Count total laboratoria records
                 DB::raw('SUM(CASE WHEN laboratoria.selesai = 1 THEN 1 ELSE 0 END) as total_selesai_laboratoria'),
-                DB::raw('COUNT(radiologis.id) as total_radiologis'), // Count total radiologis records
+                DB::raw('COUNT(DISTINCT radiologis.id) as total_radiologis'), // Count total radiologis records
                 DB::raw('SUM(CASE WHEN radiologis.selesai = 1 THEN 1 ELSE 0 END) as total_selesai_radiologis'),
                 DB::raw('COUNT(rectals.id) as total_rectals'), // Count total rectals records
                 DB::raw('SUM(CASE WHEN rectals.selesai = 1 THEN 1 ELSE 0 END) as total_selesai_rectals'),

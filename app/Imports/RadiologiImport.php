@@ -2,9 +2,13 @@
 
 namespace App\Imports;
 
+use App\Events\ImportCompleted;
 use App\Models\Participant;
 use App\Models\Radiologi;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Support\Facades\Event;
+use Maatwebsite\Excel\Concerns\Importable;
+use Maatwebsite\Excel\Concerns\RegistersEventListeners;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
@@ -12,8 +16,9 @@ use Maatwebsite\Excel\Concerns\WithStartRow;
 
 class RadiologiImport implements ToModel, WithStartRow, WithChunkReading, WithHeadingRow, ShouldQueue
 {
+    use Importable, RegistersEventListeners;
     protected  $client_id;
-
+    protected $totalRowsProcessed = 0;
     public function __construct($client_id)
     {
         $this->client_id = $client_id;
@@ -34,7 +39,7 @@ class RadiologiImport implements ToModel, WithStartRow, WithChunkReading, WithHe
                 'diafragma_sinus' => $row['diafragma_sinus'] ?? null,
                 'pulmo' => $row['pulmo'] ?? null, // Make sure this header matches your Excel file
                 'kesan' => $row['kesan'] ?? null, // Make sure this header matches your Excel file
-                'diperiksa' => $row['diperiksa'] ?? null,
+                'diperiksa' => $row['pemeriksa'] ?? null,
                 'selesai' => 1,
                 'employee_id' => 3,
             ];
@@ -43,6 +48,7 @@ class RadiologiImport implements ToModel, WithStartRow, WithChunkReading, WithHe
                 Radiologi::updateOrCreate([
                     'participant_id' => $participant->id
                 ], $data);
+                $this->totalRowsProcessed++; // Hitung setiap row yang berhasil diproses
             }
         }
     }
@@ -53,11 +59,29 @@ class RadiologiImport implements ToModel, WithStartRow, WithChunkReading, WithHe
 
     public function chunkSize(): int
     {
-        return 2; // Process 2 rows at a time
+        return 100; // Process 2 rows at a time
     }
 
     public function headingRow(): int
     {
         return 1; // Set the heading row to row 6
+    }
+
+    public function onImportComplete()
+    {
+        // Kirim notifikasi setelah semua data diproses
+        Event::dispatch(new ImportCompleted($this->client_id));
+    }
+
+    public function onQueueComplete()
+    {
+        // Trigger this method when the queue processing is done
+        $this->onImportComplete();
+    }
+
+    public function afterImport()
+    {
+        // Trigger this method after the import job is done
+        $this->onImportComplete();
     }
 }
