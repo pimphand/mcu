@@ -5,8 +5,6 @@ namespace App\Imports;
 use App\Models\Participant;
 use App\Models\Radiologi;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Support\Collection;
-use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
@@ -38,6 +36,7 @@ class RadiologiImport implements ToModel, WithStartRow, WithChunkReading, WithHe
                 'kesan' => $row['kesan'] ?? null, // Make sure this header matches your Excel file
                 'diperiksa' => $row['diperiksa'] ?? null,
                 'selesai' => 1,
+                'employee_id' => 3,
             ];
             $participant = Participant::where('code', $row['no_mcu'])->first();
             if ($participant) {

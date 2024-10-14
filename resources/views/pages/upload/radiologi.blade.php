@@ -6,6 +6,24 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/vendors/css/pickers/pickadate/pickadate.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/vendors/css/pickers/flatpickr/flatpickr.min.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        .table-responsive table.textkecil {
+            font-size: 10px !important; /* Atur ukuran font kecil dan prioritaskan */
+        }
+
+        .table-responsive th.textkecil, .table-responsive td.textkecil {
+            font-size: 10px !important; /* Pastikan ukuran font pada header dan sel tabel */
+        }
+
+        .table thead th {
+            vertical-align: bottom;
+        }
+
+        .table th, .table td {
+            padding: 0.75rem;
+            vertical-align: top
+        }
+    </style>
 @endsection
 
 @section('content')
@@ -48,7 +66,7 @@
                     </div>
                     <div class="col-md-1">
                         <label for="" class="form-label text-white">cari</label>
-                        <button type="submit" class="btn btn-primary">Cari</button>
+                        <button type="button" class="btn btn-primary" id="cari">Cari</button>
                     </div>
                 </div>
             </form>
@@ -66,6 +84,10 @@
                                         <i class="mdi mdi-cloud-upload"></i>
                                         Upload
                                     </button>
+                                    <a href="https://docs.google.com/spreadsheets/d/1qlsSuNyR7Uf7T8YVIL49Oi_ehLF5DkBTls2JEW5jSJU/edit?usp=sharing" target="_blank" class="btn btn-success left" type="button">
+                                        <i class="mdi mdi-cloud-upload"></i>
+                                        Template
+                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -76,18 +98,20 @@
                 </div>
             </div>
             <div class="table-responsive small textkecil">
-                <table id="tabelLap" border="1" class="table customize-table table-bordered mb-0 v-middle">
+                <table id="tabelLap" border="1" class="table customize-table table-bordered mb-0 v-middle ">
                     <thead>
                     <tr>
                         <th class="border-bottom border-top">No.</th>
-                        <th class="border-bottom border-top">TANGGAL UPLOAD</th>
                         <th class="border-bottom border-top">TANGGAL MCU</th>
+                        <th class="border-bottom border-top">TANGGAL UPLOAD</th>
                         <th class="border-bottom border-top">MCU ID</th>
                         <th class="border-bottom border-top">NAMA</th>
                         <th class="border-bottom border-top">GENDER</th>
-                        <th class="border-bottom border-top">Hasil MCU</th>
-                        <th class="border-bottom border-top">Catatan</th>
-                        <th class="border-bottom border-top">Dokter Pemeriksa</th>
+                        <th class="border-bottom border-top">COR</th>
+                        <th class="border-bottom border-top">RFS</th>
+                        <th class="border-bottom border-top">PULMO</th>
+                        <th class="border-bottom border-top">KESAN</th>
+                        <th class="border-bottom border-top">PEMERIKSA</th>
                     </tr>
                     </thead>
                     <tbody id="data">
@@ -148,5 +172,42 @@
                 }
             });
         });
+
+        $('#cari').click(function (e){
+            let url = "{{ route('upload.radiologi') }}"
+            url = url + "?date_range="+ $('#fp-range').val()+`&client_id=${$('#client_id').val()}`;
+            $.ajax({
+                url: url,  // URL untuk mengirim data
+                type: 'get',
+                beforeSend: function() {
+                    $('#cari').attr('disabled', true).text('Diproses...');
+                },
+                success: function(response) {
+                    let tableRows = '';
+                    $.each(response.data, function(index, item) {
+                        tableRows += `<tr>
+                            <td class="border-bottom border-top text-right" nowrap="">${index + 1}</td>
+                            <td class="border-bottom border-top text-right" nowrap="">${item.date_mcu}</td>
+                            <td class="border-bottom border-top">${item.created_at.split('T')[0]}</td>
+                            <td class="border-bottom border-top">${item.participant.code}</td>
+                            <td class="border-bottom border-top">${item.participant.name}</td>
+                            <td class="border-bottom border-top">${item.participant.gender}</td>
+                            <td class="border-bottom border-top">${item.cor}</td>
+                            <td class="border-bottom border-top">${item.diafragma_sinus}</td>
+                            <td class="border-bottom border-top">${item.pulmo}</td>
+                            <td class="border-bottom border-top">${item.kesan}</td>
+                            <td class="border-bottom border-top">dr. Mahendro A.P Sp.Rad</td>
+                        </tr>`;
+                    });
+                    $('#tabelLap tbody').html(tableRows);  // Populate the table body
+                },
+                error: function(xhr, status, error) {
+                    alert('Upload failed. Please try again.');
+                },
+                complete: function() {
+                    $('#cari').attr('disabled', false).text('Cari');
+                }
+            });
+        })
     </script>
 @endsection
