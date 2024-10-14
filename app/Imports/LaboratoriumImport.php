@@ -24,7 +24,7 @@ class LaboratoriumImport implements ToModel, WithStartRow, WithChunkReading, Wit
      */
     public function model(array $row)
     {
-        if ($row['code']!= null){
+        if ($row['code'] != null) {
             $data = [
                 "name" => $row['name'],
                 "hemoglobin" => $row['hemoglobin'],
@@ -38,13 +38,13 @@ class LaboratoriumImport implements ToModel, WithStartRow, WithChunkReading, Wit
                 "segmen" => $row['nsegmen'],
                 "limfosit" => $row['limfosit'],
                 "monosit" => $row['monosit'],
-                "sgpt" => $row['sgpt'],
-                "creatinin" => $row['creatinin'],
-                "glukosa_puasa" => $row['glukosa_puasa'],
-                "cholesterol_total" => $row['cholesterol_total'],
-                "asam_urat" => $row['asam_urat'],
-                "sgot" => $row['sgot'],
-                "ureum" => $row['ureum'],
+                "sgpt" => $row['sgpt'] ?? null,
+                "creatinin" => $row['creatinin'] ?? null,
+                "glukosa_puasa" => $row['glukosa_puasa'] ?? null,
+                "cholesterol_total" => $row['cholesterol_total'] ?? null,
+                "asam_urat" => $row['asam_urat'] ?? null,
+                "sgot" => $row['sgot'] ?? null,
+                "ureum" => $row['ureum'] ?? null,
                 "berat_jenis" => $row['beratjenis'],
                 "ph_reaksi" => $row['phreaksi'],
                 "warna" => $row['warna'],
@@ -65,10 +65,10 @@ class LaboratoriumImport implements ToModel, WithStartRow, WithChunkReading, Wit
                 "pemeriksa_lab" => $row['pemeriksa_lab'],
                 "reduksi" => $row['reduksi'],
             ];
-            $pemeriksaan = Participant::with('laboratorium')->where('code',$row['code'])->first();
+
+            $pemeriksaan = Participant::with('laboratorium')->where('code', $row['code'])->first();
             if ($pemeriksaan) {
-                $pemeriksaan->laboratorium->update($data);
-                $pemeriksaan->save();
+                $pemeriksaan->laboratorium()->updateOrCreate(['participant_id' => $pemeriksaan->id,], $data);
             }
         }
     }
@@ -80,6 +80,6 @@ class LaboratoriumImport implements ToModel, WithStartRow, WithChunkReading, Wit
 
     public function chunkSize(): int
     {
-        return 2;
+        return 50;
     }
 }
