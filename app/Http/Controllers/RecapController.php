@@ -88,7 +88,7 @@ class RecapController extends Controller
                 DB::raw('SUM(CASE WHEN audiometris.selesai = 1 THEN 1 ELSE 0 END) as total_selesai_audiometris'),
                 DB::raw('COUNT(pemeriksaan_fisiks.id) as total_pemeriksaan_fisiks'), // Count total pemeriksaan fisiks records
                 DB::raw('SUM(CASE WHEN pemeriksaan_fisiks.selesai = 1 THEN 1 ELSE 0 END) as total_selesai_pemeriksaan_fisiks'),
-                DB::raw('SUM(CASE WHEN pemeriksaan_fisiks.kesimpulan = "FIT" THEN 1 ELSE 0 END) as total_selesai_pemeriksaan_fit'),
+                DB::raw('SUM(CASE WHEN pemeriksaan_fisiks.kesimpulan IN ("FIT", "GSI1 - FIT WITH JOB") THEN 1 ELSE 0 END) as total_selesai_pemeriksaan_fit'),
                 DB::raw('SUM(CASE WHEN pemeriksaan_fisiks.kesimpulan = "FIT WITH RESTRICTION" THEN 1 ELSE 0 END) as total_selesai_pemeriksaan_frw'),
                 DB::raw('SUM(CASE WHEN pemeriksaan_fisiks.kesimpulan = "UNFIT" THEN 1 ELSE 0 END) as total_selesai_pemeriksaan_unfit'),
                 DB::raw('COUNT(laboratoria.id) as total_laboratoria'), // Count total laboratoria records
