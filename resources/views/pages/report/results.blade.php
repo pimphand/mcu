@@ -163,6 +163,7 @@
                                  <th class="border-bottom textkecil border-top" nowrap="">N Segmen</th>
                                  <th class="border-bottom textkecil border-top" nowrap="">Limfosit </th>
                                  <th class="border-bottom textkecil border-top" nowrap="">Monosit </th>
+                                 <th class="border-bottom textkecil border-top" nowrap="">HBsAg</th>
                                  <th class="border-bottom textkecil border-top" nowrap="">SGOT</th>
                                  <th class="border-bottom textkecil border-top" nowrap="">SGPT</th>
                                  <th class="border-bottom textkecil border-top" nowrap="">Ureum</th>
@@ -311,7 +312,7 @@
                             <td nowrap="">{{ $item->laboratorium?->segmen }}</td>
                             <td nowrap="">{{ $item->laboratorium?->limfosit }}</td>
                             <td nowrap="">{{ $item->laboratorium?->monosit }}</td>
-                            <td nowrap="">{{ $item->laboratorium?->sgot }}</td>
+                            <td nowrap="">{!! $item->laboratorium?->hbsag == "Positif" ? "<span class='text-danger'>Positif</span>" : $item->laboratorium?->hbsag !!}</td>
                             <td nowrap="">{{ $item->laboratorium?->sgot }}</td>
                             <td nowrap="">{{ $item->laboratorium?->ureum }}</td>
                             <td nowrap="">{{ $item->laboratorium?->creatinin }}</td>
