@@ -66,6 +66,7 @@ class LaboratoriumImport implements ToModel, WithStartRow, WithChunkReading, Wit
                 "kesimpulan" => $row['kesimpulan_lab'] ?? null,
                 "pemeriksa_lab" => $row['pemeriksa_lab'] ?? null,
                 "reduksi" => $row['reduksi'] ?? null,
+                "hbsag" => $row['hbsag'] ?? null,
                 "selesai" => 1,
             ];
 
