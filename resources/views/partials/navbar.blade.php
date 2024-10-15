@@ -399,4 +399,5 @@
                     data-feather="alert-circle"></span><span>No results found.</span></div>
         </a></li>
 </ul>
+{{-- remove navbar --}}
 <!-- END: Header-->
