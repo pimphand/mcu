@@ -85,6 +85,7 @@
         <th class="border-bottom textkecil border-top" nowrap="">SGPT</th>
         <th class="border-bottom textkecil border-top" nowrap="">Ureum</th>
         <th class="border-bottom textkecil border-top" nowrap="">Creatinin</th>
+        <th class="border-bottom textkecil border-top" nowrap="">HBsAg</th>
         <th class="border-bottom textkecil border-top" nowrap="">Glukosa Puasa</th>
         <th class="border-bottom textkecil border-top" nowrap="">Berat Jenis</th>
         <th class="border-bottom textkecil border-top" nowrap="">PH / Reaksi </th>
@@ -229,9 +230,9 @@
             <td nowrap="">{{ $item->laboratorium?->limfosit }}</td>
             <td nowrap="">{{ $item->laboratorium?->monosit }}</td>
             <td nowrap="">{{ $item->laboratorium?->sgot }}</td>
-            <td nowrap="">{{ $item->laboratorium?->sgot }}</td>
             <td nowrap="">{{ $item->laboratorium?->ureum }}</td>
             <td nowrap="">{{ $item->laboratorium?->creatinin }}</td>
+            <td nowrap="">{{ $item->laboratorium?->hbsag }}</td>
             <td nowrap="">{{ $item->laboratorium?->glukosa_puasa }}</td>
             <td nowrap="">{{ $item->laboratorium?->berat_jenis }}</td>
             <td nowrap="">{{ $item->laboratorium?->ph_reaksi }}</td>

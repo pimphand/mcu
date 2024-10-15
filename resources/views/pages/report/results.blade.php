@@ -439,7 +439,19 @@
 
         $.get(url, function(data){
             if(data.status == 'success'){
-                window.open(data.download_url, '_blank');
+                let countdown = 10; // Set the countdown duration in seconds
+                exportButton.prop('disabled', true).text(`dalam ${countdown} detik akan terdownload`);
+
+                let interval = setInterval(() => {
+                    countdown--;
+                    if (countdown > 0) {
+                        exportButton.text(`dalam ${countdown} detik akan terdownload`);
+                    } else {
+                        clearInterval(interval);
+                        window.open(data.download_url, '_blank'); // Trigger the download
+                    }
+                }, 1000); // Update every second
+
             } else {
                 alert('Data tidak ditemukan');
             }
@@ -449,7 +461,9 @@
         })
         .always(function() {
             // Re-enable the button and restore the original text
-            exportButton.prop('disabled', false).text(originalText);
+            setTimeout(() => {
+                exportButton.prop('disabled', false).text(originalText);
+            }, 10000);
         });
     });
     </script>
