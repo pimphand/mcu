@@ -71,11 +71,11 @@
                     <div class="col-md-2 mt-1">
                         <button class="btn btn-success export" type="button" data-type="identitas">Simpan Excel</button>
                     </div>
-                    
+
                 </div>
             </form>
 
-            
+
         </div>
         <div class="card-body">
             <div class="table-responsive table-responsive small textkecil">
@@ -98,6 +98,7 @@
                                   <th class="border-bottom textkecil border-top">TTV </th>
                                   <th class="border-bottom textkecil border-top">Keluhan Utama</th>
                                   <th class="border-bottom textkecil border-top">Riwayat Penyakit Sekarang</th>
+                                  <th class="border-bottom textkecil border-top">Riwayat Penyakit Terdahulu</th>
                                   <th class="border-bottom textkecil border-top">Riwayat Trauma</th>
                                   <th class="border-bottom textkecil border-top">Alergi</th>
                                   <th class="border-bottom textkecil border-top">Merokok</th>
@@ -246,14 +247,15 @@
                             <td nowrap="">{{ $item->tandaVital?->riwayat_penyakit_terdahulu_text }}</td>
                             <td nowrap="">{{ $item->tandaVital?->riwayat_trauma_text }}</td>
                             <td nowrap="">{{ $item->tandaVital?->alergi_text }}</td>
-                            <td nowrap="">{{ $item->tandaVital?->alergi_text }}</td>
-                            <td nowrap="">{{ $item->tandaVital?->konsumsi_alkohol }}</td>
+                            <td nowrap="">{{ $item->tandaVital?->merokok == 1? "Ya" : 'Tidak' }}</td>
+                            <td nowrap="">{{ $item->tandaVital?->konsumsi_alkohol == 1? "Ya" : 'Tidak' }}</td>
                             <td nowrap="">{{ $item->tandaVital?->tinggi_badan }}</td>
                             <td nowrap="">{{ $item->tandaVital?->berat_badan }}</td>
                             <td nowrap="">{{ $item->tandaVital?->imt }}</td>
                             <td nowrap="">{{ $item->tandaVital?->imt_nilai }}</td>
                             <td nowrap="">{{ $item->tandaVital?->tekanan_darah }}</td>
                             <td nowrap="">{{ $item->tandaVital?->frekuensi_nadi }}</td>
+                            <td nowrap="">{{ $item->tandaVital?->suhu }}</td>
                             <td nowrap="">{{ $item->tandaVital?->frekuensi_nafas }}</td>
                             {{-- pemerikaan Fisik --}}
                             <td nowrap="">{!! $item->pemeriksaanFisik?->selesai ? "<span class='text-success'>SELESAI</span>" : "<span class='text-danger'>TIDAK</span>" !!}</td>
@@ -433,7 +435,7 @@
         let exportButton = $(this); // Save reference to the button
         let originalText = exportButton.text(); // Save original button text
         let url = "{{ route('report.importResultMcu') }}"+'?'+`filter[date_range]=${$('#fp-range').val()}&client_id=${$('#client_id').val()}&contract_id=${$('#contract_id').val()}&divisi_id=${$('#divisi_id').val()}`;
-        
+
         // Disable the button and change the text to show the process is ongoing
         exportButton.prop('disabled', true).text('Sedang di proses...');
 

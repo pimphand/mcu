@@ -1,295 +1,296 @@
-<table class="dt-responsive table mt-1 textkecil" id="table">
-    <thead>
-    <tr>
-        <th class="border-bottom textkecil border-top">No.</th>
-        <th class="border-bottom textkecil border-top">Tgl</th>
-        <th class="border-bottom textkecil border-top">No. Register</th>
-        <th class="border-bottom textkecil border-top">MCU ID</th>
-        <th class="border-bottom textkecil border-top">NIK</th>
-        <th class="border-bottom textkecil border-top">Nama</th>
-        <th class="border-bottom textkecil border-top">Tgl Lahir</th>
-        <th class="border-bottom textkecil border-top">JK</th>
-        <th class="border-bottom textkecil border-top">Dept</th>
-        <th class="border-bottom textkecil border-top">Bagian/ Unit</th>
-        <th class="border-bottom textkecil border-top">Perusahaan</th>
-        <th class="border-bottom textkecil border-top">Gedung</th>
-        <th class="border-bottom textkecil border-top">Paket MCU</th>
-        <th class="border-bottom textkecil border-top">TTV </th>
-        <th class="border-bottom textkecil border-top">Keluhan Utama</th>
-        <th class="border-bottom textkecil border-top">Riwayat Penyakit Sekarang</th>
-        <th class="border-bottom textkecil border-top">Riwayat Trauma</th>
-        <th class="border-bottom textkecil border-top">Alergi</th>
-        <th class="border-bottom textkecil border-top">Merokok</th>
-        <th class="border-bottom textkecil border-top">Alkohol</th>
-        <th class="border-bottom textkecil border-top">TB</th>
-        <th class="border-bottom textkecil border-top">BB</th>
-        <th class="border-bottom textkecil border-top">IMT</th>
-        <th class="border-bottom textkecil border-top">Nilai IMT</th>
-        <th class="border-bottom textkecil border-top">Tekanan Darah</th>
-        <th class="border-bottom textkecil border-top">Frekuensi Nadi</th>
-        <th class="border-bottom textkecil border-top">Suhu</th>
-        <th class="border-bottom textkecil border-top">Frekuensi Nafas</th>
-        <th class="border-bottom textkecil border-top">Pemeriksaan Fisik </th>
-        <th class="border-bottom textkecil border-top">Keadaan Umum </th>
-        <th class="border-bottom textkecil border-top">Kepala</th>
-        <th class="border-bottom textkecil border-top">Mata</th>
-        <th class="border-bottom textkecil border-top">Pupil</th>
-        <th class="border-bottom textkecil border-top">Hidung</th>
-        <th class="border-bottom textkecil border-top">Bibir</th>
-        <th class="border-bottom textkecil border-top">Lidah</th>
-        <th class="border-bottom textkecil border-top">Visus</th>
-        <th class="border-bottom textkecil border-top">Tenggorokan</th>
-        <th class="border-bottom textkecil border-top">Faring</th>
-        <th class="border-bottom textkecil border-top">Buta Warna</th>
-        <th class="border-bottom textkecil border-top">Telinga</th>
-        <th class="border-bottom textkecil border-top">Kelainan Telinga</th>
-        <th class="border-bottom textkecil border-top">Leher KGB</th>
-        <th class="border-bottom textkecil border-top">Leher JVP</th>
-        <th class="border-bottom textkecil border-top">Gigi</th>
-        <th class="border-bottom textkecil border-top">Thorax Jantung Inspeksi</th>
-        <th class="border-bottom textkecil border-top">Thorax Jantung Auskultasi</th>
-        <th class="border-bottom textkecil border-top">Thorax Jantung Palpasi</th>
-        <th class="border-bottom textkecil border-top">Thorax Jantung Perkusi</th>
-        <th class="border-bottom textkecil border-top">Thorax Paru Inspeksi</th>
-        <th class="border-bottom textkecil border-top">Thorax Paru Auskultasi Vasikuler</th>
-        <th class="border-bottom textkecil border-top">Thorax Paru Inspeksi Auskultasi Ronkhi</th>
-        <th class="border-bottom textkecil border-top">Thorax Paru Inspeksi Auskultasi Wheezing</th>
-        <th class="border-bottom textkecil border-top">Thorax Paru Inspeksi Palpasi</th>
-        <th class="border-bottom textkecil border-top">Thorax Paru Inspeksi Perkusi</th>
-        <th class="border-bottom textkecil border-top">Thorak Abdomen Inspeksi</th>
-        <th class="border-bottom textkecil border-top">Thorak Abdomen Auskultasi</th>
-        <th class="border-bottom textkecil border-top">Thorak Abdomen Palpasi</th>
-        <th class="border-bottom textkecil border-top">Thorak Abdomen Perkusi</th>
-        <th class="border-bottom textkecil border-top">Extrimitas Fisiologis Atas</th>
-        <th class="border-bottom textkecil border-top">Extrimitas Fisiologis Bawah</th>
-        <th class="border-bottom textkecil border-top">Extrimitas Phatologis Atas</th>
-        <th class="border-bottom textkecil border-top">Extrimitas Phatologis Bawah</th>
-        <th class="border-bottom textkecil border-top">EKG</th>
-        <th class="border-bottom textkecil border-top">Neurologis</th>
-        <th class="border-bottom textkecil border-top">Kesimpulan Pemeriksaan</th>
-        <th class="border-bottom textkecil border-top">Catatan</th>
-        <th class="border-bottom textkecil border-top">Lab </th>
-        <th class="border-bottom textkecil border-top" nowrap="">Hemoglobin</th>
-        <th class="border-bottom textkecil border-top" nowrap="">Reduksi</th>
-        <th class="border-bottom textkecil border-top" nowrap="">Hematokrit</th>
-        <th class="border-bottom textkecil border-top" nowrap="">Lekosit</th>
-        <th class="border-bottom textkecil border-top" nowrap="">Trombosit</th>
-        <th class="border-bottom textkecil border-top" nowrap="">Eritrosit</th>
-        <th class="border-bottom textkecil border-top" nowrap="">Basofil</th>
-        <th class="border-bottom textkecil border-top" nowrap="">Eosinofil </th>
-        <th class="border-bottom textkecil border-top" nowrap="">N Batang </th>
-        <th class="border-bottom textkecil border-top" nowrap="">N Segmen</th>
-        <th class="border-bottom textkecil border-top" nowrap="">Limfosit </th>
-        <th class="border-bottom textkecil border-top" nowrap="">Monosit </th>
-        <th class="border-bottom textkecil border-top" nowrap="">SGOT</th>
-        <th class="border-bottom textkecil border-top" nowrap="">SGPT</th>
-        <th class="border-bottom textkecil border-top" nowrap="">Ureum</th>
-        <th class="border-bottom textkecil border-top" nowrap="">Creatinin</th>
-        <th class="border-bottom textkecil border-top" nowrap="">HBsAg</th>
-        <th class="border-bottom textkecil border-top" nowrap="">Glukosa Puasa</th>
-        <th class="border-bottom textkecil border-top" nowrap="">Berat Jenis</th>
-        <th class="border-bottom textkecil border-top" nowrap="">PH / Reaksi </th>
-        <th class="border-bottom textkecil border-top" nowrap="">Warna </th>
-        <th class="border-bottom textkecil border-top" nowrap="">Kekeruhan</th>
-        <th class="border-bottom textkecil border-top" nowrap="">Urobilinogen</th>
-        <th class="border-bottom textkecil border-top" nowrap="">Bilirubin</th>
-        <th class="border-bottom textkecil border-top" nowrap="">Eritrosit</th>
-        <th class="border-bottom textkecil border-top" nowrap="">Keton</th>
-        <th class="border-bottom textkecil border-top" nowrap="">Protein</th>
-        <th class="border-bottom textkecil border-top" nowrap="">Sedimen – Epitel</th>
-        <th class="border-bottom textkecil border-top" nowrap="">Sedimen – Eritrosit</th>
-        <th class="border-bottom textkecil border-top" nowrap="">Sedimen – Leukosit</th>
-        <th class="border-bottom textkecil border-top" nowrap="">Sedimen - Bakteri</th>
-        <th class="border-bottom textkecil border-top" nowrap="">Sedimen – Kristal</th>
-        <th class="border-bottom textkecil border-top" nowrap="">Cholesterol Total</th>
-        <th class="border-bottom textkecil border-top" nowrap="">Asam Urat</th>
-        <th class="border-bottom textkecil border-top" nowrap="">Glukosa Sewaktu</th>
-        <th class="border-bottom textkecil border-top" nowrap="">Trigliserida</th>
-        <th class="border-bottom textkecil border-top" nowrap="">HDL Cholesterol</th>
-        <th class="border-bottom textkecil border-top" nowrap="">LDL Cholestero</th>
-        <th class="border-bottom textkecil border-top" nowrap="">Kesimpulan Hasil</th>
-        <th class="border-bottom textkecil border-top">Rad </th>
-        <th class="border-bottom textkecil border-top">COR </th>
-        <th class="border-bottom textkecil border-top">Diafragma Sinus </th>
-        <th class="border-bottom textkecil border-top">Pulmo</th>
-        <th class="border-bottom textkecil border-top">Kesan</th>
-        <th class="border-bottom textkecil border-top">Audiometri </th>
-        <th class="border-bottom textkecil border-top">Audiometri Telinga Kanan</th>
-        <th class="border-bottom textkecil border-top">Audiometri Telinga Kiri</th>
-        <th class="border-bottom textkecil border-top">Pendengaran Telinga Kanan</th>
-        <th class="border-bottom textkecil border-top">Pendengaran Telinga Kiri</th>
-        <th class="border-bottom textkecil border-top">Kesimpulan Pem. Audiometri</th>
-        <th class="border-bottom textkecil border-top">Saran Hasil Pem. Auidometri</th>
-        <th class="border-bottom textkecil border-top">EKG </th>
-        <th class="border-bottom textkecil border-top">Takikardi</th>
-        <th class="border-bottom textkecil border-top">Bradikardi</th>
-        <th class="border-bottom textkecil border-top">Aritmia</th>
-        <th class="border-bottom textkecil border-top">Aresst</th>
-        <th class="border-bottom textkecil border-top">Penemuan Lain</th>
-        <th class="border-bottom textkecil border-top">Keadaan Jantung Normal</th>
-        <th class="border-bottom textkecil border-top">Kesimpulan Hasil EKG</th>
-        <th class="border-bottom textkecil border-top">Spiro </th>
-        <th class="border-bottom textkecil border-top">Hasil Pem. Spirometri</th>
-        <th class="border-bottom textkecil border-top">Retriksi</th>
-        <th class="border-bottom textkecil border-top">Obstruksif</th>
-        <th class="border-bottom textkecil border-top">Rectal </th>
-        <th class="border-bottom textkecil border-top">Salmonella Thypi</th>
-        <th class="border-bottom textkecil border-top">Shigella SP</th>
-        <th class="border-bottom textkecil border-top">E. Coli Pathogen</th>
-        <th class="border-bottom textkecil border-top">Kesimpulan Hasil</th>
-    </tr>
-    </thead>
-    <tbody>
-    @foreach($data as $key=> $item)
-        <tr style="background-color: {{
+<table class="dt-responsive table textkecil" id="table">
+                    <thead>
+                                <tr>
+                                 <th class="border-bottom textkecil border-top">No.</th>
+                                  <th class="border-bottom textkecil border-top">Tgl</th>
+                                  <th class="border-bottom textkecil border-top">No. Register</th>
+                                  <th class="border-bottom textkecil border-top">MCU ID</th>
+                                  <th class="border-bottom textkecil border-top">NIK</th>
+                                  <th class="border-bottom textkecil border-top">Nama</th>
+                                    <th class="border-bottom textkecil border-top">Tgl Lahir</th>
+                                  <th class="border-bottom textkecil border-top">JK</th>
+                                  <th class="border-bottom textkecil border-top">Dept</th>
+                                  <th class="border-bottom textkecil border-top">Bagian/ Unit</th>
+                                  <th class="border-bottom textkecil border-top">Perusahaan</th>
+								   <th class="border-bottom textkecil border-top">Gedung</th>
+                                  <th class="border-bottom textkecil border-top">Paket MCU</th>
+                                  <th class="border-bottom textkecil border-top">TTV </th>
+                                  <th class="border-bottom textkecil border-top">Keluhan Utama</th>
+                                  <th class="border-bottom textkecil border-top">Riwayat Penyakit Sekarang</th>
+                                  <th class="border-bottom textkecil border-top">Riwayat Penyakit Terdahulu</th>
+                                  <th class="border-bottom textkecil border-top">Riwayat Trauma</th>
+                                  <th class="border-bottom textkecil border-top">Alergi</th>
+                                  <th class="border-bottom textkecil border-top">Merokok</th>
+                                  <th class="border-bottom textkecil border-top">Alkohol</th>
+                                  <th class="border-bottom textkecil border-top">TB</th>
+                                  <th class="border-bottom textkecil border-top">BB</th>
+                                  <th class="border-bottom textkecil border-top">IMT</th>
+                                  <th class="border-bottom textkecil border-top">Nilai IMT</th>
+                                  <th class="border-bottom textkecil border-top">Tekanan Darah</th>
+                                  <th class="border-bottom textkecil border-top">Frekuensi Nadi</th>
+                                  <th class="border-bottom textkecil border-top">Suhu</th>
+                                  <th class="border-bottom textkecil border-top">Frekuensi Nafas</th>
+                                  <th class="border-bottom textkecil border-top">Pemeriksaan Fisik </th>
+                                  <th class="border-bottom textkecil border-top">Keadaan Umum </th>
+                                  <th class="border-bottom textkecil border-top">Kepala</th>
+                                  <th class="border-bottom textkecil border-top">Mata</th>
+                                  <th class="border-bottom textkecil border-top">Pupil</th>
+                                  <th class="border-bottom textkecil border-top">Hidung</th>
+                                  <th class="border-bottom textkecil border-top">Bibir</th>
+                                  <th class="border-bottom textkecil border-top">Lidah</th>
+                                  <th class="border-bottom textkecil border-top">Visus</th>
+                                  <th class="border-bottom textkecil border-top">Tenggorokan</th>
+                                  <th class="border-bottom textkecil border-top">Faring</th>
+                                  <th class="border-bottom textkecil border-top">Buta Warna</th>
+                                  <th class="border-bottom textkecil border-top">Telinga</th>
+                                  <th class="border-bottom textkecil border-top">Kelainan Telinga</th>
+                                  <th class="border-bottom textkecil border-top">Leher KGB</th>
+                                  <th class="border-bottom textkecil border-top">Leher JVP</th>
+                                  <th class="border-bottom textkecil border-top">Gigi</th>
+                                  <th class="border-bottom textkecil border-top">Thorax Jantung Inspeksi</th>
+                                  <th class="border-bottom textkecil border-top">Thorax Jantung Auskultasi</th>
+                                  <th class="border-bottom textkecil border-top">Thorax Jantung Palpasi</th>
+                                  <th class="border-bottom textkecil border-top">Thorax Jantung Perkusi</th>
+                                  <th class="border-bottom textkecil border-top">Thorax Paru Inspeksi</th>
+                                  <th class="border-bottom textkecil border-top">Thorax Paru Auskultasi Vasikuler</th>
+                                  <th class="border-bottom textkecil border-top">Thorax Paru Inspeksi Auskultasi Ronkhi</th>
+                                  <th class="border-bottom textkecil border-top">Thorax Paru Inspeksi Auskultasi Wheezing</th>
+                                  <th class="border-bottom textkecil border-top">Thorax Paru Inspeksi Palpasi</th>
+                                  <th class="border-bottom textkecil border-top">Thorax Paru Inspeksi Perkusi</th>
+                                  <th class="border-bottom textkecil border-top">Thorak Abdomen Inspeksi</th>
+                                  <th class="border-bottom textkecil border-top">Thorak Abdomen Auskultasi</th>
+                                  <th class="border-bottom textkecil border-top">Thorak Abdomen Palpasi</th>
+                                  <th class="border-bottom textkecil border-top">Thorak Abdomen Perkusi</th>
+                                  <th class="border-bottom textkecil border-top">Extrimitas Fisiologis Atas</th>
+                                  <th class="border-bottom textkecil border-top">Extrimitas Fisiologis Bawah</th>
+                                  <th class="border-bottom textkecil border-top">Extrimitas Phatologis Atas</th>
+                                  <th class="border-bottom textkecil border-top">Extrimitas Phatologis Bawah</th>
+                                  <th class="border-bottom textkecil border-top">EKG</th>
+                                  <th class="border-bottom textkecil border-top">Neurologis</th>
+                                  <th class="border-bottom textkecil border-top">Kesimpulan Pemeriksaan</th>
+                                  <th class="border-bottom textkecil border-top">Catatan</th>
+                                  <th class="border-bottom textkecil border-top">Lab </th>
+                                 <th class="border-bottom textkecil border-top" nowrap="">Hemoglobin</th>
+                                 <th class="border-bottom textkecil border-top" nowrap="">Reduksi</th>
+                                 <th class="border-bottom textkecil border-top" nowrap="">Hematokrit</th>
+                                 <th class="border-bottom textkecil border-top" nowrap="">Lekosit</th>
+                                 <th class="border-bottom textkecil border-top" nowrap="">Trombosit</th>
+                                 <th class="border-bottom textkecil border-top" nowrap="">Eritrosit</th>
+                                 <th class="border-bottom textkecil border-top" nowrap="">Basofil</th>
+                                 <th class="border-bottom textkecil border-top" nowrap="">Eosinofil </th>
+                                 <th class="border-bottom textkecil border-top" nowrap="">N Batang </th>
+                                 <th class="border-bottom textkecil border-top" nowrap="">N Segmen</th>
+                                 <th class="border-bottom textkecil border-top" nowrap="">Limfosit </th>
+                                 <th class="border-bottom textkecil border-top" nowrap="">Monosit </th>
+                                 <th class="border-bottom textkecil border-top" nowrap="">SGOT</th>
+                                 <th class="border-bottom textkecil border-top" nowrap="">SGPT</th>
+                                 <th class="border-bottom textkecil border-top" nowrap="">Ureum</th>
+                                 <th class="border-bottom textkecil border-top" nowrap="">Creatinin</th>
+                                 <th class="border-bottom textkecil border-top" nowrap="">Glukosa Puasa</th>
+                                 <th class="border-bottom textkecil border-top" nowrap="">Berat Jenis</th>
+                                 <th class="border-bottom textkecil border-top" nowrap="">PH / Reaksi </th>
+                                 <th class="border-bottom textkecil border-top" nowrap="">Warna </th>
+                                 <th class="border-bottom textkecil border-top" nowrap="">Kekeruhan</th>
+                                 <th class="border-bottom textkecil border-top" nowrap="">Urobilinogen</th>
+                                 <th class="border-bottom textkecil border-top" nowrap="">Bilirubin</th>
+                                 <th class="border-bottom textkecil border-top" nowrap="">Eritrosit</th>
+                                 <th class="border-bottom textkecil border-top" nowrap="">Keton</th>
+                                 <th class="border-bottom textkecil border-top" nowrap="">Protein</th>
+                                 <th class="border-bottom textkecil border-top" nowrap="">Sedimen – Epitel</th>
+                                 <th class="border-bottom textkecil border-top" nowrap="">Sedimen – Eritrosit</th>
+                                 <th class="border-bottom textkecil border-top" nowrap="">Sedimen – Leukosit</th>
+                                 <th class="border-bottom textkecil border-top" nowrap="">Sedimen - Bakteri</th>
+                                 <th class="border-bottom textkecil border-top" nowrap="">Sedimen – Kristal</th>
+                                 <th class="border-bottom textkecil border-top" nowrap="">Cholesterol Total</th>
+                                 <th class="border-bottom textkecil border-top" nowrap="">Asam Urat</th>
+                                 <th class="border-bottom textkecil border-top" nowrap="">Glukosa Sewaktu</th>
+                                 <th class="border-bottom textkecil border-top" nowrap="">Trigliserida</th>
+                                 <th class="border-bottom textkecil border-top" nowrap="">HDL Cholesterol</th>
+                                 <th class="border-bottom textkecil border-top" nowrap="">LDL Cholestero</th>
+                                 <th class="border-bottom textkecil border-top" nowrap="">Kesimpulan Hasil</th>
+                                <th class="border-bottom textkecil border-top">Rad </th>
+                                <th class="border-bottom textkecil border-top">COR </th>
+                                <th class="border-bottom textkecil border-top">Diafragma Sinus </th>
+                                <th class="border-bottom textkecil border-top">Pulmo</th>
+                                <th class="border-bottom textkecil border-top">Kesan</th>
+                                <th class="border-bottom textkecil border-top">Audiometri </th>
+                                 <th class="border-bottom textkecil border-top">Audiometri Telinga Kanan</th>
+                                 <th class="border-bottom textkecil border-top">Audiometri Telinga Kiri</th>
+                                 <th class="border-bottom textkecil border-top">Pendengaran Telinga Kanan</th>
+                                 <th class="border-bottom textkecil border-top">Pendengaran Telinga Kiri</th>
+                                 <th class="border-bottom textkecil border-top">Kesimpulan Pem. Audiometri</th>
+                                 <th class="border-bottom textkecil border-top">Saran Hasil Pem. Auidometri</th>
+                                 <th class="border-bottom textkecil border-top">EKG </th>
+                                 <th class="border-bottom textkecil border-top">Takikardi</th>
+                                 <th class="border-bottom textkecil border-top">Bradikardi</th>
+                                 <th class="border-bottom textkecil border-top">Aritmia</th>
+                                 <th class="border-bottom textkecil border-top">Aresst</th>
+                                 <th class="border-bottom textkecil border-top">Penemuan Lain</th>
+                                 <th class="border-bottom textkecil border-top">Keadaan Jantung Normal</th>
+                                 <th class="border-bottom textkecil border-top">Kesimpulan Hasil EKG</th>
+                                <th class="border-bottom textkecil border-top">Spiro </th>
+                                 <th class="border-bottom textkecil border-top">Hasil Pem. Spirometri</th>
+                                 <th class="border-bottom textkecil border-top">Retriksi</th>
+                                 <th class="border-bottom textkecil border-top">Obstruksif</th>
+                                <th class="border-bottom textkecil border-top">Rectal </th>
+                                 <th class="border-bottom textkecil border-top">Salmonella Thypi</th>
+                                 <th class="border-bottom textkecil border-top">Shigella SP</th>
+                                 <th class="border-bottom textkecil border-top">E. Coli Pathogen</th>
+                                 <th class="border-bottom textkecil border-top">Kesimpulan Hasil</th>
+                                </tr>
+                            </thead>
+                    <tbody>
+                    @foreach($data as $key=> $item)
+                      <tr style="background-color: {{
                                 ($item->pemeriksaanFisik?->kesimpulan == "UNFIT") ? '#eadafd' :
                                 (($item->pemeriksaanFisik?->kesimpulan == "FIT WITH RESTRICTION") ? '#9bdeee' : '')
                             }}">
 
-            <td nowrap="">{{ $key +1 }}</td>
-            <td nowrap="">{{ $item->register_date }}</td>
-            <td nowrap="">{{ $item->register_number }}</td>
-            <td nowrap="">{{ $item->code }}</td>
-            <td nowrap="">{{ $item->nik }}</td>
-            <td nowrap="">{{ $item->name }}</td>
-            <td nowrap="">{{ $item->birthday }}</td>
-            <td nowrap="">{{ $item->gender }}</td>
-            <td nowrap="">{{ $item->department?->name }}</td>
-            <td nowrap="">{{ $item->divisi?->name }}</td>
-            <td nowrap="">{{ $item->client?->name }}</td>
-            <td nowrap="">{{ $item->client?->building ?? "-" }}</td>
-            <td nowrap="">{{ $item->packet_name }}</td>
-            {{-- pemerikaan Tanda Vital --}}
-            <td nowrap="">{!! $item->tandaVital?->selesai ? "<span class='text-success'>SELESAI</span>" : "<span class='text-danger'>TIDAK</span>" !!}</td>
-            <td nowrap="">{{ $item->tandaVital?->keluhan_utama_text }}</td>
-            <td nowrap="">{{ $item->tandaVital?->riwayat_penyakit_sekarang_text }}</td>
-            <td nowrap="">{{ $item->tandaVital?->riwayat_penyakit_terdahulu_text }}</td>
-            <td nowrap="">{{ $item->tandaVital?->riwayat_trauma_text }}</td>
-            <td nowrap="">{{ $item->tandaVital?->alergi_text }}</td>
-            <td nowrap="">{{ $item->tandaVital?->alergi_text }}</td>
-            <td nowrap="">{{ $item->tandaVital?->konsumsi_alkohol }}</td>
-            <td nowrap="">{{ $item->tandaVital?->tinggi_badan }}</td>
-            <td nowrap="">{{ $item->tandaVital?->berat_badan }}</td>
-            <td nowrap="">{{ $item->tandaVital?->imt }}</td>
-            <td nowrap="">{{ $item->tandaVital?->imt_nilai }}</td>
-            <td nowrap="">{{ $item->tandaVital?->tekanan_darah }}</td>
-            <td nowrap="">{{ $item->tandaVital?->frekuensi_nadi }}</td>
-            <td nowrap="">{{ $item->tandaVital?->frekuensi_nafas }}</td>
-            {{-- pemerikaan Fisik --}}
-            <td nowrap="">{!! $item->pemeriksaanFisik?->selesai ? "<span class='text-success'>SELESAI</span>" : "<span class='text-danger'>TIDAK</span>" !!}</td>
-            <td nowrap="">{{ $item->pemeriksaanFisik?->keadaan_umum }}</td>
-            <td nowrap="">{{ $item->pemeriksaanFisik?->kepala_text }}</td>
-            <td nowrap="">{{ $item->pemeriksaanFisik?->mata }}</td>
-            <td nowrap="">{{ $item->pemeriksaanFisik?->pupil }}</td>
-            <td nowrap="">{{ $item->pemeriksaanFisik?->hidung }}</td>
-            <td nowrap="">{{ $item->pemeriksaanFisik?->bibir }}</td>
-            <td nowrap="">{{ $item->pemeriksaanFisik?->lidah }}</td>
-            <td nowrap="">{{ $item->pemeriksaanFisik?->visus }}</td>
-            <td nowrap="">{{ $item->pemeriksaanFisik?->tenggorokan_text }}</td>
-            <td nowrap="">{{ $item->pemeriksaanFisik?->faring }}</td>
-            <td nowrap="">{{ $item->pemeriksaanFisik?->buta_warna }}</td>
-            <td nowrap="">{{ $item->pemeriksaanFisik?->telinga }}</td>
-            <td nowrap="">{{ $item->pemeriksaanFisik?->kelainan_telinga }}</td>
-            <td nowrap="">{{ $item->pemeriksaanFisik?->leher_kgb }}</td>
-            <td nowrap="">{{ $item->pemeriksaanFisik?->leher_jvp }}</td>
-            <td nowrap="">{{ $item->pemeriksaanFisik?->gigi }}</td>
-            <td nowrap="">{{ $item->pemeriksaanFisik?->jantung_inspeksi }}</td>
-            <td nowrap="">{{ $item->pemeriksaanFisik?->jantung_auskultasi }}</td>
-            <td nowrap="">{{ $item->pemeriksaanFisik?->jantung_palpasi }}</td>
-            <td nowrap="">{{ $item->pemeriksaanFisik?->jantung_perkusi }}</td>
-            <td nowrap="">{{ $item->pemeriksaanFisik?->paru_inspeksi }}</td>
-            <td nowrap="">{{ $item->pemeriksaanFisik?->paru_auskultasi_vasikuler }}</td>
-            <td nowrap="">{{ $item->pemeriksaanFisik?->paru_auskultasi_ronkhi }}</td>
-            <td nowrap="">{{ $item->pemeriksaanFisik?->paru_auskultasi_wheezing }}</td>
-            <td nowrap="">{{ $item->pemeriksaanFisik?->paru_palpasi }}</td>
-            <td nowrap="">{{ $item->pemeriksaanFisik?->paru_perkusi }}</td>
-            <td nowrap="">{{ $item->pemeriksaanFisik?->abdomen_inspeksi }}</td>
-            <td nowrap="">{{ $item->pemeriksaanFisik?->abdomen_auskultasi }}</td>
-            <td nowrap="">{{ $item->pemeriksaanFisik?->abdomen_palpasi }}</td>
-            <td nowrap="">{{ $item->pemeriksaanFisik?->abdomen_perkusi }}</td>
-            <td nowrap="">{{ $item->pemeriksaanFisik?->reflex_fisiologis_atas }}</td>
-            <td nowrap="">{{ $item->pemeriksaanFisik?->reflex_fisiologis_bawah }}</td>
-            <td nowrap="">{{ $item->pemeriksaanFisik?->reflex_phatologis_atas }}</td>
-            <td nowrap="">{{ $item->pemeriksaanFisik?->reflex_phatologis_bawah }}</td>
-            <td nowrap="">{{ $item->pemeriksaanFisik?->ekg_text }}</td>
-            <td nowrap="">{{ $item->pemeriksaanFisik?->neurologis_text }}</td>
-            <td nowrap="">{{ $item->pemeriksaanFisik?->kesimpulan }}</td>
-            <td nowrap="">{{ $item->pemeriksaanFisik?->saran }}</td>
-            {{-- LAB --}}
-            <td nowrap="">{!! $item->laboratorium?->selesai ? "<span class='text-success'>SELESAI</span>" : "<span class='text-danger'>TIDAK</span>" !!}</td>
-            <td nowrap="">{{ $item->laboratorium?->hemoglobin }}</td>
-            <td nowrap="">{{ $item->laboratorium?->reduksi }}</td>
-            <td nowrap="">{{ $item->laboratorium?->hematokrit }}</td>
-            <td nowrap="">{{ $item->laboratorium?->lekosit }}</td>
-            <td nowrap="">{{ $item->laboratorium?->trombosit }}</td>
-            <td nowrap="">{{ $item->laboratorium?->eritrosit }}</td>
-            <td nowrap="">{{ $item->laboratorium?->basofil }}</td>
-            <td nowrap="">{{ $item->laboratorium?->eosinofil }}</td>
-            <td nowrap="">{{ $item->laboratorium?->batang }}</td>
-            <td nowrap="">{{ $item->laboratorium?->segmen }}</td>
-            <td nowrap="">{{ $item->laboratorium?->limfosit }}</td>
-            <td nowrap="">{{ $item->laboratorium?->monosit }}</td>
-            <td nowrap="">{{ $item->laboratorium?->sgot }}</td>
-            <td nowrap="">{{ $item->laboratorium?->ureum }}</td>
-            <td nowrap="">{{ $item->laboratorium?->creatinin }}</td>
-            <td nowrap="">{{ $item->laboratorium?->hbsag }}</td>
-            <td nowrap="">{{ $item->laboratorium?->glukosa_puasa }}</td>
-            <td nowrap="">{{ $item->laboratorium?->berat_jenis }}</td>
-            <td nowrap="">{{ $item->laboratorium?->ph_reaksi }}</td>
-            <td nowrap="">{{ $item->laboratorium?->warna }}</td>
-            <td nowrap="">{{ $item->laboratorium?->kekeruhan }}</td>
-            <td nowrap="">{{ $item->laboratorium?->urobilinogen }}</td>
-            <td nowrap="">{{ $item->laboratorium?->bilirubin }}</td>
-            <td nowrap="">{{ $item->laboratorium?->eritrosit_urine }}</td>
-            <td nowrap="">{{ $item->laboratorium?->keton }}</td>
-            <td nowrap="">{{ $item->laboratorium?->protein }}</td>
-            <td nowrap="">{{ $item->laboratorium?->sedimen_epitel }}</td>
-            <td nowrap="">{{ $item->laboratorium?->sedimen_eritrosit }}</td>
-            <td nowrap="">{{ $item->laboratorium?->sedimen_leukosit }}</td>
-            <td nowrap="">{{ $item->laboratorium?->sedimen_bakteri }}</td>
-            <td nowrap="">{{ $item->laboratorium?->sedimen_kristal }}</td>
-            <td nowrap="">{{ $item->laboratorium?->cholesterol_total }}</td>
-            <td nowrap="">{{ $item->laboratorium?->asam_urat }}</td>
-            <td nowrap="">{{ $item->laboratorium?->glukosa_sewaktu }}</td>
-            <td nowrap="">{{ $item->laboratorium?->trigliserida }}</td>
-            <td nowrap="">{{ $item->laboratorium?->hdl_cholesterol }}</td>
-            <td nowrap="">{{ $item->laboratorium?->ldl_cholestero }}</td>
-            <td nowrap="">{{ $item->laboratorium?->kesimpulan }}</td>
-            {{-- Radiologi --}}
-            <td nowrap="">{!! $item->radiologi?->selesai ? "<span class='text-success'>SELESAI</span>" : "<span class='text-danger'>TIDAK</span>" !!}</td>
-            <td nowrap="">{{ $item->radiologi?->cor }}</td>
-            <td nowrap="">{{ $item->radiologi?->diafragma_sinus }}</td>
-            <td nowrap="">{{ $item->radiologi?->pulmo }}</td>
-            <td nowrap="">{{ $item->radiologi?->kesan }}</td>
-            {{-- audiometri --}}
-            <td nowrap="">{!! $item->audiometri?->selesai ? "<span class='text-success'>SELESAI</span>" : "<span class='text-danger'>TIDAK</span>" !!}</td>
-            <td nowrap="">{{ $item->audiometri?->audiometri_telinga_kanan }}</td>
-            <td nowrap="">{{ $item->audiometri?->audiometri_telinga_kiri }}</td>
-            <td nowrap="">{{ $item->audiometri?->pendengaran_telinga_kanan }}</td>
-            <td nowrap="">{{ $item->audiometri?->pendengaran_telinga_kiri }}</td>
-            <td nowrap="">{{ $item->audiometri?->kesimpulan }}</td>
-            <td nowrap="">{{ $item->audiometri?->saran }}</td>
-            {{-- ekg --}}
-            <td nowrap="">{!! $item->ekg?->selesai ? "<span class='text-success'>SELESAI</span>" : "<span class='text-danger'>TIDAK</span>" !!}</td>
-            <td nowrap="">{{ $item->ekg?->takikardi }}</td>
-            <td nowrap="">{{ $item->ekg?->bradikardi }}</td>
-            <td nowrap="">{{ $item->ekg?->aritmia }}</td>
-            <td nowrap="">{{ $item->ekg?->aresst }}</td>
-            <td nowrap="">{{ $item->ekg?->penemuan_lain }}</td>
-            <td nowrap="">{{ $item->ekg?->keadaan_jantung_normal }}</td>
-            <td nowrap="">{{ $item->ekg?->kesimpulan }}</td>
-            {{-- Spiro --}}
-            <td nowrap="">{!! $item->spirometri?->selesai ? "<span class='text-success'>SELESAI</span>" : "<span class='text-danger'>TIDAK</span>" !!}</td>
-            <td nowrap="">{{ $item->spirometri?->hasil }}</td>
-            <td nowrap="">{{ $item->spirometri?->retriksi }}</td>
-            <td nowrap="">{{ $item->spirometri?->obstruksif }}</td>
-            {{-- Rectal --}}
-            <td nowrap="">{!! $item->rectal?->selesai ? "<span class='text-success'>SELESAI</span>" : "<span class='text-danger'>TIDAK</span>" !!}</td>
-            <td nowrap="">{{ $item->rectal?->salmonella_thypi }}</td>
-            <td nowrap="">{{ $item->rectal?->shigella_sp }}</td>
-            <td nowrap="">{{ $item->rectal?->e_coli_pathogen }}</td>
-            <td nowrap="">{{ $item->rectal?->kesimpulan }}</td>
-        </tr>
-    @endforeach
-    </tbody>
-</table>
+                            <td nowrap="">{{ $key +1 }}</td>
+                            <td nowrap="">{{ $item->register_date }}</td>
+                            <td nowrap="">{{ $item->register_number }}</td>
+                            <td nowrap="">{{ $item->code }}</td>
+                            <td nowrap="">{{ $item->nik }}</td>
+                            <td nowrap="">{{ $item->name }}</td>
+                            <td nowrap="">{{ $item->birthday }}</td>
+                            <td nowrap="">{{ $item->gender }}</td>
+                            <td nowrap="">{{ $item->department?->name }}</td>
+                            <td nowrap="">{{ $item->divisi?->name }}</td>
+                            <td nowrap="">{{ $item->client?->name }}</td>
+                            <td nowrap="">{{ $item->client?->building ?? "-" }}</td>
+                            <td nowrap="">{{ $item->packet_name }}</td>
+                            {{-- pemerikaan Tanda Vital --}}
+                            <td nowrap="">{!! $item->tandaVital?->selesai ? "<span class='text-success'>SELESAI</span>" : "<span class='text-danger'>TIDAK</span>" !!}</td>
+                            <td nowrap="">{{ $item->tandaVital?->keluhan_utama_text }}</td>
+                            <td nowrap="">{{ $item->tandaVital?->riwayat_penyakit_sekarang_text }}</td>
+                            <td nowrap="">{{ $item->tandaVital?->riwayat_penyakit_terdahulu_text }}</td>
+                            <td nowrap="">{{ $item->tandaVital?->riwayat_trauma_text }}</td>
+                            <td nowrap="">{{ $item->tandaVital?->alergi_text }}</td>
+                            <td nowrap="">{{ $item->tandaVital?->merokok == 1? "Ya" : 'Tidak' }}</td>
+                            <td nowrap="">{{ $item->tandaVital?->konsumsi_alkohol == 1? "Ya" : 'Tidak' }}</td>
+                            <td nowrap="">{{ $item->tandaVital?->tinggi_badan }}</td>
+                            <td nowrap="">{{ $item->tandaVital?->berat_badan }}</td>
+                            <td nowrap="">{{ $item->tandaVital?->imt }}</td>
+                            <td nowrap="">{{ $item->tandaVital?->imt_nilai }}</td>
+                            <td nowrap="">{{ $item->tandaVital?->tekanan_darah }}</td>
+                            <td nowrap="">{{ $item->tandaVital?->frekuensi_nadi }}</td>
+                            <td nowrap="">{{ $item->tandaVital?->suhu }}</td>
+                            <td nowrap="">{{ $item->tandaVital?->frekuensi_nafas }}</td>
+                            {{-- pemerikaan Fisik --}}
+                            <td nowrap="">{!! $item->pemeriksaanFisik?->selesai ? "<span class='text-success'>SELESAI</span>" : "<span class='text-danger'>TIDAK</span>" !!}</td>
+                            <td nowrap="">{{ $item->pemeriksaanFisik?->keadaan_umum }}</td>
+                            <td nowrap="">{{ $item->pemeriksaanFisik?->kepala_text }}</td>
+                            <td nowrap="">{{ $item->pemeriksaanFisik?->mata }}</td>
+                            <td nowrap="">{{ $item->pemeriksaanFisik?->pupil }}</td>
+                            <td nowrap="">{{ $item->pemeriksaanFisik?->hidung }}</td>
+                            <td nowrap="">{{ $item->pemeriksaanFisik?->bibir }}</td>
+                            <td nowrap="">{{ $item->pemeriksaanFisik?->lidah }}</td>
+                            <td nowrap="">{{ $item->pemeriksaanFisik?->visus }}</td>
+                            <td nowrap="">{{ $item->pemeriksaanFisik?->tenggorokan_text }}</td>
+                            <td nowrap="">{{ $item->pemeriksaanFisik?->faring }}</td>
+                            <td nowrap="">{{ $item->pemeriksaanFisik?->buta_warna }}</td>
+                            <td nowrap="">{{ $item->pemeriksaanFisik?->telinga }}</td>
+                            <td nowrap="">{{ $item->pemeriksaanFisik?->kelainan_telinga }}</td>
+                            <td nowrap="">{{ $item->pemeriksaanFisik?->leher_kgb }}</td>
+                            <td nowrap="">{{ $item->pemeriksaanFisik?->leher_jvp }}</td>
+                            <td nowrap="">{{ $item->pemeriksaanFisik?->gigi }}</td>
+                            <td nowrap="">{{ $item->pemeriksaanFisik?->jantung_inspeksi }}</td>
+                            <td nowrap="">{{ $item->pemeriksaanFisik?->jantung_auskultasi }}</td>
+                            <td nowrap="">{{ $item->pemeriksaanFisik?->jantung_palpasi }}</td>
+                            <td nowrap="">{{ $item->pemeriksaanFisik?->jantung_perkusi }}</td>
+                            <td nowrap="">{{ $item->pemeriksaanFisik?->paru_inspeksi }}</td>
+                            <td nowrap="">{{ $item->pemeriksaanFisik?->paru_auskultasi_vasikuler }}</td>
+                            <td nowrap="">{{ $item->pemeriksaanFisik?->paru_auskultasi_ronkhi }}</td>
+                            <td nowrap="">{{ $item->pemeriksaanFisik?->paru_auskultasi_wheezing }}</td>
+                            <td nowrap="">{{ $item->pemeriksaanFisik?->paru_palpasi }}</td>
+                            <td nowrap="">{{ $item->pemeriksaanFisik?->paru_perkusi }}</td>
+                            <td nowrap="">{{ $item->pemeriksaanFisik?->abdomen_inspeksi }}</td>
+                            <td nowrap="">{{ $item->pemeriksaanFisik?->abdomen_auskultasi }}</td>
+                            <td nowrap="">{{ $item->pemeriksaanFisik?->abdomen_palpasi }}</td>
+                            <td nowrap="">{{ $item->pemeriksaanFisik?->abdomen_perkusi }}</td>
+                            <td nowrap="">{{ $item->pemeriksaanFisik?->reflex_fisiologis_atas }}</td>
+                            <td nowrap="">{{ $item->pemeriksaanFisik?->reflex_fisiologis_bawah }}</td>
+                            <td nowrap="">{{ $item->pemeriksaanFisik?->reflex_phatologis_atas }}</td>
+                            <td nowrap="">{{ $item->pemeriksaanFisik?->reflex_phatologis_bawah }}</td>
+                            <td nowrap="">{{ $item->pemeriksaanFisik?->ekg_text }}</td>
+                            <td nowrap="">{{ $item->pemeriksaanFisik?->neurologis_text }}</td>
+                            <td nowrap="">{{ $item->pemeriksaanFisik?->kesimpulan }}</td>
+                            <td nowrap="">{{ $item->pemeriksaanFisik?->saran }}</td>
+                            {{-- LAB --}}
+                            <td nowrap="">{!! $item->laboratorium?->selesai ? "<span class='text-success'>SELESAI</span>" : "<span class='text-danger'>TIDAK</span>" !!}</td>
+                            <td nowrap="">{{ $item->laboratorium?->hemoglobin }}</td>
+                            <td nowrap="">{{ $item->laboratorium?->reduksi }}</td>
+                            <td nowrap="">{{ $item->laboratorium?->hematokrit }}</td>
+                            <td nowrap="">{{ $item->laboratorium?->lekosit }}</td>
+                            <td nowrap="">{{ $item->laboratorium?->trombosit }}</td>
+                            <td nowrap="">{{ $item->laboratorium?->eritrosit }}</td>
+                            <td nowrap="">{{ $item->laboratorium?->basofil }}</td>
+                            <td nowrap="">{{ $item->laboratorium?->eosinofil }}</td>
+                            <td nowrap="">{{ $item->laboratorium?->batang }}</td>
+                            <td nowrap="">{{ $item->laboratorium?->segmen }}</td>
+                            <td nowrap="">{{ $item->laboratorium?->limfosit }}</td>
+                            <td nowrap="">{{ $item->laboratorium?->monosit }}</td>
+                            <td nowrap="">{{ $item->laboratorium?->sgot }}</td>
+                            <td nowrap="">{{ $item->laboratorium?->sgot }}</td>
+                            <td nowrap="">{{ $item->laboratorium?->ureum }}</td>
+                            <td nowrap="">{{ $item->laboratorium?->creatinin }}</td>
+                            <td nowrap="">{{ $item->laboratorium?->glukosa_puasa }}</td>
+                            <td nowrap="">{{ $item->laboratorium?->berat_jenis }}</td>
+                            <td nowrap="">{{ $item->laboratorium?->ph_reaksi }}</td>
+                            <td nowrap="">{{ $item->laboratorium?->warna }}</td>
+                            <td nowrap="">{{ $item->laboratorium?->kekeruhan }}</td>
+                            <td nowrap="">{{ $item->laboratorium?->urobilinogen }}</td>
+                            <td nowrap="">{{ $item->laboratorium?->bilirubin }}</td>
+                            <td nowrap="">{{ $item->laboratorium?->eritrosit_urine }}</td>
+                            <td nowrap="">{{ $item->laboratorium?->keton }}</td>
+                            <td nowrap="">{{ $item->laboratorium?->protein }}</td>
+                            <td nowrap="">{{ $item->laboratorium?->sedimen_epitel }}</td>
+                            <td nowrap="">{{ $item->laboratorium?->sedimen_eritrosit }}</td>
+                            <td nowrap="">{{ $item->laboratorium?->sedimen_leukosit }}</td>
+                            <td nowrap="">{{ $item->laboratorium?->sedimen_bakteri }}</td>
+                            <td nowrap="">{{ $item->laboratorium?->sedimen_kristal }}</td>
+                            <td nowrap="">{{ $item->laboratorium?->cholesterol_total }}</td>
+                            <td nowrap="">{{ $item->laboratorium?->asam_urat }}</td>
+                            <td nowrap="">{{ $item->laboratorium?->glukosa_sewaktu }}</td>
+                            <td nowrap="">{{ $item->laboratorium?->trigliserida }}</td>
+                            <td nowrap="">{{ $item->laboratorium?->hdl_cholesterol }}</td>
+                            <td nowrap="">{{ $item->laboratorium?->ldl_cholestero }}</td>
+                            <td nowrap="">{{ $item->laboratorium?->kesimpulan }}</td>
+                            {{-- Radiologi --}}
+                            <td nowrap="">{!! $item->radiologi?->selesai ? "<span class='text-success'>SELESAI</span>" : "<span class='text-danger'>TIDAK</span>" !!}</td>
+                            <td nowrap="">{{ $item->radiologi?->cor }}</td>
+                            <td nowrap="">{{ $item->radiologi?->diafragma_sinus }}</td>
+                            <td nowrap="">{{ $item->radiologi?->pulmo }}</td>
+                            <td nowrap="">{{ $item->radiologi?->kesan }}</td>
+                             {{-- audiometri --}}
+                            <td nowrap="">{!! $item->audiometri?->selesai ? "<span class='text-success'>SELESAI</span>" : "<span class='text-danger'>TIDAK</span>" !!}</td>
+                            <td nowrap="">{{ $item->audiometri?->audiometri_telinga_kanan }}</td>
+                            <td nowrap="">{{ $item->audiometri?->audiometri_telinga_kiri }}</td>
+                            <td nowrap="">{{ $item->audiometri?->pendengaran_telinga_kanan }}</td>
+                            <td nowrap="">{{ $item->audiometri?->pendengaran_telinga_kiri }}</td>
+                            <td nowrap="">{{ $item->audiometri?->kesimpulan }}</td>
+                            <td nowrap="">{{ $item->audiometri?->saran }}</td>
+                             {{-- ekg --}}
+                            <td nowrap="">{!! $item->ekg?->selesai ? "<span class='text-success'>SELESAI</span>" : "<span class='text-danger'>TIDAK</span>" !!}</td>
+                             <td nowrap="">{{ $item->ekg?->takikardi }}</td>
+                             <td nowrap="">{{ $item->ekg?->bradikardi }}</td>
+                             <td nowrap="">{{ $item->ekg?->aritmia }}</td>
+                             <td nowrap="">{{ $item->ekg?->aresst }}</td>
+                             <td nowrap="">{{ $item->ekg?->penemuan_lain }}</td>
+                             <td nowrap="">{{ $item->ekg?->keadaan_jantung_normal }}</td>
+                             <td nowrap="">{{ $item->ekg?->kesimpulan }}</td>
+                             {{-- Spiro --}}
+                            <td nowrap="">{!! $item->spirometri?->selesai ? "<span class='text-success'>SELESAI</span>" : "<span class='text-danger'>TIDAK</span>" !!}</td>
+                            <td nowrap="">{{ $item->spirometri?->hasil }}</td>
+                            <td nowrap="">{{ $item->spirometri?->retriksi }}</td>
+                            <td nowrap="">{{ $item->spirometri?->obstruksif }}</td>
+                             {{-- Rectal --}}
+                            <td nowrap="">{!! $item->rectal?->selesai ? "<span class='text-success'>SELESAI</span>" : "<span class='text-danger'>TIDAK</span>" !!}</td>
+                            <td nowrap="">{{ $item->rectal?->salmonella_thypi }}</td>
+                            <td nowrap="">{{ $item->rectal?->shigella_sp }}</td>
+                            <td nowrap="">{{ $item->rectal?->e_coli_pathogen }}</td>
+                            <td nowrap="">{{ $item->rectal?->kesimpulan }}</td>
+                        </tr>
+                    @endforeach
+                    </tbody>
+                </table>
