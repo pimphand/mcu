@@ -81,7 +81,7 @@
                             <tr>
                                 <td>Status</td>
                                 <td>:</td>
-                                <td>{{ $participant->status }}</td>
+                                <td>{{ $participant->status ?? "-" }}</td>
                             </tr>
                             <tr>
                                 <td>Dept. ID</td>
@@ -113,7 +113,7 @@
         </thead>
         <tbody>
             <tr>
-                <td colspan="3" class="border">HEMATOLOGI</td>
+                <td colspan="3" class="border"><b>HEMATOLOGI</b></td>
             </tr>
             <tr>
                 <td class="border">Hemoglobin</td>
@@ -182,7 +182,10 @@
                 <td class="border text-center">2 – 6%</td>
             </tr>
             <tr>
-                <td colspan="3" class="border">KIMIA KLINIK</td>
+                <td colspan="3" class="border"><b>IMMUNO SEROLOGI</b></td>
+            </tr>
+            <tr>
+                <td colspan="3" class="border"><b>HEPATITIS</b></td>
             </tr>
             @if($laboratorium->sgot)
 {{--            <tr>--}}
@@ -192,12 +195,22 @@
 {{--                <td class="border text-center">P: < 31 µl, L: < 34 µl</td>--}}
 {{--            </tr>--}}
             @endif
+            @if($laboratorium->sgpt)
             <tr>
                 <td class="border">SGPT</td>
                 <td class="border text-center">
                     {{ $laboratorium->sgpt }}</td>
                 <td class="border text-center">0 - 45 µl</td>
             </tr>
+            @endif
+            @if($laboratorium->hbsag)
+            <tr>
+                <td class="border">HBsAg Kualitatif</td>
+                <td class="border text-center">
+                    {{ $laboratorium->hbsag }}</td>
+                <td class="border text-center">Negatif</td>
+            </tr>
+            @endif
             @if($laboratorium->ureum)
 {{--                <tr>--}}
 {{--                    <td class="border">Ureum</td>--}}
@@ -206,14 +219,17 @@
 {{--                    <td class="border text-center">10 - 40 mg</td>--}}
 {{--                </tr>--}}
             @endif
+            @if($laboratorium->ureum)
             <tr>
                 <td class="border">Creatinin</td>
                 <td class="border text-center">
-                    {{ $laboratorium->creatinin }}</td>
+                    {{ $laboratorium->ureum }}</td>
                 <td class="border text-center">P: < 0.6 - 1.2 mg/dL, L: < 0.6 - 1.4 mg/dL</td>
             </tr>
+            @endif
+            
             <tr>
-                <td colspan="3" class="border">URINE LENGKAP</td>
+                <td colspan="3" class="border"><b>URINE LENGKAP</b></td>
             </tr>
             <tr>
                 <td class="border">Reduksi</td>
