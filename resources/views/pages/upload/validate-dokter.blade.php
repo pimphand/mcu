@@ -63,6 +63,10 @@
                                         <i class="mdi mdi-cloud-upload"></i>
                                         Upload
                                     </button>
+                                    <a class="btn btn-success left" href="https://docs.google.com/spreadsheets/d/1i_LMCnMkPWYx9Nk17PuQaZ1AKHngFVcGPcL7wI0auRE/edit?usp=sharing" target="_blank" type="button">
+                                        <i class="mdi mdi-cloud-upload"></i>
+                                        Template
+                                    </a>
                                 </div>
                             </div>
 
