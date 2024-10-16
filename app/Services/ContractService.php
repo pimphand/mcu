@@ -43,7 +43,7 @@ class ContractService
 
     public function create(array $data)
     {
-        $sequence = $this->contract->count();
+        $sequence = $this->contract->count()+rand(10,100);
         $data['code'] = sprintf('%s%s', self::PREFIX, str_pad($sequence + 1, 5, '0', STR_PAD_LEFT));
         return $this->contract->create($data);
     }

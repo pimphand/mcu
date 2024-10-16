@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\DataRegisterExport;
 use App\Exports\ResultMcu;
+use App\Http\Resources\DataRegisterResource;
+use App\Jobs\GeneratePdfJob;
 use App\Jobs\TestJob;
 use App\Models\Audiometri;
 use App\Models\Ekg;
@@ -14,6 +17,7 @@ use App\Models\Rectal;
 use App\Models\Spirometri;
 use App\Models\TandaVital;
 use App\Services\ParticipantService;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -144,5 +148,60 @@ class RecapController extends Controller
             return $data;
         }
         return view('pages.recaps.register', compact('data', 'client'));
+    }
+
+    public function dataRegister(Request $request)
+    {
+        $data = [];
+        $client = $this->participantService->getClient();
+        if ($request->ajax()) {
+            $data = QueryBuilder::for(Participant::class)
+                ->allowedFilters([
+                    AllowedFilter::exact('client_id'),
+                    AllowedFilter::exact('contract_id'),
+                    AllowedFilter::exact('divisi_id'),
+                    AllowedFilter::scope('date_range'),
+                ])
+                ->get();
+            if ($request->excel){
+                // Use a queue to process the export
+                $fileName = 'hasil_register_mcu' . time() . '.xlsx';
+
+                Queue::push(function () use ($data, $fileName) {
+                    Excel::store(new DataRegisterExport($data), 'hasil_register_mcu/' . $fileName);
+                });
+
+                // Return the public URL for the user to download the file
+                $fileUrl = Storage::url('hasil_register_mcu/' . $fileName);
+
+                return response()->json([
+                    'status' => 'success',
+                    'download_url' => $fileUrl
+                ]);
+            }
+
+            if ($request->pdf){
+
+                $fileName = 'dataRegister_' . time() . '.pdf'; // Customize the file name
+//                GeneratePdfJob::dispatch($data, $fileName);
+//
+//                return [
+//                    'status' => 'success',
+//                    'download_url' => Storage::url('pdf/' . $fileName)
+//                ];
+
+                $mpdf = new \Mpdf\Mpdf();
+                $mpdf->WriteHTML(view('exports.dataRegister',['data' => $data]));
+                $storagePath = storage_path('app/public/pdf/') . $fileName;
+                $mpdf->Output($storagePath, \Mpdf\Output\Destination::FILE);
+                $fileUrl = Storage::url('pdf/' . $fileName);
+                return [
+                    'status' => 'success',
+                    'download_url' => $fileUrl
+                ];
+            }
+            return DataRegisterResource::collection($data);
+        }
+        return view('pages.recaps.dataRegister', compact('data', 'client'));
     }
 }

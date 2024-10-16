@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Imports\DoctorValidateImport;
+use App\Imports\GeneralResultImport;
 use App\Imports\LaboratoriumImport;
 use App\Imports\RadiologiImport;
 use App\Jobs\TestJob;
@@ -79,6 +80,36 @@ class UploadFileController extends Controller
         ]);
 
         Excel::queueImport(new RadiologiImport(Session::get('client_id')), $request->file('fileExcel'));
+
+        return ['status' => 'success'];
+    }
+    public function getGeneralResult(Request $request)
+    {
+        $participantService = new ParticipantService();
+        $client = $participantService->getClient();
+
+        if ($request->ajax()) {
+            $data = QueryBuilder::for(Radiologi::class)
+                ->withWhereHas('participant', function ($query) use ($request) {
+                    $query->where('client_id', Session::get('client_id'))
+                        ->DateRange($request->date_range);
+                })
+                ->get();
+
+            return [
+                "data" => $data
+            ];
+        }
+        return view('pages.upload.general_result', compact('client'));
+    }
+
+    public function generalResult(Request $request)
+    {
+        $data = $request->validate([
+            'fileExcel' => 'required|mimes:xlsx,xls'
+        ]);
+
+        Excel::queueImport(new GeneralResultImport(Session::get('client_id')), $request->file('fileExcel'));
 
         return ['status' => 'success'];
     }

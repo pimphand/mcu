@@ -25,7 +25,6 @@ class LaboratoriumImport implements ToModel, WithStartRow, WithChunkReading, Wit
      */
     public function model(array $row)
     {
-        //        Log::alert("array : $row"  );
         if (isset($row['code']) && $row['code'] != null) {
             $data = [
                 "name" => $row['name'] ?? null,

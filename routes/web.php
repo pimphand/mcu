@@ -125,13 +125,15 @@ Route::middleware('auth')->group(function () {
         Route::delete('/{id}', [DivisiController::class, 'destroy'])->name('divisi.delete');
     });
     Route::middleware('mcu')->group(function () {
-
         Route::get('participant-upload-validasi-dokter', [\App\Http\Controllers\UploadFileController::class, 'getValidateDoctor'])->name('upload.validasi.dokter');
         Route::post('participant-upload-validasi-dokter', [\App\Http\Controllers\UploadFileController::class, 'validateDoctor']);
         Route::get('participant-upload-laboratorium', [\App\Http\Controllers\UploadFileController::class, 'getlaboratorium'])->name('upload.laboratorium');
         Route::post('participant-upload-laboratorium', [\App\Http\Controllers\UploadFileController::class, 'laboratorium']);
         Route::get('participant-upload-radiologi', [\App\Http\Controllers\UploadFileController::class, 'getradiologi'])->name('upload.radiologi');
         Route::post('participant-upload-radiologi', [\App\Http\Controllers\UploadFileController::class, 'radiologi']);
+        Route::get('participant-upload-umum', [\App\Http\Controllers\UploadFileController::class, 'getGeneralResult'])->name('upload.generalResult');
+        Route::post('participant-upload-umum', [\App\Http\Controllers\UploadFileController::class, 'generalResult']);
+//   participant-upload-umum
     });
 
     /** route crud participant */
@@ -219,4 +221,5 @@ Route::middleware('auth')->group(function () {
     Route::get('report-hasil', action: [RecapController::class, 'results'])->name('report.results');
     Route::get('report-import-result-mcu', [RecapController::class, 'importResultMcu'])->name('report.importResultMcu');
     Route::middleware('mcu')->get('report-recap-register', [RecapController::class, 'register'])->name('recap.register');
+    Route::middleware('mcu')->get('report-data-register', [RecapController::class, 'dataRegister'])->name('recap.dataRegister');
 });

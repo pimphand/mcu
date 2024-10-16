@@ -39,8 +39,8 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label class="form-label mt-1">Nama</label>
-                                    <input type="text" name="name" class="form-control" placeholder="nama"
+                                    <label class="form-label mt-1">Nomor Kontrak</label>
+                                    <input type="text" name="name" class="form-control" placeholder="Masukan Nomor Kontrak"
                                         value="{{ old('name', $contract->name) }}" required>
                                     @error('name')
                                         <span class="text-danger">{{ $message }}</span>
