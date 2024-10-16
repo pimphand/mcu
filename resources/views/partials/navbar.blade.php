@@ -8,6 +8,9 @@
                             data-feather="menu"></i></a></li> --}}
             </ul>
             <ul class="nav navbar-nav bookmark-icons">
+                <h4 id="title_navbar">
+
+</h4>
                 {{-- <li class="nav-item d-none d-lg-block"><a class="nav-link" href="app-email.html"
                         data-bs-toggle="tooltip" data-bs-placement="bottom" title="Email"><i class="ficon"
                             data-feather="mail"></i></a></li>

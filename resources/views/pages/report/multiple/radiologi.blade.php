@@ -95,7 +95,7 @@ $currentPage = $index + 1;
                             <tr>
                                 <td>Dept. ID</td>
                                 <td>:</td>
-                                                                <td>{{ $participant->divisi?->name }}</td>
+                            <td>{{ $participant->divisi?->name }}</td>
 
                             </tr>
                             <tr>

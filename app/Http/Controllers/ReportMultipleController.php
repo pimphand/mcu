@@ -55,13 +55,12 @@ class ReportMultipleController extends Controller
                 AllowedFilter::exact('contract_id'),
                 AllowedFilter::scope('date_range'),
             ])
-            ->skip($start - 1)  // Lewati data sebelum posisi 'start'
-            ->take($end - $start + 1)  // Ambil sejumlah 'end - start + 1' data
+            ->whereBetween('no_form', [$start, $end])
             ->get();
 
         $pdf = Pdf::loadView('pages.report.multiple.identitas', compact('data'));
 
-        return $pdf->stream(sprintf('%s-%s.pdf', "spirometri", $start . '-' . $end));
+        return $pdf->stream(sprintf('%s-%s.pdf', "print-stiker", $start . '-' . $end));
     }
 
     public function pemFisik(Request $request)
@@ -88,7 +87,7 @@ class ReportMultipleController extends Controller
 
         $pdf = Pdf::loadView('pages.report.multiple.pemeriksaan-fisik', compact('data'));
 
-        return $pdf->stream(sprintf('%s-%s.pdf', "spirometri", $start . '-' . $end));
+        return $pdf->stream(sprintf('%s-%s.pdf', "pemeriksaan-fisik", $start . '-' . $end));
     }
 
     public function radiologi(Request $request)
@@ -115,7 +114,7 @@ class ReportMultipleController extends Controller
 
         $pdf = Pdf::loadView('pages.report.multiple.radiologi', compact('data'));
 
-        return $pdf->stream(sprintf('%s-%s.pdf', "spirometri", $start . '-' . $end));
+        return $pdf->stream(sprintf('%s-%s.pdf', "radiologi", $start . '-' . $end));
     }
     public function ekg(Request $request)
     {
@@ -141,7 +140,7 @@ class ReportMultipleController extends Controller
 
         $pdf = Pdf::loadView('pages.report.multiple.ekg', compact('data'));
 
-        return $pdf->stream(sprintf('%s-%s.pdf', "spirometri", $start . '-' . $end));
+        return $pdf->stream(sprintf('%s-%s.pdf', "ekg", $start . '-' . $end));
     }
 
     public function rectal(Request $request)
@@ -168,6 +167,6 @@ class ReportMultipleController extends Controller
 
         $pdf = Pdf::loadView('pages.report.multiple.rectal', compact('data'));
 
-        return $pdf->stream(sprintf('%s-%s.pdf', "spirometri", $start . '-' . $end));
+        return $pdf->stream(sprintf('%s-%s.pdf', "rectal", $start . '-' . $end));
     }
 }

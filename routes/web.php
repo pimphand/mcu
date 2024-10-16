@@ -133,7 +133,7 @@ Route::middleware('auth')->group(function () {
         Route::post('participant-upload-radiologi', [\App\Http\Controllers\UploadFileController::class, 'radiologi']);
         Route::get('participant-upload-umum', [\App\Http\Controllers\UploadFileController::class, 'getGeneralResult'])->name('upload.generalResult');
         Route::post('participant-upload-umum', [\App\Http\Controllers\UploadFileController::class, 'generalResult']);
-//   participant-upload-umum
+        //   participant-upload-umum
     });
 
     /** route crud participant */
@@ -178,12 +178,10 @@ Route::middleware('auth')->group(function () {
 
         Route::get('/detail/foto-komputer/{id}', [ParticipantController::class, 'detailFotoKomputer'])->name('participant.detail.foto.komputer');
         Route::post('/detail/foto-komputer/{id}', [ParticipantController::class, 'updateFotoKomputer'])->name('participant.detail.foto.komputer.update');
-
-
         //import
         Route::post('/import', [ParticipantController::class, 'import'])->name('participant.import');
     });
-
+    Route::view('participant-print-identitas', 'pages.participant.indetitas');
     Route::prefix('report')->group(function () {
         Route::prefix('pdf')->group(function () {
             Route::get('identitas/{participantId}', [ReportController::class, 'identitas'])->name('report.identitas');

@@ -6,6 +6,7 @@ use App\Services\ClientService;
 use App\Services\ContractService;
 use App\Services\McuService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 
 class McuController extends Controller
 {
@@ -20,7 +21,7 @@ class McuController extends Controller
     }
     public function mcu(Request $request)
     {
-        $request->merge(['client_id' => \Session::get('client_id') ?? 0]);
+        $request->merge(['client_id' => Session::get('client_id') ?? 0]);
         $clients = $this->clinetService->paginate(1000);
         $contracts = $this->contractService->paginate(1000);
         return view('pages.user.mcu', compact('clients', 'contracts'));
