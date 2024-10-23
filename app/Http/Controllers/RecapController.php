@@ -67,6 +67,8 @@ class RecapController extends Controller
         // Use a queue to process the export
         $fileName = 'results_' . time() . '.xlsx';
 
+        // (new ResultMcu($data))->store('invoices.xlsx');
+        // Excel::store(new ResultMcu($data), 'invoices.xlsx');
         Queue::push(function () use ($data, $fileName) {
             // Store the file in the 'public' directory
             Excel::store(new ResultMcu($data), 'hasil_mcu/' . $fileName);
@@ -163,7 +165,7 @@ class RecapController extends Controller
                     AllowedFilter::scope('date_range'),
                 ])
                 ->get();
-            if ($request->excel){
+            if ($request->excel) {
                 // Use a queue to process the export
                 $fileName = 'hasil_register_mcu' . time() . '.xlsx';
 
@@ -180,18 +182,18 @@ class RecapController extends Controller
                 ]);
             }
 
-            if ($request->pdf){
+            if ($request->pdf) {
 
                 $fileName = 'dataRegister_' . time() . '.pdf'; // Customize the file name
-//                GeneratePdfJob::dispatch($data, $fileName);
-//
-//                return [
-//                    'status' => 'success',
-//                    'download_url' => Storage::url('pdf/' . $fileName)
-//                ];
+                //                GeneratePdfJob::dispatch($data, $fileName);
+                //
+                //                return [
+                //                    'status' => 'success',
+                //                    'download_url' => Storage::url('pdf/' . $fileName)
+                //                ];
 
                 $mpdf = new \Mpdf\Mpdf();
-                $mpdf->WriteHTML(view('exports.dataRegister',['data' => $data]));
+                $mpdf->WriteHTML(view('exports.dataRegister', ['data' => $data]));
                 $storagePath = storage_path('app/public/pdf/') . $fileName;
                 $mpdf->Output($storagePath, \Mpdf\Output\Destination::FILE);
                 $fileUrl = Storage::url('pdf/' . $fileName);

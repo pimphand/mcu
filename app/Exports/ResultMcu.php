@@ -3,10 +3,13 @@
 namespace App\Exports;
 
 use Illuminate\Contracts\View\View;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Maatwebsite\Excel\Concerns\FromView;
+use Maatwebsite\Excel\Concerns\Exportable;
 
-class ResultMcu implements FromView
+class ResultMcu implements FromView , ShouldQueue
 {
+        use Exportable;
     private $participants;
 
     /**

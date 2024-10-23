@@ -233,6 +233,7 @@
                             <td nowrap="">{{ $item->laboratorium?->monosit }}</td>
                             <td nowrap="">{!! $item->laboratorium?->hbsag == "Positif" ? "<span class='text-danger'>Positif</span>" : $item->laboratorium?->hbsag !!}</td>
                             <td nowrap="">{{ $item->laboratorium?->sgot }}</td>
+                            <td nowrap="">{{ $item->laboratorium?->sgpt }}</td>
                             <td nowrap="">{{ $item->laboratorium?->ureum }}</td>
                             <td nowrap="">{{ $item->laboratorium?->creatinin }}</td>
                             <td nowrap="">{{ $item->laboratorium?->glukosa_puasa }}</td>
@@ -265,12 +266,12 @@
                             <td nowrap="">{{ $item->radiologi?->kesan }}</td>
                              {{-- audiometri --}}
                             <td nowrap="">{!! $item->audiometri?->selesai ? "<span class='text-success'>SELESAI</span>" : "<span class='text-danger'>TIDAK</span>" !!}</td>
-                            <td nowrap="">{{ $item->audiometri?->audiometri_telinga_kanan }}</td>
-                            <td nowrap="">{{ $item->audiometri?->audiometri_telinga_kiri }}</td>
-                            <td nowrap="">{{ $item->audiometri?->pendengaran_telinga_kanan }}</td>
-                            <td nowrap="">{{ $item->audiometri?->pendengaran_telinga_kiri }}</td>
-                            <td nowrap="">{{ $item->audiometri?->kesimpulan }}</td>
-                            <td nowrap="">{{ $item->audiometri?->saran }}</td>
+                            <td nowrap="">{{ $item->audiometri?->audiometri_telinga_kanan }} </td>
+                            <td nowrap="">{{ $item->audiometri?->audiometri_telinga_kiri }} </td>
+                            <td nowrap="">{{ $item->audiometri?->pendengaran_telinga_kanan }} </td>
+                            <td nowrap="">{{ $item->audiometri?->pendengaran_telinga_kiri }} </td>
+                            <td nowrap="">{{ $item->audiometri?->kesimpulan }} </td>
+                            <td nowrap="">{{ $item->audiometri?->saran }} </td>
                              {{-- ekg --}}
                             <td nowrap="">{!! $item->ekg?->selesai ? "<span class='text-success'>SELESAI</span>" : "<span class='text-danger'>TIDAK</span>" !!}</td>
                              <td nowrap="">{{ $item->ekg?->takikardi }}</td>

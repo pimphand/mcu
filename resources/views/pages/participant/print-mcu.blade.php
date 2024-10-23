@@ -90,7 +90,7 @@
                     <button type="button" class="btn btn-sm btn-outline-primary waves-effect import"  data-url="{{ route('multiple.pemFisik') }}">
                       Pem. Fisik
                     </button>
-                    <button type="button" class="btn btn-sm btn-outline-primary waves-effect import">
+                    <button type="button" class="btn btn-sm btn-outline-primary waves-effect import" data-url="{{ route('multiple.laboratorium') }}">
                      Lab
                     </button>
                     <button type="button" class="btn btn-sm btn-outline-warning waves-effect import" data-url="{{ route('multiple.radiologi') }}">
@@ -159,7 +159,7 @@
                             </td>
                             <td class="border-bottom border-top text-center hilang">
 
-                                 @if($item->tandaVital?->selesai)
+                                 @if($item?->validateDoctor)
                                     <button type="button" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-original-title="Print Tanda Vital"
                                     class="text-center btn btn-sm btn-info font-weight-medium btn-circle printFisik" onclick="window.open('{{ route('report.resume', $item->id) }}', '', 'toolbar=yes,scrollbars=yes,resizable=yes,width=900,height=600');"> <i class="fa fa-print" aria-hidden="true"></i></button>
                                @else

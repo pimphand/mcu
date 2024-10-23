@@ -84,7 +84,7 @@
                             <tr>
                                 <td>Status</td>
                                 <td>:</td>
-                                <td>{{ $participant->status }}</td>
+                                <td>{{ $participant->status ?? "-" }}</td>
                             </tr>
                             <tr>
                                 <td>Dept. ID</td>
@@ -121,6 +121,29 @@
         <tbody>
             <tr>
                 <td colspan="3" class="border">KIMIA DARAH</td>
+            </tr>
+            <tr>
+                <td class="border">Glukosa Puasa</td>
+                <td class="border text-center">
+                    {{ $laboratorium->glukosa_puasa }}</td>
+                <td class="border text-center">
+                    0-110 mg/dl </td>
+            </tr>
+            <tr>
+                <td class="border"> Cholesterol Total </td>
+                <td class="border text-center">
+                    {{ $laboratorium->cholesterol_total }}</td>
+                <td class="border text-center">
+                    < 200 mg/dl</td>
+            </tr>
+            <tr>
+                <td class="border"> Asam Urat </td>
+                <td class="border text-center">
+                    {{ $laboratorium->asam_urat }}</td>
+                <td class="border text-center">
+                    P: < 5.7 mg/dl <br>
+                    L: < 7.0 mg/dl 
+                </td>
             </tr>
             <tr>
                 <td class="border">Glukosa Sewaktu</td>
@@ -175,6 +198,12 @@
                             </tr>
                             <tr>
                                 <td class="text-center">Pemeriksa,</td>
+                            </tr>
+                            <tr>
+                                <td class="text-center">
+                                    <img src="{{ public_path($laboratorium->employee?->ttd ? $laboratorium->employee?->ttd : 'images/ttd-kosong.png') }}" width="80"
+                                        alt="img" alt="img">
+                                </td>
                             </tr>
                             <tr>
                                 <td class="text-center">{{ $laboratorium->employee?->nama }}</td>

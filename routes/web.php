@@ -206,6 +206,7 @@ Route::middleware('auth')->group(function () {
     Route::middleware('mcu')->get('/multiple-spirometri', [ReportMultipleController::class, 'spirometri'])->name('multiple.spirometri');
     Route::middleware('mcu')->get('/multiple-identitas', [ReportMultipleController::class, 'identitas'])->name('multiple.identitas');
     Route::middleware('mcu')->get('/multiple-ekg', [ReportMultipleController::class, 'ekg'])->name('multiple.ekg');
+    Route::middleware('mcu')->get('/multiple-laboratorium', [ReportMultipleController::class, 'laboratorium'])->name('multiple.laboratorium');
     Route::middleware('mcu')->get('/multiple-rectal', [ReportMultipleController::class, 'rectal'])->name('multiple.rectal');
     Route::middleware('mcu')->get('/multiple-radiologi', [ReportMultipleController::class, 'radiologi'])->name('multiple.radiologi');
     Route::middleware('mcu')->get('/multiple-pemeriksaan-fisik', [ReportMultipleController::class, 'pemFisik'])->name('multiple.pemFisik');
@@ -216,8 +217,8 @@ Route::middleware('auth')->group(function () {
     //     Route::get('/', [ParticipantController::class,'peserta'])->name('peserta.index');
     // });
 
-    Route::get('report-hasil', action: [RecapController::class, 'results'])->name('report.results');
-    Route::get('report-import-result-mcu', [RecapController::class, 'importResultMcu'])->name('report.importResultMcu');
+    Route::middleware('mcu')->get('report-hasil', action: [RecapController::class, 'results'])->name('report.results');
+    Route::middleware('mcu')->get('report-import-result-mcu', [RecapController::class, 'importResultMcu'])->name('report.importResultMcu');
     Route::middleware('mcu')->get('report-recap-register', [RecapController::class, 'register'])->name('recap.register');
     Route::middleware('mcu')->get('report-data-register', [RecapController::class, 'dataRegister'])->name('recap.dataRegister');
 });

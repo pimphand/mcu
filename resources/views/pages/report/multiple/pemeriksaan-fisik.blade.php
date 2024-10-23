@@ -1,12 +1,13 @@
 @foreach ($data as $index=> $spirometri)
-<!DOCTYPE html>
-<html lang="en">
+
 @php
 $participant = $spirometri->participant;
+$pemeriksaanFisik = $spirometri->pemeriksaanFisik;
 $totalItems = count($data);  // Jumlah total data
 $currentPage = $index + 1;
 @endphp
-
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -91,7 +92,7 @@ $currentPage = $index + 1;
                             <tr>
                                 <td>Status</td>
                                 <td>:</td>
-                                <td>{{ $participant->status }}</td>
+                                <td>{{ $participant->status ?? "-" }}</td>
                             </tr>
                             <tr>
                                 <td>Dept. ID</td>
@@ -164,7 +165,7 @@ $currentPage = $index + 1;
             <tr>
                 <td class="borde$pemeriksaanFisikr">Riwayat Trauma</td>
                 <td class="border text-center">
-                    {{ $tandaVital->riwayat_trauma }}</td>
+                    {{ $tandaVital->riwayat_trauma_text }}</td>
 
             </tr>
             <tr>
@@ -221,7 +222,7 @@ $currentPage = $index + 1;
                     {{ $tandaVital->ibu_hamil ? 'YA' : 'TIDAK' }}</td>
 
             </tr>
-            <tr>
+            {{-- <tr>
                 <td class="border">Vaksin Hepatitis</td>
                 <td class="border text-center">
                     {{ $tandaVital->vaksin_hepatitis ? 'YA' : 'TIDAK' }}</td>
@@ -231,8 +232,7 @@ $currentPage = $index + 1;
                 <td class="border">Vaksin Tetanus</td>
                 <td class="border text-center">
                     {{ $tandaVital->vaksin_tetanus ? 'YA' : 'TIDAK' }}</td>
-
-            </tr>
+            </tr> --}}
             <tr>
                 <td colspan="2" class="border">KEADAAN UMUM</td>
             </tr>
@@ -407,7 +407,8 @@ $currentPage = $index + 1;
                 <td class="border text-center">
                     {{ $pemeriksaanFisik->reflex_phatologis_bawah }}</td>
             </tr>
-            <tr>
+            @if ($pemeriksaanFisik->lab_diperiksa)
+                <tr>
                 <td colspan="2" class="border">LABORATORIUM (TERLAMPIR)</td>
             </tr>
             <tr>
@@ -415,66 +416,85 @@ $currentPage = $index + 1;
                 <td class="border text-center">
                     {{ $participant->laboratorium?->kesimpulan }}</td>
             </tr>
+            @endif
             <tr>
                 <td colspan="2" class="border">HASIL PHOTO THORAX (TERLAMPIR)</td>
             </tr>
             <tr>
                 <td class="border">Hasil dan Kesan</td>
                 <td class="border text-center">
-                    {{ $participant->radiologi?->kesan }}</td>
+                    @if ($participant->pemeriksaanFisik->radiologi_diperiksa)
+                        {{ $participant->radiologi?->kesan }}
+                    @else    
+                        TIDAK DIPERIKSA
+                    @endif
+                </td>
             </tr>
+            {{--  --}}
+            @if ($pemeriksaanFisik->neurologis_tidak_diperiksa)
             <tr>
                 <td class="border">Neurologis</td>
                 <td class="border text-center">
                     {{ $pemeriksaanFisik->neurologis_text == 'BDN' ? 'DALAM BATAS NORMAL' : $pemeriksaanFisik->neurologis_text }}</td>
             </tr>
+            @endif
+            @if($participant->pemeriksaanFisik->audiometri_diperiksa == 1)
             <tr>
-                <td colspan="2" class="border">HASIL PHOTO THORAX (TERLAMPIR)</td>
+                <td colspan="2" class="border">HASIL AUDIOMETRI (TERLAMPIR)</td>
             </tr>
             <tr>
                 <td class="border">Pendengaran Telinga Kanan </td>
                 <td class="border text-center">
-                    {{ $participant->audiometri?->audiometri_telinga_kanan }}</td>
+                    {{ $participant->audiometri_diperiksa == 1 ? "DIPERIKSA" : "TIDAK DIPERIKSA" }}</td>
             </tr>
             <tr>
                 <td class="border">Pendengaran Telinga Kiri </td>
                 <td class="border text-center">
-                    {{ $participant->audiometri?->audiometri_telinga_kiri }}</td>
+                    {{ $participant->audiometri_diperiksa == 1  ? "DIPERIKSA" : "TIDAK DIPERIKSA" }}</td>
             </tr>
-            <tr>
+            @endif
+
+            @if ($participant->pemeriksaanFisik->ekg_diperiksa)
+                <tr>
                 <td colspan="2" class="border">EKG (TERLAMPIR)</td>
             </tr>
             <tr>
                 <td class="border">Kesimpulan EKG </td>
                 <td class="border text-center">
-                    {{ $participant->ekg?->kesimpulan }}</td>
+                    {{ $participant->ekg_diperiksa ?"DIPERIKSA" : "TIDAK DIPERIKSA" }}</td>
             </tr>
+            @endif
+            @if ($participant->pemeriksaanFisik->spiro_diperiksa)
             <tr>
                 <td colspan="2" class="border">SPIROMETRI (TERLAMPIR)</td>
             </tr>
             <tr>
                 <td class="border">Kesimpulan Spiro </td>
                 <td class="border text-center">
-                    {{ $participant->spirometri?->hasil }}</td>
+                    {{ $participant->spirometri?->selesai ?"DIPERIKSA" :"TIDAK DIPERIKSA" }}</td>
             </tr>
+            @endif
+            @if ($participant->pemeriksaanFisik->rectal_diperiksa)
             <tr>
                 <td colspan="2" class="border">RECTAL SWAB (TERLAMPIR)</td>
             </tr>
             <tr>
                 <td class="border">Salmonella Thypi</td>
                 <td class="border text-center">
-                    {{ $participant->rectal?->salmonella_thypi }}</td>
+                    {{ $participant->rectal?->salmonella_thypi  ?"DIPERIKSA" : "TIDAK DIPERIKSA"  }}</td>
             </tr>
             <tr>
                 <td class="border">Shigella SP</td>
                 <td class="border text-center">
-                    {{ $participant->rectal?->shigella_sp }}</td>
+                    {{ $participant->rectal?->shigella_sp  ?"DIPERIKSA" : "TIDAK DIPERIKSA" }}</td>
             </tr>
             <tr>
                 <td class="border">E. Coli Pathogen</td>
                 <td class="border text-center">
-                    {{ $participant->rectal?->e_coli_pathogen }}</td>
+                    {{ $participant->rectal?->e_coli_pathogen  ?"DIPERIKSA" : "TIDAK DIPERIKSA"  }}</td>
             </tr>
+            @endif
+
             <tr>
                 <td colspan="2" class="border">HASIL MCU</td>
             </tr>
@@ -485,7 +505,7 @@ $currentPage = $index + 1;
             </tr>
             <tr>
                 <td class="border">Saran</td>
-                <td class="border text-center">{!! $pemeriksaanFisik->saran !!}</td>
+                <td class="border text-start">{!! nl2br($pemeriksaanFisik->saran) !!}</td>
             </tr>
         </tbody>
     </table>
@@ -522,4 +542,6 @@ $currentPage = $index + 1;
 </body>
 
 </html>
+
+
 @endforeach
