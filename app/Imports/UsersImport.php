@@ -25,7 +25,7 @@ use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithStartRow;
 
-class UsersImport implements ToModel, WithStartRow, ShouldQueue, WithChunkReading
+class UsersImport implements ToModel, WithStartRow, WithChunkReading
 {
 
     protected $userId;
@@ -55,24 +55,24 @@ class UsersImport implements ToModel, WithStartRow, ShouldQueue, WithChunkReadin
             $sequence = Department::count();
             $devisi = Divisi::firstOrCreate([
                 'name' => $this->devisi,
-                'client_id' => $this->client_id,
+                'client_id' => Session::get('client_id'),
             ], [
                 'code' => sprintf('%s-%s', "DV", str_pad(Divisi::count() + 1, 5, '0', STR_PAD_LEFT))
             ]);
 
             $departemen =  Department::firstOrCreate([
-                'name' => $row[2],
-                'client_id' => $this->client_id,
+                'name' => $row[3],
+                'client_id' => Session::get('client_id'),
             ], [
                 'code' => sprintf('%s-%s', "D", str_pad($sequence + 1, 5, '0', STR_PAD_LEFT))
             ]);
 
             $participantService = new  ParticipantService;
             $data = [
-                'nik' => (int)$row[0],
-                'name' => $row[1],
-                'gender' => $row[3],
-                'birthday' => $this->getBirthdateFromAge((int)$row[4]),
+                'nik' => $row[1],
+                'name' => $row[2],
+                'gender' => $row[4],
+                'birthday' => $this->convertToISODate($row[5]),
                 'phone' => '',
                 'status' => '',
                 'packet_name' => '',
@@ -92,37 +92,19 @@ class UsersImport implements ToModel, WithStartRow, ShouldQueue, WithChunkReadin
                 'divisi_id' => $devisi->id,
                 'department_id' => $departemen->id,
                 'client_id' => Session::get('client_id'),
-                'contract_id' => null,
+                'contract_id' => Session::get('contract_id'),
+                'no_form' => (int)$row[0],
             ];
-
+            // dd($data);
             $user = $this->userId;
             $data = $participantService->mapingPaket($data);
-            $data['code'] = sprintf('%s%s', "MCU", str_pad(User::count() + 1, 5, '0', STR_PAD_LEFT));
+            $data['code'] = sprintf('%s%s', "MCU", str_pad((int)$row[0], 5, '0', STR_PAD_LEFT));
             $data['created_by'] = $user;
-            $insert = Participant::create($data);
-            $role = Role::where('level', RoleService::LEVEL_PARTICIPANT)->first();
-            $insertUser = User::create([
-                'name' => $data['name'],
-                'username' => $data['code'],
-                'password' => bcrypt($data['birthday']),
-                'role_id' => $role->id,
-                'client_id' => $data['client_id'],
-                'is_active' => 1
-            ]);
-            Participant::where(['id' => $insert->id])->update(['user_id' => $insertUser->id]);
-            $dataParticipant = [
-                'participant_id' => $insert->id,
-                'created_by' => $user,
-                'selesai' => false
-            ];
-            TandaVital::create($dataParticipant);
-            PemeriksaanFisik::create($dataParticipant);
-            Laboratorium::create($dataParticipant);
-            Radiologi::create($dataParticipant);
-            Audiometri::create($dataParticipant);
-            Spirometri::create($dataParticipant);
-            Rectal::create($dataParticipant);
-            Ekg::create($dataParticipant);
+            $insert = Participant::updateOrCreate([
+                'client_id' => Session::get('client_id'),
+                'contract_id' => Session::get('contract_id'),
+                'no_form' => (int)$row[0],
+            ], $data);
         }
     }
 
@@ -141,5 +123,50 @@ class UsersImport implements ToModel, WithStartRow, ShouldQueue, WithChunkReadin
     public function chunkSize(): int
     {
         return 2;
+    }
+
+    function excelSerialDateToISO($serialDate, $baseDate = '1899-12-30')
+    {
+        // Set tanggal referensi dinamis dengan Carbon
+        $date = Carbon::parse($baseDate)->addDays($serialDate);
+        return $date->format('Y-m-d');
+    }
+
+    // Fungsi untuk mengonversi tanggal teks `m/d/yy` ke format ISO `YYYY-MM-DD`
+    function convertDateToISO($date)
+    {
+        // Tambahkan nol di depan bulan atau hari jika terdiri dari satu digit
+        $date = preg_replace('/\b(\d{1})\b/', '0$1', $date);
+
+        // Pisahkan tanggal berdasarkan karakter /
+        $parts = explode('/', $date);
+
+        // Pastikan array memiliki 3 elemen untuk menghindari error
+        if (count($parts) < 3) {
+            // Kembalikan NULL jika format tanggal tidak valid
+            return null;
+        }
+
+        // Pastikan tahun ditambahkan sebagai empat digit
+        if (strlen($parts[2]) === 2) {
+            $year = $parts[2] >= 50 ? '19' . $parts[2] : '20' . $parts[2];
+            $parts[2] = $year;
+        }
+
+        // Susun kembali dalam format YYYY-MM-DD
+        return $parts[2] . '-' . $parts[0] . '-' . $parts[1];
+    }
+
+    // Fungsi utama untuk mendeteksi dan mengonversi tanggal, baik serial Excel maupun format teks
+    // Menambahkan parameter `baseDate` untuk mengonfigurasi tanggal referensi dinamis
+    function convertToISODate($value, $baseDate = '1899-12-30')
+    {
+        // Jika nilai adalah integer (angka), anggap sebagai serial date Excel
+        if (is_numeric($value) && $value > 59) { // Di atas 59 untuk melewati bug Excel pada tahun 1900
+            return self::excelSerialDateToISO($value, $baseDate);
+        }
+
+        // Jika nilai adalah string, coba konversi menggunakan fungsi konversi tanggal string
+        return self::convertDateToISO($value);
     }
 }
