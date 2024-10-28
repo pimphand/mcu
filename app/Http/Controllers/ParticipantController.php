@@ -527,7 +527,7 @@ class ParticipantController extends Controller
             'file' => 'required|mimes:xlsx,xls'
         ]);
 
-        Excel::import(new UsersImport(auth()->id(), auth()->user()->client_id, $request->devisi), $request->file('file'));
+        Excel::queueImport(new UsersImport(auth()->id(), auth()->user()->client_id, $request->devisi), $request->file('file'));
 
         return redirect()->route('participant.index')->with('success', 'Data berhasil diimport');
     }

@@ -288,12 +288,13 @@
                         <label for="form-label required">File Excel</label>
                         <input type="file" name="file" id="file" class="form-control" required>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group mt-2">
                         <label for="form-label required">Devisi</label>
                         <input type="text" name="devisi" id="devisi" class="form-control" required>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group mt-2">
                         <button type="submit" class="btn btn-primary">Import</button>
+                        <a href="https://docs.google.com/spreadsheets/d/1YQU_78r4esj0n-52EjiXjs6gLxboOgTKDlNF-Wb8E9s/edit?usp=sharing" target="_blank" class="btn btn-primary">Template</a>
                     </div>
                 </form>
             </div>

@@ -112,15 +112,15 @@ class ParticipantService
             $query = $query->where('paket_f', true);
         }
 
-         if ($contractId = Session::get('contract_id')) {
-             $query = $query->where('contract_id', $contractId);
-         }
+        if ($contractId = Session::get('contract_id')) {
+            $query = $query->where('contract_id', $contractId);
+        }
 
         if (request('is_register_page')) {
             $query = $query->whereNotNull('register_date');
         }
 
-        $query = $query->where('client_id', Auth::user()->client_id);
+        $query = $query->where('client_id', Session::get('client_id'));
         return $query->orderBy('no_form', 'asc')->paginate($limit)->withQueryString();
     }
 
