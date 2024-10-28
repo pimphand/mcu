@@ -454,7 +454,7 @@ $currentPage = $index + 1;
             </tr>
             @endif
 
-            @if ($participant->pemeriksaanFisik->ekg_diperiksa)
+            @if ($participant->pemeriksaanFisik?->ekg_diperiksa)
                 <tr>
                 <td colspan="2" class="border">EKG (TERLAMPIR)</td>
             </tr>
@@ -464,7 +464,7 @@ $currentPage = $index + 1;
                     {{ $participant->ekg_diperiksa ?"DIPERIKSA" : "TIDAK DIPERIKSA" }}</td>
             </tr>
             @endif
-            @if ($participant->pemeriksaanFisik->spiro_diperiksa)
+            @if ($participant->pemeriksaanFisik?->spiro_diperiksa)
             <tr>
                 <td colspan="2" class="border">SPIROMETRI (TERLAMPIR)</td>
             </tr>
@@ -474,7 +474,7 @@ $currentPage = $index + 1;
                     {{ $participant->spirometri?->selesai ?"DIPERIKSA" :"TIDAK DIPERIKSA" }}</td>
             </tr>
             @endif
-            @if ($participant->pemeriksaanFisik->rectal_diperiksa)
+            @if ($participant->pemeriksaanFisik?->rectal_diperiksa)
             <tr>
                 <td colspan="2" class="border">RECTAL SWAB (TERLAMPIR)</td>
             </tr>
@@ -501,7 +501,7 @@ $currentPage = $index + 1;
             <tr>
                 <td class="border">Kesimpulan</td>
                 <td class="border text-center">
-                    {{ $pemeriksaanFisik->kesimpulan }}</td>
+                    {{ $pemeriksaanFisik?->kesimpulan }}</td>
             </tr>
             <tr>
                 <td class="border">Saran</td>

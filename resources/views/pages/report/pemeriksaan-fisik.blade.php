@@ -416,7 +416,7 @@
                 <td class="border">Hasil dan Kesan</td>
                 <td class="border text-center">
                     @if ($participant->pemeriksaanFisik->radiologi_diperiksa)
-                        {{ $participant->radiologi->kesan }}
+                        {{ $participant?->radiologi?->kesan }}
                     @else    
                         TIDAK DIPERIKSA
                     @endif
