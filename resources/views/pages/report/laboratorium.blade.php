@@ -10,9 +10,11 @@
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
+
         @page {
             size: 21cm 33cm;
         }
+
         table {
             width: 100%;
         }
@@ -81,12 +83,12 @@
                             <tr>
                                 <td>Status</td>
                                 <td>:</td>
-                                <td>{{ $participant->status ?? "-" }}</td>
+                                <td>{{ $participant->status ?? '-' }}</td>
                             </tr>
                             <tr>
                                 <td>Dept. ID</td>
                                 <td>:</td>
-                                                                <td>{{ $participant->divisi?->name }}</td>
+                                <td>{{ $participant->divisi?->name }}</td>
 
                             </tr>
                             <tr>
@@ -187,47 +189,47 @@
             <tr>
                 <td colspan="3" class="border"><b>HEPATITIS</b></td>
             </tr>
-            @if($laboratorium->sgot)
-{{--            <tr>--}}
-{{--                <td class="border">SGOT</td>--}}
-{{--                <td class="border text-center">--}}
-{{--                    {{ $laboratorium->sgot }}</td>--}}
-{{--                <td class="border text-center">P: < 31 µl, L: < 34 µl</td>--}}
-{{--            </tr>--}}
+            @if ($laboratorium->sgot)
+                {{--            <tr> --}}
+                {{--                <td class="border">SGOT</td> --}}
+                {{--                <td class="border text-center"> --}}
+                {{--                    {{ $laboratorium->sgot }}</td> --}}
+                {{--                <td class="border text-center">P: < 31 µl, L: < 34 µl</td> --}}
+                {{--            </tr> --}}
             @endif
-            @if($laboratorium->sgpt)
-            <tr>
-                <td class="border">SGPT</td>
-                <td class="border text-center">
-                    {{ $laboratorium->sgpt }}</td>
-                <td class="border text-center">0 - 45 µl</td>
-            </tr>
+            @if ($laboratorium->sgpt)
+                <tr>
+                    <td class="border">SGPT</td>
+                    <td class="border text-center">
+                        {{ $laboratorium->sgpt }}</td>
+                    <td class="border text-center">0 - 45 µl</td>
+                </tr>
             @endif
-            @if($laboratorium->hbsag)
+
             <tr>
                 <td class="border">HBsAg Kualitatif</td>
                 <td class="border text-center">
                     {{ $laboratorium->hbsag }}</td>
-                <td class="border text-center">Negatif</td>
+                <td class="border text-center">{{ $laboratorium->hbsag }}</td>
             </tr>
+
+            @if ($laboratorium->ureum)
+                {{--                <tr> --}}
+                {{--                    <td class="border">Ureum</td> --}}
+                {{--                    <td class="border text-center"> --}}
+                {{--                        {{ $laboratorium->ureum }}</td> --}}
+                {{--                    <td class="border text-center">10 - 40 mg</td> --}}
+                {{--                </tr> --}}
             @endif
-            @if($laboratorium->ureum)
-{{--                <tr>--}}
-{{--                    <td class="border">Ureum</td>--}}
-{{--                    <td class="border text-center">--}}
-{{--                        {{ $laboratorium->ureum }}</td>--}}
-{{--                    <td class="border text-center">10 - 40 mg</td>--}}
-{{--                </tr>--}}
+            @if ($laboratorium->ureum)
+                <tr>
+                    <td class="border">Creatinin</td>
+                    <td class="border text-center">
+                        {{ $laboratorium->ureum }}</td>
+                    <td class="border text-center">P: < 0.6 - 1.2 mg/dL, L: < 0.6 - 1.4 mg/dL</td>
+                </tr>
             @endif
-            @if($laboratorium->ureum)
-            <tr>
-                <td class="border">Creatinin</td>
-                <td class="border text-center">
-                    {{ $laboratorium->ureum }}</td>
-                <td class="border text-center">P: < 0.6 - 1.2 mg/dL, L: < 0.6 - 1.4 mg/dL</td>
-            </tr>
-            @endif
-            
+
             <tr>
                 <td colspan="3" class="border"><b>URINE LENGKAP</b></td>
             </tr>
@@ -354,8 +356,8 @@
                             </tr>
                             <tr>
                                 <td class="text-center">
-                                    <img src="{{ public_path($laboratorium->employee?->ttd ? $laboratorium->employee?->ttd : 'images/ttd-kosong.png') }}" width="80"
-                                        alt="img" alt="img">
+                                    <img src="{{ public_path($laboratorium->employee?->ttd ? $laboratorium->employee?->ttd : 'images/ttd-kosong.png') }}"
+                                        width="80" alt="img" alt="img">
                                 </td>
                             </tr>
                             <tr>

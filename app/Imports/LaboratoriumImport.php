@@ -25,6 +25,7 @@ class LaboratoriumImport implements ToModel, WithStartRow, WithChunkReading, Wit
      */
     public function model(array $row)
     {
+
         if (isset($row['code']) && $row['code'] != null) {
             $data = [
                 "name" => $row['name'] ?? null,
@@ -68,8 +69,7 @@ class LaboratoriumImport implements ToModel, WithStartRow, WithChunkReading, Wit
                 "hbsag" => $row['hbsag'] ?? null,
                 "selesai" => 1,
             ];
-
-            $pemeriksaan = Participant::with('laboratorium')->where('no_form', $row['no_form'])->first();
+            $pemeriksaan = Participant::with('laboratorium')->where('no_form', $row['no_form'] ?? null)->orWhere('code', $row['code'])->first();
             if ($pemeriksaan) {
                 $pemeriksaan->laboratorium()->updateOrCreate(['participant_id' => $pemeriksaan->id], $data);
             }
