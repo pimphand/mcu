@@ -345,7 +345,9 @@ class ParticipantController extends Controller
             'sedimen_leukosit' => '',
             'sedimen_bakteri' => '',
             'sedimen_kristal' => '',
+            'hbsag' => '',
         ]);
+
 
         return $this->participantService->updateLaboratorium($data, $id);
     }

@@ -375,6 +375,7 @@ class ParticipantService
 
         // Normalize the 'selesai' field to boolean
         $data['selesai'] = isset($data['selesai']) ? 1 : 0; // Convert to 1 (true) or 0 (false)
+        $data['hbsag'] = isset($data['hbsag']) && $data['hbsag'] == "on" ? "Positif" : "Negatif"; // Convert to 1 (true) or 0 (false)
 
         // Use updateOrCreate to find by participant_id and update or create accordingly
         $laboratorium = Laboratorium::updateOrCreate(
