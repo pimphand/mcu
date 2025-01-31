@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,6 +10,7 @@
         table {
             width: 100%;
         }
+
         @page {
             size: 21cm 33cm;
         }
@@ -21,9 +23,7 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
-        td {
-
-        }
+        td {}
 
         .border {
             border: 1px solid black;
@@ -84,12 +84,12 @@
                             <tr>
                                 <td>Status</td>
                                 <td>:</td>
-                                <td>{{ $participant->status ?? "-" }}</td>
+                                <td>{{ $participant->status ?? '-' }}</td>
                             </tr>
                             <tr>
                                 <td>Dept. ID</td>
                                 <td>:</td>
-                                                               <td>{{ $participant->divisi?->name }}</td>
+                                <td>{{ $participant->divisi?->name }}</td>
 
                             </tr>
                             <tr>
@@ -127,7 +127,7 @@
             <tr>
                 <td class="border">Riwayat Penyakit Sekarang </td>
                 <td class="border text-center">
-                    {{ $tandaVital->riwayat_penyakit_sekarang_text  }}</td>
+                    {{ $tandaVital->riwayat_penyakit_sekarang_text }}</td>
 
             </tr>
             <tr>
@@ -377,6 +377,29 @@
                     {{ $pemeriksaanFisik->paru_perkusi }}</td>
             </tr>
             <tr>
+                <td colspan="2" class="border">THORAX ABDOMEN</td>
+            </tr>
+            <tr>
+                <td class="border">Inspeksi</td>
+                <td class="border text-center">
+                    {{ $pemeriksaanFisik->abdomen_inspeksi }}</td>
+            </tr>
+            <tr>
+                <td class="border">Auskultasi</td>
+                <td class="border text-center">
+                    {{ $pemeriksaanFisik->abdomen_auskultasi }}</td>
+            </tr>
+            <tr>
+                <td class="border">Palpasi</td>
+                <td class="border text-center">
+                    {{ $pemeriksaanFisik->abdomen_palpasi }}</td>
+            </tr>
+            <tr>
+                <td class="border">Perkusi</td>
+                <td class="border text-center">
+                    {{ $pemeriksaanFisik->abdomen_perkusi }}</td>
+            </tr>
+            <tr>
                 <td colspan="2" class="border">EXTREMITAS</td>
             </tr>
             <tr>
@@ -399,15 +422,16 @@
                 <td class="border text-center">
                     {{ $pemeriksaanFisik->reflex_phatologis_bawah }}</td>
             </tr>
+
             @if ($pemeriksaanFisik->lab_diperiksa)
                 <tr>
-                <td colspan="2" class="border">LABORATORIUM (TERLAMPIR)</td>
-            </tr>
-            <tr>
-                <td class="border">Hasil Laboratorium </td>
-                <td class="border text-center">
-                    {{ $participant->laboratorium?->kesimpulan }}</td>
-            </tr>
+                    <td colspan="2" class="border">LABORATORIUM (TERLAMPIR)</td>
+                </tr>
+                <tr>
+                    <td class="border">Hasil Laboratorium </td>
+                    <td class="border text-center">
+                        {{ $participant->laboratorium?->kesimpulan }}</td>
+                </tr>
             @endif
             <tr>
                 <td colspan="2" class="border">HASIL PHOTO THORAX (TERLAMPIR)</td>
@@ -417,74 +441,75 @@
                 <td class="border text-center">
                     @if ($participant->pemeriksaanFisik->radiologi_diperiksa)
                         {{ $participant?->radiologi?->kesan }}
-                    @else    
+                    @else
                         TIDAK DIPERIKSA
                     @endif
                 </td>
             </tr>
             {{--  --}}
             @if ($pemeriksaanFisik->neurologis_tidak_diperiksa)
-            <tr>
-                <td class="border">Neurologis</td>
-                <td class="border text-center">
-                    {{ $pemeriksaanFisik->neurologis_text == 'BDN' ? 'DALAM BATAS NORMAL' : $pemeriksaanFisik->neurologis_text }}</td>
-            </tr>
+                <tr>
+                    <td class="border">Neurologis</td>
+                    <td class="border text-center">
+                        {{ $pemeriksaanFisik->neurologis_text == 'BDN' ? 'DALAM BATAS NORMAL' : $pemeriksaanFisik->neurologis_text }}
+                    </td>
+                </tr>
             @endif
-            @if($participant->pemeriksaanFisik->audiometri_diperiksa == 1)
-            <tr>
-                <td colspan="2" class="border">HASIL AUDIOMETRI (TERLAMPIR)</td>
-            </tr>
-            <tr>
-                <td class="border">Pendengaran Telinga Kanan </td>
-                <td class="border text-center">
-                    {{ $participant->audiometri_diperiksa == 1 ? "DIPERIKSA" : "TIDAK DIPERIKSA" }}</td>
-            </tr>
-            <tr>
-                <td class="border">Pendengaran Telinga Kiri </td>
-                <td class="border text-center">
-                    {{ $participant->audiometri_diperiksa == 1  ? "DIPERIKSA" : "TIDAK DIPERIKSA" }}</td>
-            </tr>
+            @if ($participant->pemeriksaanFisik->audiometri_diperiksa == 1)
+                <tr>
+                    <td colspan="2" class="border">HASIL AUDIOMETRI (TERLAMPIR)</td>
+                </tr>
+                <tr>
+                    <td class="border">Pendengaran Telinga Kanan </td>
+                    <td class="border text-center">
+                        {{ $participant->audiometri_diperiksa == 1 ? 'DIPERIKSA' : 'TIDAK DIPERIKSA' }}</td>
+                </tr>
+                <tr>
+                    <td class="border">Pendengaran Telinga Kiri </td>
+                    <td class="border text-center">
+                        {{ $participant->audiometri_diperiksa == 1 ? 'DIPERIKSA' : 'TIDAK DIPERIKSA' }}</td>
+                </tr>
             @endif
 
             @if ($participant->pemeriksaanFisik->ekg_diperiksa)
                 <tr>
-                <td colspan="2" class="border">EKG (TERLAMPIR)</td>
-            </tr>
-            <tr>
-                <td class="border">Kesimpulan EKG </td>
-                <td class="border text-center">
-                    {{ $participant->ekg_diperiksa ?"DIPERIKSA" : "TIDAK DIPERIKSA" }}</td>
-            </tr>
+                    <td colspan="2" class="border">EKG (TERLAMPIR)</td>
+                </tr>
+                <tr>
+                    <td class="border">Kesimpulan EKG </td>
+                    <td class="border text-center">
+                        {{ $participant->ekg_diperiksa ? 'DIPERIKSA' : 'TIDAK DIPERIKSA' }}</td>
+                </tr>
             @endif
             @if ($participant->pemeriksaanFisik->spiro_diperiksa)
-            <tr>
-                <td colspan="2" class="border">SPIROMETRI (TERLAMPIR)</td>
-            </tr>
-            <tr>
-                <td class="border">Kesimpulan Spiro </td>
-                <td class="border text-center">
-                    {{ $participant->spirometri?->selesai ?"DIPERIKSA" :"TIDAK DIPERIKSA" }}</td>
-            </tr>
+                <tr>
+                    <td colspan="2" class="border">SPIROMETRI (TERLAMPIR)</td>
+                </tr>
+                <tr>
+                    <td class="border">Kesimpulan Spiro </td>
+                    <td class="border text-center">
+                        {{ $participant->spirometri?->selesai ? 'DIPERIKSA' : 'TIDAK DIPERIKSA' }}</td>
+                </tr>
             @endif
             @if ($participant->pemeriksaanFisik->rectal_diperiksa)
-            <tr>
-                <td colspan="2" class="border">RECTAL SWAB (TERLAMPIR)</td>
-            </tr>
-            <tr>
-                <td class="border">Salmonella Thypi</td>
-                <td class="border text-center">
-                    {{ $participant->rectal?->salmonella_thypi  ?"DIPERIKSA" : "TIDAK DIPERIKSA"  }}</td>
-            </tr>
-            <tr>
-                <td class="border">Shigella SP</td>
-                <td class="border text-center">
-                    {{ $participant->rectal?->shigella_sp  ?"DIPERIKSA" : "TIDAK DIPERIKSA" }}</td>
-            </tr>
-            <tr>
-                <td class="border">E. Coli Pathogen</td>
-                <td class="border text-center">
-                    {{ $participant->rectal?->e_coli_pathogen  ?"DIPERIKSA" : "TIDAK DIPERIKSA"  }}</td>
-            </tr>
+                <tr>
+                    <td colspan="2" class="border">RECTAL SWAB (TERLAMPIR)</td>
+                </tr>
+                <tr>
+                    <td class="border">Salmonella Thypi</td>
+                    <td class="border text-center">
+                        {{ $participant->rectal?->salmonella_thypi ? 'DIPERIKSA' : 'TIDAK DIPERIKSA' }}</td>
+                </tr>
+                <tr>
+                    <td class="border">Shigella SP</td>
+                    <td class="border text-center">
+                        {{ $participant->rectal?->shigella_sp ? 'DIPERIKSA' : 'TIDAK DIPERIKSA' }}</td>
+                </tr>
+                <tr>
+                    <td class="border">E. Coli Pathogen</td>
+                    <td class="border text-center">
+                        {{ $participant->rectal?->e_coli_pathogen ? 'DIPERIKSA' : 'TIDAK DIPERIKSA' }}</td>
+                </tr>
             @endif
 
             <tr>
@@ -518,8 +543,8 @@
                                 <td class="text-center">
                                     <br>
 
-                                    <img src="{{ asset($pemeriksaanFisik->employee?->ttd) }}" width="150"
-                                        alt="img" alt="img">
+                                    {{-- <img src="{{ asset($pemeriksaanFisik->employee?->ttd) }}" width="150"
+                                        alt="img" alt="img"> --}}
                                 </td>
                             </tr>
                             <tr>
