@@ -543,8 +543,8 @@
                                 <td class="text-center">
                                     <br>
 
-                                    {{-- <img src="{{ asset($pemeriksaanFisik->employee?->ttd) }}" width="150"
-                                        alt="img" alt="img"> --}}
+                                    <img src="{{ asset($pemeriksaanFisik->employee?->ttd) }}" width="150"
+                                        alt="img" alt="img">
                                 </td>
                             </tr>
                             <tr>
