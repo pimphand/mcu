@@ -483,7 +483,7 @@ class ParticipantController extends Controller
                     AllowedFilter::exact('divisi_id'),
                     AllowedFilter::scope('date_range'),
                 ])
-                ->defaultSort('no_form')
+                ->defaultSort('-created_at')
                 ->get();
         }
         return view('pages.participant.print-mcu', compact('client', 'data'));
