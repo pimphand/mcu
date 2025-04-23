@@ -56,7 +56,7 @@ class ReportMultipleController extends Controller
                 AllowedFilter::exact('contract_id'),
                 AllowedFilter::scope('date_range'),
             ])
-            ->whereBetween('no_form', [$start, $end])
+            // ->whereBetween('no_form', [$start, $end])
             ->get();
 
         $pdf = Pdf::loadView('pages.report.multiple.identitas', compact('data'));
