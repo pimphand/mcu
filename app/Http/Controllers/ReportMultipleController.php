@@ -27,7 +27,7 @@ class ReportMultipleController extends Controller
                 AllowedFilter::exact('participant.client_id'),
                 AllowedFilter::exact('participant.divisi_id'),
                 AllowedFilter::exact('participant.contract_id'),
-                AllowedFilter::scope('date_range'),
+                AllowedFilter::scope('participant.date_range'),
             ])
             ->whereHas('participant', function ($query) {
                 // $query->where('')
@@ -56,7 +56,6 @@ class ReportMultipleController extends Controller
                 AllowedFilter::exact('contract_id'),
                 AllowedFilter::scope('date_range'),
             ])
-            // ->whereBetween('no_form', [$start, $end])
             ->get();
 
         $pdf = Pdf::loadView('pages.report.multiple.identitas', compact('data'));
@@ -66,25 +65,21 @@ class ReportMultipleController extends Controller
 
     public function pemFisik(Request $request)
     {
-        $start = intval(request('start', 1)); // Mulai dari item pertama secara default
+        $start = intval(request('start', 1));
         $end = intval(request('end', 50));
+        $perPage = $end - $start + 1;
 
         $data = QueryBuilder::for(PemeriksaanFisik::class)
+            ->with(['participant.client', 'participant.divisi', 'participant.contract'])
             ->allowedIncludes(['participant'])
             ->allowedFilters([
                 AllowedFilter::exact('participant.client_id'),
                 AllowedFilter::exact('participant.divisi_id'),
                 AllowedFilter::exact('participant.contract_id'),
-                AllowedFilter::scope('date_range'),
+                AllowedFilter::scope('participant.date_range'),
             ])
-            ->whereHas('participant', function ($query) {
-                // $query->where('')
-            })
             ->where('selesai', 1)
-            ->with('participant')
-            ->skip($start - 1)  // Lewati data sebelum posisi 'start'
-            ->take($end - $start + 1)  // Ambil sejumlah 'end - start + 1' data
-            ->get();
+            ->paginate($perPage, ['*'], 'page', $start);
 
         $pdf = Pdf::loadView('pages.report.multiple.pemeriksaan-fisik', compact('data'));
 
@@ -102,15 +97,10 @@ class ReportMultipleController extends Controller
                 AllowedFilter::exact('participant.client_id'),
                 AllowedFilter::exact('participant.divisi_id'),
                 AllowedFilter::exact('participant.contract_id'),
-                AllowedFilter::scope('date_range'),
+                AllowedFilter::scope('participant.date_range'),
             ])
-            ->whereHas('participant', function ($query) {
-                $start = intval(request('start', 1)); // Mulai dari item pertama secara default
-                $end = intval(request('end', 50));
-                $query->whereBetween('no_form', [$start, $end + 1]);
-            })
+
             ->where('selesai', 1)
-            ->with('participant')
             ->get();
 
         $pdf = Pdf::loadView('pages.report.multiple.radiologi', compact('data'));
@@ -128,15 +118,10 @@ class ReportMultipleController extends Controller
                 AllowedFilter::exact('participant.client_id'),
                 AllowedFilter::exact('participant.divisi_id'),
                 AllowedFilter::exact('participant.contract_id'),
-                AllowedFilter::scope('date_range'),
+                AllowedFilter::scope('participant.date_range'),
             ])
             ->where('selesai', 1)
             ->with('participant')
-            ->whereHas('participant', function ($query) {
-                $start = intval(request('start', 1)); // Mulai dari item pertama secara default
-                $end = intval(request('end', 50));
-                $query->whereBetween('no_form', [$start, $end]);
-            })
             ->get();
 
         $pdf = Pdf::loadView('pages.report.multiple.ekg', compact('data'));
@@ -154,15 +139,10 @@ class ReportMultipleController extends Controller
                 AllowedFilter::exact('participant.client_id'),
                 AllowedFilter::exact('participant.divisi_id'),
                 AllowedFilter::exact('participant.contract_id'),
-                AllowedFilter::scope('date_range'),
+                AllowedFilter::scope('participant.date_range'),
             ])
             ->where('selesai', 1)
             ->with('participant')
-            ->whereHas('participant', function ($query) {
-                $start = intval(request('start', 1)); // Mulai dari item pertama secara default
-                $end = intval(request('end', 50));
-                $query->whereBetween('no_form', [$start, $end]);
-            })
             ->get();
 
         $pdf = Pdf::loadView('pages.report.multiple.rectal', compact('data'));
@@ -181,13 +161,9 @@ class ReportMultipleController extends Controller
                 AllowedFilter::exact('participant.client_id'),
                 AllowedFilter::exact('participant.divisi_id'),
                 AllowedFilter::exact('participant.contract_id'),
-                AllowedFilter::scope('date_range'),
+                AllowedFilter::scope('participant.date_range'),
             ])
-            ->whereHas('participant', function ($query) {
-                $start = intval(request('start', 1)); // Mulai dari item pertama secara default
-                $end = intval(request('end', 50));
-                $query->whereBetween('no_form', [$start, $end]);
-            })
+
             ->where('selesai', 1)
             ->with('participant')
             ->get();

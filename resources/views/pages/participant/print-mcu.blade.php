@@ -296,7 +296,7 @@
             if ($(this).data('type') == "identitas") {
                 url = url + '?start=' + start + '&end=' + end + "&filter[date_range]=" + $('#fp-range').val() + `&filter[client_id]=${$('#client_id').val()}`;
             } else {
-                url = url + '?start=' + start + '&end=' + end + "&filter[date_range]=" + $('#fp-range').val() + `&filter[participant.client_id]=${$('#client_id').val()}`;
+                url = url + '?start=' + start + '&end=' + end + "&filter[participant.date_range]=" + $('#fp-range').val() + `&filter[participant.client_id]=${$('#client_id').val()}`;
             }
 
             window.open(url, '', 'toolbar=yes,scrollbars=yes,resizable=yes,width=900,height=600');
