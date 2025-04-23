@@ -85,8 +85,12 @@ class Participant extends Model
 
     public function scopeDateRange(Builder $query, $date)
     {
+        if (empty($date)) {
+            return $query;
+        }
+
         $date = explode(' to ', $date);
-        // dd(count($date));
+
         // Jika hanya ada satu tanggal
         if (count($date) == 1) {
             $startDate = Carbon::parse($date[0])->startOfDay();
