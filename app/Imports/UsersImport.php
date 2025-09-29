@@ -25,7 +25,7 @@ use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithStartRow;
 
-class UsersImport implements ToModel, WithStartRow, WithChunkReading
+class UsersImport implements ToModel, WithStartRow, WithChunkReading, ShouldQueue
 {
 
     protected $userId;
@@ -54,7 +54,7 @@ class UsersImport implements ToModel, WithStartRow, WithChunkReading
         if ($row[0] != null) {
             $sequence = Department::count();
             $devisi = Divisi::firstOrCreate([
-                'name' => $this->devisi,
+                'name' => $row[3],
                 'client_id' => Session::get('client_id'),
             ], [
                 'code' => sprintf('%s-%s', "DV", str_pad(Divisi::count() + 1, 5, '0', STR_PAD_LEFT))
@@ -132,29 +132,50 @@ class UsersImport implements ToModel, WithStartRow, WithChunkReading
         return $date->format('Y-m-d');
     }
 
-    // Fungsi untuk mengonversi tanggal teks `m/d/yy` ke format ISO `YYYY-MM-DD`
+    // Fungsi untuk mengonversi tanggal teks `m/d/yy` atau `d/m/Y` ke format ISO `YYYY-MM-DD`
     function convertDateToISO($date)
     {
-        // Tambahkan nol di depan bulan atau hari jika terdiri dari satu digit
-        $date = preg_replace('/\b(\d{1})\b/', '0$1', $date);
-
-        // Pisahkan tanggal berdasarkan karakter /
-        $parts = explode('/', $date);
-
-        // Pastikan array memiliki 3 elemen untuk menghindari error
-        if (count($parts) < 3) {
-            // Kembalikan NULL jika format tanggal tidak valid
+        if ($date === null || $date === '') {
             return null;
         }
 
-        // Pastikan tahun ditambahkan sebagai empat digit
-        if (strlen($parts[2]) === 2) {
-            $year = $parts[2] >= 50 ? '19' . $parts[2] : '20' . $parts[2];
-            $parts[2] = $year;
+        $date = trim($date);
+        // Samakan delimiter ke /
+        $normalized = str_replace(['-', '.'], '/', $date);
+
+        // Coba beberapa format umum secara berurutan
+        $formats = [
+            'Y/m/d',    // 1988/07/02
+            'Y/n/j',    // 1988/7/2
+            'd/m/Y',    // 02/07/1988 (umum di ID)
+            'j/n/Y',    // 2/7/1988
+            'm/d/Y',    // 07/02/1988 (US)
+            'n/j/Y',    // 7/2/1988 (US)
+            'd/m/y',    // 02/07/88
+            'j/n/y',    // 2/7/88
+            'm/d/y',    // 07/02/88
+            'n/j/y',    // 7/2/88
+        ];
+
+        foreach ($formats as $format) {
+            try {
+                $dt = Carbon::createFromFormat($format, $normalized);
+                // Validasi parsing tepat tanpa carryover (e.g. 32 menjadi bulan berikutnya)
+                if ($dt && $dt->format($format) === $normalized) {
+                    return $dt->format('Y-m-d');
+                }
+            } catch (\Exception $e) {
+                // coba format berikutnya
+            }
         }
 
-        // Susun kembali dalam format YYYY-MM-DD
-        return $parts[2] . '-' . $parts[0] . '-' . $parts[1];
+        // Jika masih gagal, coba DateTime parser umum sebagai fallback
+        try {
+            $dt = Carbon::parse($date);
+            return $dt->format('Y-m-d');
+        } catch (\Exception $e) {
+            return null;
+        }
     }
 
     // Fungsi utama untuk mendeteksi dan mengonversi tanggal, baik serial Excel maupun format teks

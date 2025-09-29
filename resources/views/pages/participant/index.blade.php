@@ -3,355 +3,354 @@
 @section('title', 'Participant')
 
 @section('css')
-<link rel="stylesheet" href="{{ asset('app-assets/vendors/css/forms/select/select2.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('app-assets/vendors/css/forms/select/select2.min.css') }}">
 @endsection
 
 @section('content')
-<!-- Basic Tabs starts -->
-<div class="card">
-    <div class="card-header border-bottom p-1">
-        <div class="head-label">
-            <button type="button" data-url="{{ route('participant.filter', request()->all()) }}"
-                class="btn btn-outline-primary" id="filter">
-                <i data-feather='search'></i> Filter
-            </button>
-            <a href="{{ route('participant.index') }}" class="btn btn-outline-info">
-                <i data-feather='refresh-cw'></i> Reset Filter
-            </a>
-            @if ($isRegisterPage)
-            <a href="#" class="btn btn-outline-warning" id="scan-barcode">
-                <i data-feather='maximize'></i> Scan Barcode
-            </a>
-            @endif
-        </div>
-        <form action="{{ route('participant.index') }}" method="get">
-            <div class="dt-action-buttons text-right">
-                <div class="dt-buttons d-inline-flex">
-                    <div class="input-group input-group" style="margin-top: 5px;">
-                        <input type="text" name="search" value="{{ request()->get('search') }}" id="sasSearchValue"
-                            class="form-control float-right" placeholder="kode, nama participant">
-                        <div class="input-group-append">
-                            <button type="submit" id="sasSearch"
-                                class="btn btn-outline-facebook waves-effect waves-float waves-light">
-                                <i data-feather="search"></i>
-                                Search</button>
+    <!-- Basic Tabs starts -->
+    <div class="card">
+        <div class="card-header border-bottom p-1">
+            <div class="head-label">
+                <button type="button" data-url="{{ route('participant.filter', request()->all()) }}"
+                    class="btn btn-outline-primary" id="filter">
+                    <i data-feather='search'></i> Filter
+                </button>
+                <a href="{{ route('participant.index') }}" class="btn btn-outline-info">
+                    <i data-feather='refresh-cw'></i> Reset Filter
+                </a>
+                @if ($isRegisterPage)
+                    <a href="#" class="btn btn-outline-warning" id="scan-barcode">
+                        <i data-feather='maximize'></i> Scan Barcode
+                    </a>
+                @endif
+            </div>
+            <form action="{{ route('participant.index') }}" method="get">
+                <div class="dt-action-buttons text-right">
+                    <div class="dt-buttons d-inline-flex">
+                        <div class="input-group input-group" style="margin-top: 5px;">
+                            <input type="text" name="search" value="{{ request()->get('search') }}" id="sasSearchValue"
+                                class="form-control float-right" placeholder="kode, nama participant">
+                            <div class="input-group-append">
+                                <button type="submit" id="sasSearch"
+                                    class="btn btn-outline-facebook waves-effect waves-float waves-light">
+                                    <i data-feather="search"></i>
+                                    Search</button>
+                            </div>
+                            @if ($isRegisterPage)
+                                <a href="#" class="btn btn-primary float-right waves-effect waves-float waves-light"
+                                    id="btn-register">Tambah Register</a>
+                            @else
+                                <a href="#" class="btn btn-primary float-right waves-effect waves-float waves-light"
+                                    id="btn-create">Tambah Data</a>
+                                <a href="#" class="btn btn-success float-right waves-effect waves-float waves-light"
+                                    id="btn-import">Import Data</a>
+                            @endif
                         </div>
-                        @if ($isRegisterPage)
-                        <a href="#" class="btn btn-primary float-right waves-effect waves-float waves-light"
-                            id="btn-register">Tambah Register</a>
-                        @else
-                        <a href="#" class="btn btn-primary float-right waves-effect waves-float waves-light"
-                            id="btn-create">Tambah Data</a>
-                        <a href="#" class="btn btn-success float-right waves-effect waves-float waves-light"
-                            id="btn-import">Import Data</a>
-                        @endif
                     </div>
                 </div>
-            </div>
-        </form>
-    </div>
-    <div class="card-body">
-        <div class="table-responsive text-nowrap">
-            <table class="dt-responsive table mt-1" id="table">
-                <thead>
-                    <tr>
-                        <th>Aksi</th>
-                        @if ($isRegisterPage)
-                        <th>Tanggal Register</th>
-                        <th>No. Register</th>
-                        @endif
-                        <th>MCU ID</th>
-                        <th>NIK</th>
-                        <th>Nama</th>
-                        <th>JK</th>
-                        <th>Tgl. Lahir</th>
-                        <th>Divisi</th>
-                        <th>Dept. ID</th>
-                        <th>Department</th>
-                        <th>Status Kepegawaian</th>
-                        <th>Perusahaan</th>
-                        <th>Kontrak ID</th>
-                        <th>Id</th>
-                        <th>U</th>
-                        <th>A</th>
-                        <th>E</th>
-                        <th>S</th>
-                        <th>R</th>
-                        <th>Lab. Khusus</th>
-                        <th>Nama Paket</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($participants as $key => $item)
-                    <tr>
-                        <td>
-                            <a href="{{ route('participant.edit', $item->id) }}" data-bs-toggle="tooltip"
-                                data-bs-placement="right" data-bs-original-title="Edit Register "
-                                data-url="{{ route('participant.edit', $item->id) }}"
-                                class="btn btn-sm btn-outline-dark edit">
-                                <i data-feather='edit'></i>
-                            </a>
-                            <a href="#" class="btn btn-sm btn-outline-danger delete" data-bs-toggle="tooltip"
-                                data-bs-placement="right" data-bs-original-title="Hapus Register "
-                                data-url="{{ route('participant.delete', $item->id) }}">
-                                <i data-feather='trash'></i>
-                            </a>
-                            <a href="{{ route('report.register', $item->id) }}" target="_blank"
-                                class="btn btn-sm btn-outline-warning" data-bs-toggle="tooltip"
-                                data-bs-placement="right" data-bs-original-title="Print Register ">
-                                <i data-feather='file-text'></i>
-                            </a>
-                        </td>
-                        @if ($isRegisterPage)
-                        <td>{{ $item->register_date }}</td>
-                        <td>{{ $item->register_number }} {{$item->no_form ? "($item->no_form)" : ''}}</td>
-                        @endif
-                        <td>{{ $item->code }}</td>
-                        <td>{{ $item->nik }}</td>
-                        <td>
-                            <a href="{{ route('participant.detail', $item->id) }}"
-                                data-url="{{ route('participant.detail', $item->id) }}" class="btn btn-link detail detail_{{$item->id}}">
-                                {{ $item->name }}
-                            </a>
-                        </td>
-                        <td>{{ $item->gender }}</td>
-                        <td>{{ $item->birthday }}</td>
-                        <td>{{ $item->divisi?->name }}</td>
-                        <td>{{ $item->department?->code }}</td>
-                        <td>{{ $item->department?->name }}</td>
-                        <td>{{ $item->status }}</td>
-                        <td>{{ $item->client?->code }}</td>
-                        <td>{{ $item->contract?->code }}</td>
-                        <td>{{ $item->id }}</td>
-                        <td>{{ $item->plan_u }}</td>
-                        <td>{{ $item->plan_a }}</td>
-                        <td>{{ $item->plan_e }}</td>
-                        <td>{{ $item->plan_s }}</td>
-                        <td>{{ $item->plan_r }}</td>
-                        <td>{{ $item->lab_special }}</td>
-                        <td>{{ $item->packet_name }}</td>
-                    </tr>
-                    @endforeach
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <th>Aksi</th>
-                        <th>MCU ID</th>
-                        <th>NIK</th>
-                        <th>Nama</th>
-                        <th>JK</th>
-                        <th>Tgl. Lahir</th>
-                        <th>Divisi</th>
-                        <th>Dept. ID</th>
-                        <th>Department</th>
-                        <th>Status Kepegawaian</th>
-                        <th>Perusahaan</th>
-                        <th>Kontrak ID</th>
-                        <th>Id</th>
-                        <th>U</th>
-                        <th>A</th>
-                        <th>E</th>
-                        <th>S</th>
-                        <th>R</th>
-                        <th>Lab. Khusus</th>
-                        <th>Nama Paket</th>
-                    </tr>
-                </tfoot>
-            </table>
+            </form>
         </div>
-    </div>
-    <div class="card-footer">
-        {!! $participants->links('partials.pagination') !!}
-    </div>
-</div>
-<!-- Basic Tabs ends -->
-
-{{-- modal delete --}}
-<form action="" id="form-delete" method="post">
-    @csrf
-    <div class="modal fade" id="modal-delete" tabindex="-1" aria-labelledby="modal-delete" aria-hidden="true">
-        @method('delete')
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Konfirmasi!</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <p>Yakin ingin hapus data ?</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn" data-bs-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-danger">Hapus</button>
-                </div>
-            </div>
-        </div>
-    </div>
-</form>
-
-{{-- form add --}}
-<form action="{{ route('participant.store') }}" id="form-create" method="POST" enctype="multipart/form-data">
-    @csrf
-    <div class="modal fade" id="modal-create" tabindex="-1" aria-labelledby="modal-delete" aria-hidden="true">
-        <div class="modal-dialog modal-xl">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Tambah Data Peserta MCU {{ auth()->user()->client?->code }}</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body" id="content-create">
-
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn" data-bs-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-primary" id="submit-create">Submit</button>
-                </div>
-            </div>
-        </div>
-    </div>
-</form>
-
-{{-- model detail --}}
-<div class="modal fade" id="modal-detail" tabindex="-1" aria-labelledby="modal-delete" aria-hidden="true">
-    <div class="modal-dialog modal-xl">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Data Peserta MCU</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body" id="content-detail">
-
-            </div>
-        </div>
-    </div>
-</div>
-
-{{-- form edit detail --}}
-<form action="" id="form-edit-detail" method="POST" enctype="multipart/form-data">
-    <div class="modal fade" id="modal-edit-detail" tabindex="-1" aria-labelledby="modal-delete" aria-hidden="true">
-        <div class="modal-dialog modal-xl modal-dialog-scrollable">
-            <div class="modal-content" id="content-edit-detail">
-
-            </div>
-        </div>
-    </div>
-</form>
-<form action="" id="form-import" method="POST" enctype="multipart/form-data">
-    <div class="modal fade" id="modal-edit-detail" tabindex="-1" aria-labelledby="modal-delete" aria-hidden="true">
-        <div class="modal-dialog modal-xl modal-dialog-scrollable">
-            <div class="modal-content" id="content-edit-detail">
-
-            </div>
-        </div>
-    </div>
-</form>
-
-{{-- modal gigi --}}
-<div class="modal fade" id="modal-gigi" tabindex="-1" aria-labelledby="modal-delete" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Keadaan Gigi</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body" id="content-gigi">
-                <h5 id="nomor-gigi"></h5>
-                <table class="table table-bordered">
-                    <tbody>
+        <div class="card-body">
+            <div class="table-responsive text-nowrap">
+                <table class="dt-responsive table mt-1" id="table">
+                    <thead>
                         <tr>
-                            <td>
-                                <a href="#" id="gigi-karies" class="btn btn-link get-data-gigi"
-                                    data-color="danger">Karies (O)</a>
-                            </td>
-                            <td>
-                                <a href="#" id="gigi-tanggal" class="btn btn-link get-data-gigi"
-                                    data-color="dark">Tanggal (X)</a>
-                            </td>
+                            <th>Aksi</th>
+                            @if ($isRegisterPage)
+                                <th>Tanggal Register</th>
+                                <th>No. Register</th>
+                            @endif
+                            <th>MCU ID</th>
+                            <th>NIK</th>
+                            <th>Nama</th>
+                            <th>JK</th>
+                            <th>Tgl. Lahir</th>
+                            <th>Divisi</th>
+                            <th>Dept. ID</th>
+                            <th>Department</th>
+                            <th>Status Kepegawaian</th>
+                            <th>Perusahaan</th>
+                            <th>Kontrak ID</th>
+                            <th>Id</th>
+                            <th>U</th>
+                            <th>A</th>
+                            <th>E</th>
+                            <th>S</th>
+                            <th>R</th>
+                            <th>Lab. Khusus</th>
+                            <th>Nama Paket</th>
                         </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($participants as $key => $item)
+                            <tr>
+                                <td>
+                                    <a href="{{ route('participant.edit', $item->id) }}" data-bs-toggle="tooltip"
+                                        data-bs-placement="right" data-bs-original-title="Edit Register "
+                                        data-url="{{ route('participant.edit', $item->id) }}"
+                                        class="btn btn-sm btn-outline-dark edit">
+                                        <i data-feather='edit'></i>
+                                    </a>
+                                    <a href="#" class="btn btn-sm btn-outline-danger delete" data-bs-toggle="tooltip"
+                                        data-bs-placement="right" data-bs-original-title="Hapus Register "
+                                        data-url="{{ route('participant.delete', $item->id) }}">
+                                        <i data-feather='trash'></i>
+                                    </a>
+                                    <a href="{{ route('report.register', $item->id) }}" target="_blank"
+                                        class="btn btn-sm btn-outline-warning" data-bs-toggle="tooltip"
+                                        data-bs-placement="right" data-bs-original-title="Print Register ">
+                                        <i data-feather='file-text'></i>
+                                    </a>
+                                </td>
+                                @if ($isRegisterPage)
+                                    <td>{{ $item->register_date }}</td>
+                                    <td>{{ $item->register_number }} {{$item->no_form ? "($item->no_form)" : ''}}</td>
+                                @endif
+                                <td>{{ $item->code }}</td>
+                                <td>{{ $item->nik }}</td>
+                                <td>
+                                    <a href="{{ route('participant.detail', $item->id) }}"
+                                        data-url="{{ route('participant.detail', $item->id) }}"
+                                        class="btn btn-link detail detail_{{$item->id}}">
+                                        {{ $item->name }}
+                                    </a>
+                                </td>
+                                <td>{{ $item->gender }}</td>
+                                <td>{{ $item->birthday }}</td>
+                                <td>{{ $item->divisi?->name }}</td>
+                                <td>{{ $item->department?->code }}</td>
+                                <td>{{ $item->department?->name }}</td>
+                                <td>{{ $item->status }}</td>
+                                <td>{{ $item->client?->code }}</td>
+                                <td>{{ $item->contract?->code }}</td>
+                                <td>{{ $item->id }}</td>
+                                <td>{{ $item->plan_u }}</td>
+                                <td>{{ $item->plan_a }}</td>
+                                <td>{{ $item->plan_e }}</td>
+                                <td>{{ $item->plan_s }}</td>
+                                <td>{{ $item->plan_r }}</td>
+                                <td>{{ $item->lab_special }}</td>
+                                <td>{{ $item->packet_name }}</td>
+                            </tr>
+                        @endforeach
                     </tbody>
+                    <tfoot>
+                        <tr>
+                            <th>Aksi</th>
+                            <th>MCU ID</th>
+                            <th>NIK</th>
+                            <th>Nama</th>
+                            <th>JK</th>
+                            <th>Tgl. Lahir</th>
+                            <th>Divisi</th>
+                            <th>Dept. ID</th>
+                            <th>Department</th>
+                            <th>Status Kepegawaian</th>
+                            <th>Perusahaan</th>
+                            <th>Kontrak ID</th>
+                            <th>Id</th>
+                            <th>U</th>
+                            <th>A</th>
+                            <th>E</th>
+                            <th>S</th>
+                            <th>R</th>
+                            <th>Lab. Khusus</th>
+                            <th>Nama Paket</th>
+                        </tr>
+                    </tfoot>
                 </table>
             </div>
         </div>
-    </div>
-</div>
-<div class="modal fade" id="modal-import" tabindex="-1" aria-labelledby="modal-delete" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Import Peserta</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body" id="">
-                <form action="{{ route('participant.import') }}" method="post" enctype="multipart/form-data">
-                    @csrf
-                    <div class="form-group">
-                        <label for="form-label required">File Excel</label>
-                        <input type="file" name="file" id="file" class="form-control" required>
-                    </div>
-                    <div class="form-group mt-2">
-                        <label for="form-label required">Devisi</label>
-                        <input type="text" name="devisi" id="devisi" class="form-control" required>
-                    </div>
-                    <div class="form-group mt-2">
-                        <button type="submit" class="btn btn-primary">Import</button>
-                        <a href="https://docs.google.com/spreadsheets/d/1YQU_78r4esj0n-52EjiXjs6gLxboOgTKDlNF-Wb8E9s/edit?usp=sharing" target="_blank" class="btn btn-primary">Template</a>
-                    </div>
-                </form>
-            </div>
+        <div class="card-footer">
+            {!! $participants->links('partials.pagination') !!}
         </div>
     </div>
-</div>
+    <!-- Basic Tabs ends -->
 
-{{-- form filter --}}
-<form action="{{ route('participant.index', request()->all()) }}" id="form-filter" method="GET"
-    enctype="multipart/form-data">
-    <div class="modal fade" id="modal-filter" tabindex="-1" aria-labelledby="modal-delete" aria-hidden="true">
+    {{-- modal delete --}}
+    <form action="" id="form-delete" method="post">
+        @csrf
+        <div class="modal fade" id="modal-delete" tabindex="-1" aria-labelledby="modal-delete" aria-hidden="true">
+            @method('delete')
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Konfirmasi!</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Yakin ingin hapus data ?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-danger">Hapus</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    {{-- form add --}}
+    <form action="{{ route('participant.store') }}" id="form-create" method="POST" enctype="multipart/form-data">
+        @csrf
+        <div class="modal fade" id="modal-create" tabindex="-1" aria-labelledby="modal-delete" aria-hidden="true">
+            <div class="modal-dialog modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Tambah Data Peserta MCU {{ auth()->user()->client?->code }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body" id="content-create">
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-primary" id="submit-create">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    {{-- model detail --}}
+    <div class="modal fade" id="modal-detail" tabindex="-1" aria-labelledby="modal-delete" aria-hidden="true">
         <div class="modal-dialog modal-xl">
-            <div class="modal-content" id="content-filter">
-            </div>
-        </div>
-    </div>
-</form>
-
-{{-- form scan --}}
-<form action="#" id="form-scan" method="GET" enctype="multipart/form-data">
-    <div class="modal fade" id="modal-scan" tabindex="-1" aria-labelledby="modal-delete" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable">
-            <div class="modal-content" id="content-scan">
+            <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Scan Barcode</h5>
+                    <h5 class="modal-title">Data Peserta MCU</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label for="form-label required">Barcode atau MCU ID</label>
-                        <input type="text" name="mcu_id" id="mcu_id" class="form-control" placeholder="MCU ID">
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn" data-bs-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-primary" id="btn-scan"
-                        data-url="{{ route('participant.scan', 'xxx') }}">Scan</button>
+                <div class="modal-body" id="content-detail">
+
                 </div>
             </div>
         </div>
     </div>
-</form>
+
+    {{-- form edit detail --}}
+    <form action="" id="form-edit-detail" method="POST" enctype="multipart/form-data">
+        <div class="modal fade" id="modal-edit-detail" tabindex="-1" aria-labelledby="modal-delete" aria-hidden="true">
+            <div class="modal-dialog modal-xl modal-dialog-scrollable">
+                <div class="modal-content" id="content-edit-detail">
+
+                </div>
+            </div>
+        </div>
+    </form>
+    <form action="" id="form-import" method="POST" enctype="multipart/form-data">
+        <div class="modal fade" id="modal-edit-detail" tabindex="-1" aria-labelledby="modal-delete" aria-hidden="true">
+            <div class="modal-dialog modal-xl modal-dialog-scrollable">
+                <div class="modal-content" id="content-edit-detail">
+
+                </div>
+            </div>
+        </div>
+    </form>
+
+    {{-- modal gigi --}}
+    <div class="modal fade" id="modal-gigi" tabindex="-1" aria-labelledby="modal-delete" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Keadaan Gigi</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="content-gigi">
+                    <h5 id="nomor-gigi"></h5>
+                    <table class="table table-bordered">
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <a href="#" id="gigi-karies" class="btn btn-link get-data-gigi"
+                                        data-color="danger">Karies (O)</a>
+                                </td>
+                                <td>
+                                    <a href="#" id="gigi-tanggal" class="btn btn-link get-data-gigi"
+                                        data-color="dark">Tanggal (X)</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="modal-import" tabindex="-1" aria-labelledby="modal-delete" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Import Peserta</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="">
+                    <form action="{{ route('participant.import') }}" method="post" enctype="multipart/form-data">
+                        @csrf
+                        <div class="form-group">
+                            <label for="form-label required">File Excel</label>
+                            <input type="file" name="file" id="file" class="form-control" required>
+                        </div>
+                        <div class="d-flex justify-content-between mt-2">
+                            <button type="submit" class="btn btn-primary">Import</button>
+                            <a href="https://docs.google.com/spreadsheets/d/1YQU_78r4esj0n-52EjiXjs6gLxboOgTKDlNF-Wb8E9s/edit?usp=sharing"
+                                target="_blank" class="btn btn-outline-primary">Template</a>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- form filter --}}
+    <form action="{{ route('participant.index', request()->all()) }}" id="form-filter" method="GET"
+        enctype="multipart/form-data">
+        <div class="modal fade" id="modal-filter" tabindex="-1" aria-labelledby="modal-delete" aria-hidden="true">
+            <div class="modal-dialog modal-xl">
+                <div class="modal-content" id="content-filter">
+                </div>
+            </div>
+        </div>
+    </form>
+
+    {{-- form scan --}}
+    <form action="#" id="form-scan" method="GET" enctype="multipart/form-data">
+        <div class="modal fade" id="modal-scan" tabindex="-1" aria-labelledby="modal-delete" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-scrollable">
+                <div class="modal-content" id="content-scan">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Scan Barcode</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="form-label required">Barcode atau MCU ID</label>
+                            <input type="text" name="mcu_id" id="mcu_id" class="form-control" placeholder="MCU ID">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-primary" id="btn-scan"
+                            data-url="{{ route('participant.scan', 'xxx') }}">Scan</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
 @endsection
 
 @section('js')
-<script src="{{ asset('app-assets/vendors/js/forms/select/select2.full.min.js') }}"></script>
-<script>
-    $(function() {
+    <script src="{{ asset('app-assets/vendors/js/forms/select/select2.full.min.js') }}"></script>
+    <script>
+        $(function () {
 
             // button delete
-            $('table').on('click', '.delete', function() {
+            $('table').on('click', '.delete', function () {
                 const url = $(this).data('url');
                 $("#form-delete").attr('action', url);
                 $("#modal-delete").modal("show");
             });
 
-            $('#scan-barcode').on('click', function() {
+            $('#scan-barcode').on('click', function () {
                 const url = $(this).data('url');
                 // $("#form-scan").attr('action', url);
                 $("#modal-scan").modal("show");
@@ -360,7 +359,7 @@
                 }, 1000);
             });
 
-            $('#btn-scan').on('click', function(e) {
+            $('#btn-scan').on('click', function (e) {
                 e.preventDefault();
                 let url = $(this).data('url');
                 const mcuId = $("#mcu_id").val();
@@ -398,7 +397,7 @@
             });
 
             // button edit
-            $('table').on('click', '.edit', function(e) {
+            $('table').on('click', '.edit', function (e) {
                 e.preventDefault();
                 const url = $(this).data('url');
                 $("#form-create").attr('action', url);
@@ -418,14 +417,14 @@
                                 url: "{{ route('divisi.select2') }}",
                                 dataType: 'json',
                                 delay: 350,
-                                data: function(params) {
+                                data: function (params) {
                                     return {
                                         search: params.term,
                                     };
                                 },
-                                processResults: function(data) {
+                                processResults: function (data) {
                                     return {
-                                        results: $.map(data.data, function(item) {
+                                        results: $.map(data.data, function (item) {
                                             return {
                                                 text: `${item.name}`,
                                                 id: item.id
@@ -447,14 +446,14 @@
                                 url: "{{ route('department.select2') }}",
                                 dataType: 'json',
                                 delay: 350,
-                                data: function(params) {
+                                data: function (params) {
                                     return {
                                         search: params.term,
                                     };
                                 },
-                                processResults: function(data) {
+                                processResults: function (data) {
                                     return {
-                                        results: $.map(data.data, function(item) {
+                                        results: $.map(data.data, function (item) {
                                             return {
                                                 text: `${item.name}`,
                                                 id: item.id
@@ -476,7 +475,7 @@
             });
 
             // btn filter
-            $('#filter').on('click', function(e) {
+            $('#filter').on('click', function (e) {
                 const url = $(this).data('url');
                 $("#modal-filter").modal("show");
                 $.ajax({
@@ -489,11 +488,11 @@
                     }
                 })
             });
-            $('#btn-import').on('click', function() {
+            $('#btn-import').on('click', function () {
                 $("#modal-import").modal("show");
             });
             // btn create
-            $('#btn-create').on('click', function() {
+            $('#btn-create').on('click', function () {
                 $("#modal-create").modal("show");
 
                 $.ajax({
@@ -511,14 +510,14 @@
                                 url: "{{ route('divisi.select2') }}",
                                 dataType: 'json',
                                 delay: 350,
-                                data: function(params) {
+                                data: function (params) {
                                     return {
                                         search: params.term,
                                     };
                                 },
-                                processResults: function(data) {
+                                processResults: function (data) {
                                     return {
-                                        results: $.map(data.data, function(item) {
+                                        results: $.map(data.data, function (item) {
                                             return {
                                                 text: `${item.name}`,
                                                 id: item.id
@@ -540,14 +539,14 @@
                                 url: "{{ route('department.select2') }}",
                                 dataType: 'json',
                                 delay: 350,
-                                data: function(params) {
+                                data: function (params) {
                                     return {
                                         search: params.term,
                                     };
                                 },
-                                processResults: function(data) {
+                                processResults: function (data) {
                                     return {
-                                        results: $.map(data.data, function(item) {
+                                        results: $.map(data.data, function (item) {
                                             return {
                                                 text: `${item.name}`,
                                                 id: item.id
@@ -647,13 +646,13 @@
             function eventChange() {
 
                 // const packetNameCahnge = $('#content-create #packet_name').val();
-                $('#content-create').on('change', '#packet_a', function(e) {
+                $('#content-create').on('change', '#packet_a', function (e) {
                     let isChecked = $(this).is(':checked');
                     $('#content-create #plan_u').prop('checked', isChecked);
                     setPaketName();
 
                 })
-                $('#content-create').on('change', '#packet_b', function(e) {
+                $('#content-create').on('change', '#packet_b', function (e) {
                     let isChecked = $(this).is(':checked');
                     $('#content-create #plan_u').prop('checked', isChecked);
                     $('#content-create #plan_r').prop('checked', isChecked);
@@ -661,14 +660,14 @@
                     setPaketName();
 
                 })
-                $('#content-create').on('change', '#packet_c', function(e) {
+                $('#content-create').on('change', '#packet_c', function (e) {
                     let isChecked = $(this).is(':checked');
                     $('#content-create #plan_u').prop('checked', isChecked);
                     $('#content-create #plan_a').prop('checked', isChecked);
                     setPaketName();
 
                 })
-                $('#content-create').on('change', '#packet_d', function(e) {
+                $('#content-create').on('change', '#packet_d', function (e) {
                     let isChecked = $(this).is(':checked');
                     $('#content-create #plan_u').prop('checked', isChecked);
                     $('#content-create #plan_e').prop('checked', isChecked);
@@ -676,7 +675,7 @@
                     setPaketName();
 
                 })
-                $('#content-create').on('change', '#packet_e', function(e) {
+                $('#content-create').on('change', '#packet_e', function (e) {
                     let isChecked = $(this).is(':checked');
                     $('#content-create #plan_u').prop('checked', isChecked);
                     $('#content-create #plan_s').prop('checked', isChecked);
@@ -684,7 +683,7 @@
                     setPaketName();
 
                 })
-                $('#content-create').on('change', '#packet_f', function(e) {
+                $('#content-create').on('change', '#packet_f', function (e) {
                     let isChecked = $(this).is(':checked');
                     $('#content-create #plan_u').prop('checked', isChecked);
                     $('#content-create #plan_a').prop('checked', isChecked);
@@ -696,7 +695,7 @@
 
             function setPaketName() {
                 let packets = [];
-                $('#content-create .packet-x').each(function() {
+                $('#content-create .packet-x').each(function () {
                     if ($(this).is(':checked')) {
                         packets.push($(this).data('packet').toUpperCase())
                     }
@@ -705,7 +704,7 @@
             }
 
             // button detail
-            $('table').on('click', '.detail', function(e) {
+            $('table').on('click', '.detail', function (e) {
                 e.preventDefault();
                 const url = $(this).data('url');
                 $("#modal-detail").modal("show");
@@ -721,7 +720,7 @@
             });
 
             // button update register
-            $("#content-detail").on('click', '#update-register', function(e) {
+            $("#content-detail").on('click', '#update-register', function (e) {
                 const url = $(this).data('url');
                 $.ajax({
                     url: url,
@@ -735,7 +734,7 @@
             })
 
             // button edit detail
-            $('#content-detail').on('click', '.edit-detail', function(e) {
+            $('#content-detail').on('click', '.edit-detail', function (e) {
                 const url = $(this).data('url');
                 $("#modal-edit-detail").modal("show");
                 $("#form-edit-detail").attr("action", url);
@@ -762,14 +761,14 @@
                         url: "{{ route('employee.select2') }}",
                         dataType: 'json',
                         delay: 350,
-                        data: function(params) {
+                        data: function (params) {
                             return {
                                 search: params.term,
                             };
                         },
-                        processResults: function(data) {
+                        processResults: function (data) {
                             return {
-                                results: $.map(data.data, function(item) {
+                                results: $.map(data.data, function (item) {
                                     return {
                                         text: `${item.nama}`,
                                         id: item.id
@@ -782,7 +781,7 @@
                 });
             }
 
-            $('#content-edit-detail').on('click', '#submit-edit-detail', function(e) {
+            $('#content-edit-detail').on('click', '#submit-edit-detail', function (e) {
                 e.preventDefault();
                 const form = $('#form-edit-detail');
 
@@ -805,15 +804,15 @@
                         success: (data) => {
                             if (data.success) {
                                 toastSuccess('Data berhasil disimpan');
-                                if (data.data.selesai == 1){
+                                if (data.data.selesai == 1) {
 
-                                    $('.'+data.class).attr('aria-valuenow', 100);
-                                    $('.'+data.class).attr('aria-valuemin', 100);
-                                    $('.'+data.class).attr('aria-valuemax', 100);
+                                    $('.' + data.class).attr('aria-valuenow', 100);
+                                    $('.' + data.class).attr('aria-valuemin', 100);
+                                    $('.' + data.class).attr('aria-valuemax', 100);
 
                                     // Update the width of the progress bar
-                                    $('.'+data.class).css('width', '100%');
-                                    $('#'+data.class).text('SELESAI')
+                                    $('.' + data.class).css('width', '100%');
+                                    $('#' + data.class).text('SELESAI')
                                 }
                                 $('._btn_danger').click()
                                 return;
@@ -834,16 +833,16 @@
                             if (data.success) {
                                 toastSuccess('Data berhasil disimpan');
                                 $('._btn_danger').click()
-                               if (data.data.selesai == 1){
+                                if (data.data.selesai == 1) {
 
-                                   $('.'+data.class).attr('aria-valuenow', 100);
-                                   $('.'+data.class).attr('aria-valuemin', 100);
-                                   $('.'+data.class).attr('aria-valuemax', 100);
+                                    $('.' + data.class).attr('aria-valuenow', 100);
+                                    $('.' + data.class).attr('aria-valuemin', 100);
+                                    $('.' + data.class).attr('aria-valuemax', 100);
 
-                                   // Update the width of the progress bar
-                                   $('.'+data.class).css('width', '100%');
-                                   $('#'+data.class).text('SELESAI')
-                               }
+                                    // Update the width of the progress bar
+                                    $('.' + data.class).css('width', '100%');
+                                    $('#' + data.class).text('SELESAI')
+                                }
                                 return;
                             }
                             toastError('Data tidak ada perubahan');
@@ -857,35 +856,35 @@
 
             function eventFormEditDetail() {
                 // event form edit detail TANDA VITAL
-                $('#content-edit-detail #keluhan_utama').on('change', function(e) {
+                $('#content-edit-detail #keluhan_utama').on('change', function (e) {
                     let isChecked = $(this).is(':checked');
                     $('#content-edit-detail #keluhan_utama_text').val(isChecked ? 'TAK' : null);
                 });
 
-                $('#content-edit-detail #riwayat_penyakit_terdahulu').on('change', function(e) {
+                $('#content-edit-detail #riwayat_penyakit_terdahulu').on('change', function (e) {
                     let isChecked = $(this).is(':checked');
                     $('#content-edit-detail #riwayat_penyakit_terdahulu_text').val(isChecked ? '-' : null);
                 });
 
-                $('#content-edit-detail #riwayat_penyakit_sekarang').on('change', function(e) {
+                $('#content-edit-detail #riwayat_penyakit_sekarang').on('change', function (e) {
                     let isChecked = $(this).is(':checked');
                     $('#content-edit-detail #riwayat_penyakit_sekarang_text').val(isChecked ? 'TAK' : null);
                 });
 
-                $('#content-edit-detail #alergi').on('change', function(e) {
+                $('#content-edit-detail #alergi').on('change', function (e) {
                     let isChecked = $(this).is(':checked');
                     $('#content-edit-detail #alergi_text').val(isChecked ? 'TIDAK' : null);
                 });
 
-                $('#content-edit-detail #riwayat_trauma').on('change', function(e) {
+                $('#content-edit-detail #riwayat_trauma').on('change', function (e) {
                     let isChecked = $(this).is(':checked');
                     $('#content-edit-detail #riwayat_trauma_text').val(isChecked ? 'TIDAK' : null);
                 });
 
-                $('#content-edit-detail #tinggi_badan').on('keyup', function(e) {
+                $('#content-edit-detail #tinggi_badan').on('keyup', function (e) {
                     rumusIMT();
                 });
-                $('#content-edit-detail #berat_badan').on('keyup', function(e) {
+                $('#content-edit-detail #berat_badan').on('keyup', function (e) {
                     rumusIMT();
                 });
 
@@ -916,13 +915,13 @@
                 }
 
                 // event form edit SPIROMETRI
-                $('#content-edit-detail .hasil-spirometri').on('change', function() {
+                $('#content-edit-detail .hasil-spirometri').on('change', function () {
                     setHasilSpirometri();
                 });
 
                 function setHasilSpirometri() {
                     let hasilSpirometri = [];
-                    $('#content-edit-detail .hasil-spirometri').each(function() {
+                    $('#content-edit-detail .hasil-spirometri').each(function () {
                         if ($(this).is(':checked')) {
                             hasilSpirometri.push($(this).attr('id').toUpperCase())
                         }
@@ -932,12 +931,12 @@
                 }
 
                 // event form edit PEMERIKSAAN FISIk
-                $('#content-edit-detail #kepala').on('change', function() {
+                $('#content-edit-detail #kepala').on('change', function () {
                     const kepalaText = $('#content-edit-detail #kepala_text');
                     $(this).is(':checked') ? kepalaText.val('Normochepal') : kepalaText.val(null);
                 });
 
-                $('#content-edit-detail .gigi').on('click', function(e) {
+                $('#content-edit-detail .gigi').on('click', function (e) {
                     const dataGigi = $(this).data('gigi');
                     const dataGigiKey = Object.keys(dataGigi);
                     const dataGigiVal = Object.values(dataGigi);
@@ -947,7 +946,7 @@
                     $("#modal-gigi").modal('show');
                 })
 
-                $(".get-data-gigi").on("click", function(e) {
+                $(".get-data-gigi").on("click", function (e) {
                     const color = $(this).data('color');
                     let dataKeyGigi = localStorage.getItem('data-gigi-key').split(',');
                     let dataValGigi = localStorage.getItem('data-gigi-val').split(',');
@@ -989,20 +988,20 @@
                 });
 
                 const tenggorokanText = $("#content-edit-detail #tenggorokan_text");
-                $("#content-edit-detail #tenggorokan").on("change", function(e) {
+                $("#content-edit-detail #tenggorokan").on("change", function (e) {
                     const isChecked = $(this).is(':checked');
                     const valueTenggorokanText = isChecked ? 'TAK' : null;
                     tenggorokanText.val(valueTenggorokanText);
                 });
 
-                $("#content-edit-detail .tenggorokan").on('change', function() {
+                $("#content-edit-detail .tenggorokan").on('change', function () {
                     setTenggorokanText();
                 })
 
                 function setTenggorokanText() {
                     let tenggorokanArrayKanan = [];
                     let tenggorokanArrayKiri = [];
-                    $("#content-edit-detail .tenggorokan").each(function(e) {
+                    $("#content-edit-detail .tenggorokan").each(function (e) {
                         if ($(this).is(':checked') && $(this).data('kode') == 'kanan') {
                             tenggorokanArrayKanan.push($(this).data('value'))
                         };
@@ -1021,7 +1020,7 @@
                 }
 
                 const ekgText = $("#content-edit-detail #ekg_text");
-                $("#content-edit-detail #ekg_tidak_diperiksa").on('change', function() {
+                $("#content-edit-detail #ekg_tidak_diperiksa").on('change', function () {
                     const isChecked = $(this).is(':checked');
                     let ekgBdnIsChecked = $("#content-edit-detail #ekg_bdn").is(':checked');
                     if (isChecked) {
@@ -1035,7 +1034,7 @@
                     }
                 })
 
-                $("#content-edit-detail #ekg_bdn").on('change', function() {
+                $("#content-edit-detail #ekg_bdn").on('change', function () {
                     const isChecked = $(this).is(':checked');
                     let ekgIsChecked = $("#content-edit-detail #ekg_tidak_diperiksa").is(':checked');
                     if (ekgIsChecked) {
@@ -1050,7 +1049,7 @@
                 })
 
                 const neorologisText = $("#content-edit-detail #neurologis_text");
-                $("#content-edit-detail #neurologis_tidak_diperiksa").on('change', function() {
+                $("#content-edit-detail #neurologis_tidak_diperiksa").on('change', function () {
                     const isChecked = $(this).is(':checked');
                     let neorologisBdnIsChecked = $("#content-edit-detail #ekg_bdn").is(':checked');
                     if (isChecked) {
@@ -1064,7 +1063,7 @@
                     }
                 })
 
-                $("#content-edit-detail #neurologis_bdn").on('change', function() {
+                $("#content-edit-detail #neurologis_bdn").on('change', function () {
                     const isChecked = $(this).is(':checked');
                     let neorologisIsChecked = $("#content-edit-detail #neurologis_tidak_diperiksa").is(
                         ':checked');
@@ -1084,50 +1083,50 @@
 
 
 
-</script>
-<script>
+    </script>
+    <script>
 
 
-    $('#nilai_normal').click(function (e) {
+        $('#nilai_normal').click(function (e) {
 
-        $('#keadaanUmum').val('Compost Mentis');
-        $('#normokepala').prop('checked', true);
-        $('#kepala').val('Normochepal');
-        $('#pupil').val('ISOKOR');
-        $('#buta_warna').val('NORMAL');
-        $('#telinga2').val('Normal');
-        $('#tonsiltenggorokan').prop('checked', true);
-        $('#tenggorokan').val('TAK');
-        $('#faring').val('Tidak Hiperemis');
-        $('#leher_kgb').val('PEMBESARAN -');
-        $('#leher_jvp').val('MENINGKAT -');
-        $('#fisik_jantung_auskultasi').val('BJ I + BJ II Normal');
-        $('#fisik_jantung_perkusi').val('Sonor'); //DALL
-        $('#fisik_paru_inspeksi').val('Pergerakan Dada Simetris');
-        $('#fisik_jantung_palpasi').val('IC Teraba'); //
-        $('#fisik_paru_perkusi').val('Sonor');
-        $('#fisik_abdomen_inspeksi').val('Supel');
-        $('#fisik_abdomen_auskultasi').val('Bising usus Normal');
-        $('#fisik_abdomen_perkusi').val('Timpani');
-        var pemEkg = "0";
-        if (pemEkg == 1) {
-            $('#fisekgfisik_ekg').prop('checked', false);
-            $('#fisekg2fisik_ekg').prop('checked', true);
-            $('#fisik_ekg').val('DBN');
-        } else {
-            $('#fisekgfisik_ekg').prop('checked', true);
-            $('#fisekg2fisik_ekg').prop('checked', false);
-        }
+            $('#keadaanUmum').val('Compost Mentis');
+            $('#normokepala').prop('checked', true);
+            $('#kepala').val('Normochepal');
+            $('#pupil').val('ISOKOR');
+            $('#buta_warna').val('NORMAL');
+            $('#telinga2').val('Normal');
+            $('#tonsiltenggorokan').prop('checked', true);
+            $('#tenggorokan').val('TAK');
+            $('#faring').val('Tidak Hiperemis');
+            $('#leher_kgb').val('PEMBESARAN -');
+            $('#leher_jvp').val('MENINGKAT -');
+            $('#fisik_jantung_auskultasi').val('BJ I + BJ II Normal');
+            $('#fisik_jantung_perkusi').val('Sonor'); //DALL
+            $('#fisik_paru_inspeksi').val('Pergerakan Dada Simetris');
+            $('#fisik_jantung_palpasi').val('IC Teraba'); //
+            $('#fisik_paru_perkusi').val('Sonor');
+            $('#fisik_abdomen_inspeksi').val('Supel');
+            $('#fisik_abdomen_auskultasi').val('Bising usus Normal');
+            $('#fisik_abdomen_perkusi').val('Timpani');
+            var pemEkg = "0";
+            if (pemEkg == 1) {
+                $('#fisekgfisik_ekg').prop('checked', false);
+                $('#fisekg2fisik_ekg').prop('checked', true);
+                $('#fisik_ekg').val('DBN');
+            } else {
+                $('#fisekgfisik_ekg').prop('checked', true);
+                $('#fisekg2fisik_ekg').prop('checked', false);
+            }
 
-        $('#fisekg2neurologis').prop('checked', true);
-        $('#neurologis').val('DBN');
-        $('#pemeriksa_fisik').val('dr. Dini Desti Susanti');
-        $('#cu_fisik_p').prop('checked', true);
-        $('#u_fisik_p').val('1');
-        $('#cu_fisik').prop('checked', true);
-        $('#u_fisik').val('1');
+            $('#fisekg2neurologis').prop('checked', true);
+            $('#neurologis').val('DBN');
+            $('#pemeriksa_fisik').val('dr. Dini Desti Susanti');
+            $('#cu_fisik_p').prop('checked', true);
+            $('#u_fisik_p').val('1');
+            $('#cu_fisik').prop('checked', true);
+            $('#u_fisik').val('1');
 
-    });
+        });
 
-</script>
+    </script>
 @endsection
