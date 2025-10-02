@@ -2,23 +2,41 @@
 @php
 function getAgeInYearsMonthsDays($birthDate)
 {
-// Mengubah string tanggal lahir ke objek Carbon
-$birthDate = Carbon\Carbon::parse($birthDate);
-$currentDate = Carbon\Carbon::now();
+    // Mengubah string tanggal lahir ke objek Carbon
+    $birthDate = Carbon\Carbon::parse($birthDate);
+    $currentDate = Carbon\Carbon::now();
 
-// Hitung selisih dalam tahun, bulan, dan hari
-$diffYears = $birthDate->diffInYears($currentDate);
-$diffMonths = $birthDate->copy()->addYears($diffYears)->diffInMonths($currentDate);
-$diffDays = $birthDate->copy()->addYears($diffYears)->addMonths($diffMonths)->diffInDays($currentDate);
+    // Hitung selisih dalam tahun, bulan, dan hari
+    $diffYears = $birthDate->diffInYears($currentDate);
+    $diffMonths = $birthDate->copy()->addYears($diffYears)->diffInMonths($currentDate);
+    $diffDays = $birthDate->copy()->addYears($diffYears)->addMonths($diffMonths)->diffInDays($currentDate);
 
-// Bulatkan hasil
-$roundedYears = floor($diffYears);
-$roundedMonths = floor($diffMonths);
-$roundedDays = floor($diffDays);
+    // Bulatkan hasil
+    $roundedYears = floor($diffYears);
+    $roundedMonths = floor($diffMonths);
+    $roundedDays = floor($diffDays);
 
-// Format hasilnya
+    // Format hasilnya
 return "{$roundedYears} Tahun {$roundedMonths} Bulan {$roundedDays} Hari";
 }
+
+$map = [
+    'plan_u' => 'U',
+    'plan_a' => 'A',
+    'plan_e' => 'E',
+    'plan_s' => 'S',
+    'plan_r' => 'R',
+];
+
+
+$result = collect($participant->toArray())
+    ->filter(fn($val, $key) => $val == 1 && isset($map[$key])) // hanya key yang ada di $map dan bernilai 1
+    ->keys()
+    ->map(fn($key) => $map[$key])
+    ->implode(' + ');
+
+echo $result;
+
 @endphp
 
 <head>
@@ -63,7 +81,7 @@ return "{$roundedYears} Tahun {$roundedMonths} Bulan {$roundedDays} Hari";
         <tr>
             <td>
                 <div class="qr-code">
-                    <img src="{{ asset('logo.png') }}" alt="Logo Perusahaan" width="60" height="">
+                    <img src="{{ public_path('logo.png') }}" alt="Logo Perusahaan" width="60" height="">
                 </div>
             </td>
             <td style="text-align: center">
@@ -72,7 +90,7 @@ return "{$roundedYears} Tahun {$roundedMonths} Bulan {$roundedDays} Hari";
                 <span style="font-size:17px">{{ $participant->register_number }}</span>
             </td>
             <td style="text-align: center">
-                <span style="font-size:10px">MCU ID</span>
+                <span style="font-size:10px">MCU ID  af</span>
                 <br>
                 <span style="font-size:17px">{{ $participant->code }}</span>
             </td>
@@ -112,60 +130,60 @@ return "{$roundedYears} Tahun {$roundedMonths} Bulan {$roundedDays} Hari";
         </tr>
     </table>
     <table>
-        <td><img src="{{ asset('register-transformed.jpg') }}" width="100%" alt=""></td>
+        <td><img src="{{ public_path('register-transformed.jpg') }}" width="100%" alt=""></td>
     </table>
-    Paket MCU:
-    <table style="width: 100%; border-collapse: collapse; font-size:10px; border: 1px solid black;">
-        <tr style="border: 1px solid black;">
-            <td style="border: 1px solid black;">
-                {{ $participant->tandaVital?->selesai ? 'SELESAI' : 'BELUM' }}
-                <br>
-                Tanda Vital
-            </td>
-            <td style="border: 1px solid black;">
-                {{ $participant->pemeriksaanFisik?->selesai ? 'SELESAI'
-                : 'BELUM' }} <br>
-                Pemeriksaan Fisik
+    Paket MCU: 
+        {{ collect([
+            'U' => $participant->plan_u,
+            'A' => $participant->plan_a,
+            'E' => $participant->plan_e,
+            'S' => $participant->plan_s,
+            'R' => $participant->plan_r,
+        ])->filter()->keys()->implode(' + ') }}
+        <table style="width: 100%; border-collapse: collapse; font-size:10px; border: 1px solid black; text-align:center; table-layout: fixed;">
+            <tr style="border: 1px solid black;">
+                <td style="border: 1px solid black; vertical-align: middle; width:16.66%;">
+                    {{ $participant->tandaVital?->selesai ? 'SELESAI' : '' }}
+                    <br>
+                    Tanda Vital
+                    <br><br>                    <br>
                 </td>
-            <td style="border: 1px solid black;">
-                {{ $participant->pemeriksaanFisik?->selesai ? 'SELESAI'
-                : 'BELUM' }} <br>
-               Visus
+                <td style="border: 1px solid black; vertical-align: middle; width:16.66%;">
+                    {{ $participant->pemeriksaanFisik?->selesai ? 'SELESAI' : '' }} 
+                    <br>Pemeriksaan Fisik
+                    <br><br>                    <br>
                 </td>
-            <td style="border: 1px solid black;">
-                {{ $participant->laboratorium?->selesai ? 'SELESAI' : 'BELUM' }} <br> Laboratorium
-            </td>
-            <td style="border: 1px solid black;">
-                {{ $participant->radiologi?->selesai ? 'SELESAI' :
-                'BELUM' }} <br>
-                Radiologi
-            </td>
-            {{-- <td style="border: 1px solid black;">{{ $participant->audiometri?->selesai ? 'SELESAI' : 'BELUM' }}
-                <br>
-                Audiometri
-            </td>
-            <td style="border: 1px solid black;">{{ $participant->spirometri?->selesai ? 'SELESAI' : 'BELUM' }}
-                <br>Spiro
-            </td>
-            <td style="border: 1px solid black;">{{ $participant->rectal?->selesai ? 'SELESAI' : 'BELUM' }} <br>
-                Rectal
-            </td>
-            <td style="border: 1px solid black;">
-                {{ $participant->ekg?->selesai ? 'SELESAI' : 'BELUM'}} <br>
-                EKG
-            </td>
-            --}}
-            <td style="border: 1px solid black;">Konsultasi Ya/Tidak</td>
-             <td style="text-align: center;border: 1px solid black;">
-                Tanda Tangan Peserta
-                <br>
-                <br>
-                <br>
-                <br>
-                {{ $participant->name }}
-            </td>
-        </tr>
-    </table>
+                <td style="border: 1px solid black; vertical-align: middle; width:16.66%;">
+                    {{ $participant->pemeriksaanFisik?->selesai ? 'SELESAI' : '' }} 
+                    <br>Visus
+                    <br><br>                    <br>
+                </td>
+                <td style="border: 1px solid black; vertical-align: middle; width:16.66%;">
+                    {{ $participant->laboratorium?->selesai ? 'SELESAI' : '' }} 
+                    <br>Laboratorium
+                    <br><br>                    <br>
+                </td>
+                <td style="border: 1px solid black; vertical-align: middle; width:16.66%;">
+                    {{ $participant->radiologi?->selesai ? 'SELESAI' : '' }} 
+                    <br>Radiologi
+                    <br><br>                    <br>
+                </td>
+                @if ($participant->plan_r)
+                    <td style="border: 1px solid black; vertical-align: middle; width:16.66%;">
+                        {{ $participant->rectal?->selesai ? 'SELESAI' : '' }} 
+                        <br>Rectal
+                        <br><br>                    <br>
+                    </td>
+                @endif
+                <td style="border: 1px solid black; vertical-align: middle; width:16.66%;">
+                    <br><br>
+                    Konsultasi Ya/Tidak
+                    <br><br>                    <br>
+                </td>
+            </tr>
+        </table>
+
+
 </body>
 
 </html>
