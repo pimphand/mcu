@@ -90,7 +90,7 @@ echo $result;
                 <span style="font-size:17px">{{ $participant->register_number }}</span>
             </td>
             <td style="text-align: center">
-                <span style="font-size:10px">MCU ID  af</span>
+                <span style="font-size:10px">MCU ID</span>
                 <br>
                 <span style="font-size:17px">{{ $participant->code }}</span>
             </td>
@@ -118,7 +118,7 @@ echo $result;
         </tr>
         <tr>
             <td style="text-align: left;">TGL LAHIR</td>
-            <td style="text-align: left;">: {{ $participant->birthday ?? "-" }}</td>
+            <td style="text-align: left;">: {{ date('d-m-Y', strtotime($participant->birthday)) ?? "-" }}</td>
             <td style="text-align: left;">NAMA DEPT</td>
             <td style="text-align: left;">: {{ $participant->department?->name }}</td>
         </tr>
@@ -126,7 +126,7 @@ echo $result;
             <td style="text-align: left;">USIA</td>
             <td style="text-align: left;">: {{ getAgeInYearsMonthsDays($participant->birthday) }}</td>
             <td style="text-align: left;">TGL REGISTRASI</td>
-            <td style="text-align: left;">: {{ $participant->register_date }}</td>
+            <td style="text-align: left;">: {{ date('d-m-Y', strtotime($participant->register_date)) }}</td>
         </tr>
     </table>
     <table>

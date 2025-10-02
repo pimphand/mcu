@@ -94,11 +94,11 @@ Kab.  Sukabumi (0266) 6545065</p>
                                 <td>{{ \Carbon\Carbon::parse($participant->birthday)->diff(\Carbon\Carbon::now())->format('%y tahun %m bulan  %d hari') }}
                                 </td>
                             </tr>
-                            <tr>
+                            {{-- <tr>
                                 <td>Status</td>
                                 <td>:</td>
                                 <td>{{ $participant->status ?? "-"}}</td>
-                            </tr>
+                            </tr> --}}
                             <tr>
                                 <td>Department</td>
                                 <td>:</td>
@@ -107,12 +107,12 @@ Kab.  Sukabumi (0266) 6545065</p>
                             <tr>
                                 <td>Paket MCU</td>
                                 <td>:</td>
-                                <td>{{ $participant->packet_name }}</td>
+                                <td>{{ $participant->plan_name }}</td>
                             </tr>
                             <tr>
                                 <td>Tgl Register</td>
                                 <td>:</td>
-                                <td>{{ $participant->register_date }}</td>
+                                <td>{{ date('d-m-Y', strtotime($participant->register_date)) }}</td>
                             </tr>
                         </tbody>
                     </table>

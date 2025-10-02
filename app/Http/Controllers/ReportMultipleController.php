@@ -47,18 +47,33 @@ class ReportMultipleController extends Controller
     {
         $start = intval(request('start', 1)); // Mulai dari item pertama secara default
         $end = intval(request('end', 50));
-
+       
         $data = QueryBuilder::for(Participant::class)
-
             ->allowedFilters([
                 AllowedFilter::exact('client_id'),
                 AllowedFilter::exact('divisi_id'),
                 AllowedFilter::exact('contract_id'),
                 AllowedFilter::scope('date_range'),
             ])
+            ->whereBetween('no_form', [$start, $end])
+            ->where('contract_id', $request->session()->get('contract_id'))
             ->get();
-
         $pdf = Pdf::loadView('pages.report.multiple.identitas', compact('data'));
+        
+        $pdf->setOption('isHtml5ParserEnabled', true);
+        $pdf->setOption('isRemoteEnabled', true);
+
+        $pdf->output(); 
+        $domPdf = $pdf->getDomPDF();
+        $canvas = $domPdf->getCanvas();
+        $canvas->page_script(function ($pageNumber, $pageCount, $canvas, $fontMetrics) {
+            $text = "No Form $pageNumber";
+            $font = $fontMetrics->get_font("Helvetica", "normal");
+            $size = 4;
+            $width = $fontMetrics->get_text_width($text, $font, $size);
+            $canvas->text($canvas->get_width() - $width - 20, $canvas->get_height() - 20, $text, $font, $size);
+        });
+
 
         return $pdf->stream(sprintf('%s-%s.pdf', "print-stiker", $start . '-' . $end));
     }
