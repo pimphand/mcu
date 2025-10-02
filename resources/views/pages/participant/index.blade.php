@@ -130,7 +130,7 @@
                                 <td>{{ $item->plan_s }}</td>
                                 <td>{{ $item->plan_r }}</td>
                                 <td>{{ $item->lab_special }}</td>
-                                <td>{{ $item->packet_name }}</td>
+                                <td>{{ $item->plan_name }}</td>
                             </tr>
                         @endforeach
                     </tbody>
