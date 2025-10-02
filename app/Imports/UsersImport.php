@@ -25,7 +25,7 @@ use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithStartRow;
 
-class UsersImport implements ToModel, WithStartRow, WithChunkReading, ShouldQueue
+class UsersImport implements ToModel, WithStartRow, WithChunkReading //, ShouldQueue
 {
 
     protected $userId;
@@ -68,6 +68,12 @@ class UsersImport implements ToModel, WithStartRow, WithChunkReading, ShouldQueu
             ]);
 
             $participantService = new  ParticipantService;
+            $plans = ['U', 'A', 'E', 'S', 'R'];
+            $selected = [];
+            if (!empty($row[6])) {
+                $selected = array_map('trim', explode('+', $row[6]));
+            }
+
             $data = [
                 'nik' => $row[1],
                 'name' => $row[2],
@@ -76,28 +82,32 @@ class UsersImport implements ToModel, WithStartRow, WithChunkReading, ShouldQueu
                 'phone' => '',
                 'status' => '',
                 'packet_name' => '',
-                'packet_a' => '',
-                'packet_b' => '',
-                'packet_c' => '',
-                'packet_d' => '',
-                'packet_e' => '',
-                'packet_f' => '',
-                'plan_name' => '',
-                'plan_u' => '',
-                'plan_a' => '',
-                'plan_e' => '',
-                'plan_s' => '',
-                'plan_r' => '',
-                'lab_special' => '',
+                'packet_a' => false,
+                'packet_b' => false,
+                'packet_c' => false,
+                'packet_d' => false,
+                'packet_e' => false,
+                'packet_f' => false,
+                'plan_name' => $row[6],
+                'plan_u' => false,
+                'plan_a' => false,
+                'plan_e' => false,
+                'plan_s' => false,
+                'plan_r' => false,
+                'lab_special' => false,
                 'divisi_id' => $devisi->id,
                 'department_id' => $departemen->id,
                 'client_id' => Session::get('client_id'),
                 'contract_id' => Session::get('contract_id'),
                 'no_form' => (int)$row[0],
             ];
-            // dd($data);
+
+            foreach ($plans as $p) {
+
+                $data['plan_' . strtolower($p)] = in_array($p, $selected) ? 1 : 0;
+            }
+
             $user = $this->userId;
-            $data = $participantService->mapingPaket($data);
             $data['code'] = sprintf('%s%s', "MCU", str_pad((int)$row[0], 5, '0', STR_PAD_LEFT));
             $data['created_by'] = $user;
             $insert = Participant::updateOrCreate([
