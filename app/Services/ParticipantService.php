@@ -413,6 +413,7 @@ class ParticipantService
         $data['tenggorokan'] = isset($data['tenggorokan']) ? 1 : 0;
         $data['visus_diperiksa'] = isset($data['visus_diperiksa']) ? 1 : 0;
         $data['selesai'] = isset($data['selesai']) ? 1 : 0;
+        $data['berkacamata'] = isset($data['berkacamata']) ? 1 : 0;
 
         // Use updateOrCreate to find by participant_id and update or create accordingly
         $pemeriksaanFisik = PemeriksaanFisik::updateOrCreate(

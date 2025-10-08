@@ -291,6 +291,7 @@ class ParticipantController extends Controller
             'rectal_diperiksa' => '',
             'kesimpulan' => '',
             'saran' => '',
+            'berkacamata' => '',
         ]);
         return $this->participantService->updatePemeriksaanFisik($data, $id);
     }

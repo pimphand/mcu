@@ -115,13 +115,14 @@
             </tr>
         </thead>
         <tbody style="font-size:12px">
-            <tr>
+            @if($tandaVital)
+                <tr>
                 <td colspan="2" class="border">TANDA VITAL</td>
             </tr>
             <tr>
                 <td class="border">Keluhan Utama</td>
                 <td class="border text-center">
-                    {{ $tandaVital->keluhan_utama_text }}</td>
+                    {{ $tandaVital->keluhan_utama_text ? $tandaVital->keluhan_utama_text : '-' }}</td>
 
             </tr>
             <tr>
@@ -225,6 +226,7 @@
                 <td class="border text-center">
                     {{ $tandaVital->vaksin_tetanus ? 'YA' : 'TIDAK' }}</td>
             </tr> --}}
+            @endif
             <tr>
                 <td colspan="2" class="border">KEADAAN UMUM</td>
             </tr>
@@ -261,6 +263,13 @@
                 <td class="border text-center">
                     {{ $pemeriksaanFisik->visus }}</td>
             </tr>
+            @if ($pemeriksaanFisik->berkacamata)
+                <tr>
+                    <td class="border">Berkacamata</td>
+                    <td class="border text-center">
+                        {{ $pemeriksaanFisik->berkacamata ? 'YA' : 'TIDAK' }}</td>
+                </tr>
+            @endif
             <tr>
                 <td class="border">Buta Warna</td>
                 <td class="border text-center">
@@ -543,7 +552,7 @@
                                 <td class="text-center">
                                     <br>
 
-                                    <img src="{{ asset($pemeriksaanFisik->employee?->ttd) }}" width="150"
+                                    <img src="{{ public_path($pemeriksaanFisik->employee?->ttd) }}" width="150"
                                         alt="img" alt="img">
                                 </td>
                             </tr>

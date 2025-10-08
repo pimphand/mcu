@@ -49,13 +49,21 @@
                 <input type="text" name="kepala_text" id="kepala_text" class="form-control" value="{{ $pemeriksaanFisik?->kepala_text }}">
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-1">
+            <div class="form-group">
+                <label class="form-check-label h-3 fw-bold" for="">Berkacamata  &nbsp;</label><br>
+                <div class="form-check form-check-success form-switch ml-2">
+                    <input type="checkbox" name="berkacamata" class="form-check-input" id="berkacamata" {{ $pemeriksaanFisik?->berkacamata ? 'checked' : null }} />
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
             <div class="form-group">
                 <label class="form-label" for="">Hidung</label>
                 <input type="text" name="hidung" id="hidung" class="form-control" value="{{ $pemeriksaanFisik?->hidung }}">
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-2">
             <div class="form-group">
                 <label class="form-label" for="">Mata</label>
                 <input type="text" name="mata" id="mata" class="form-control" value="{{ $pemeriksaanFisik?->mata }}">
@@ -79,6 +87,7 @@
                 <label class="form-label" for="">Visus</label>
                 <input type="text" name="visus" id="visus" class="form-control" value="{{ $pemeriksaanFisik?->visus }}">
             </div>
+            
         </div>
         <div class="col-md-3">
             <div class="form-group">
