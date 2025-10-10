@@ -156,7 +156,7 @@
 
             </tr>
             <tr>
-                <td class="borde$pemeriksaanFisikr">Riwayat Trauma</td>
+                <td class="border">Riwayat Trauma</td>
                 <td class="border text-center">
                     {{ $tandaVital->riwayat_trauma_text }}</td>
 
@@ -535,12 +535,14 @@
             </tr>
         </tbody>
     </table>
-    <table style="margin-top: 10px;">
+    <table style="margin-top: 10px; width: 100%;">
         <tbody>
             <tr>
-                <td style="width: 50%;"></td>
-                <td>
-                    <table>
+                <td style="width: 50%; text-align: left; vertical-align: bottom;">
+                    <span style="font-size: 12px;">{{ $participant->code }}</span>
+                </td>
+                <td style="width: 50%; text-align: right;">
+                    <table style="float: right;">
                         <tbody>
                             <tr>
                                 <td class="text-center">{{ config('app.city') }}, {{ now()->format('d M Y') }}</td>
@@ -551,9 +553,8 @@
                             <tr>
                                 <td class="text-center">
                                     <br>
-
                                     <img src="{{ public_path($pemeriksaanFisik->employee?->ttd) }}" width="150"
-                                        alt="img" alt="img">
+                                        alt="img">
                                 </td>
                             </tr>
                             <tr>
@@ -565,6 +566,8 @@
             </tr>
         </tbody>
     </table>
+
+   
 </body>
 
 </html>
