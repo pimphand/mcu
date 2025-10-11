@@ -79,7 +79,7 @@ class UploadFileController extends Controller
             'fileExcel' => 'required|mimes:xlsx,xls'
         ]);
 
-        Excel::queueImport(new RadiologiImport(Session::get('client_id')), $request->file('fileExcel'));
+        Excel::Import(new RadiologiImport(Session::get('client_id')), $request->file('fileExcel'));
 
         return ['status' => 'success'];
     }

@@ -163,7 +163,7 @@
                             </tr>
                             <tr>
                                 <td class="text-center">
-                                    <img src="{{ asset($radiologi->employee?->ttd ? $radiologi->employee?->ttd : 'images/ttd-kosong.png') }}" width="100"
+                                    <img src="{{ public_path($radiologi->employee?->ttd ? $radiologi->employee?->ttd : 'images/ttd-kosong.png') }}" width="100"
                                         alt="img" alt="img">
                                 </td>
                             </tr>

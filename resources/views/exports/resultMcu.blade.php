@@ -7,12 +7,12 @@
                                   <th class="border-bottom textkecil border-top">MCU ID</th>
                                   <th class="border-bottom textkecil border-top">NIK</th>
                                   <th class="border-bottom textkecil border-top">Nama</th>
-                                    <th class="border-bottom textkecil border-top">Tgl Lahir</th>
+                                  <th class="border-bottom textkecil border-top">Tgl Lahir</th>
                                   <th class="border-bottom textkecil border-top">JK</th>
                                   <th class="border-bottom textkecil border-top">Dept</th>
                                   <th class="border-bottom textkecil border-top">Bagian/ Unit</th>
                                   <th class="border-bottom textkecil border-top">Perusahaan</th>
-								   <th class="border-bottom textkecil border-top">Gedung</th>
+								                  <th class="border-bottom textkecil border-top">Gedung</th>
                                   <th class="border-bottom textkecil border-top">Paket MCU</th>
                                   <th class="border-bottom textkecil border-top">TTV </th>
                                   <th class="border-bottom textkecil border-top">Keluhan Utama</th>
@@ -39,6 +39,7 @@
                                   <th class="border-bottom textkecil border-top">Bibir</th>
                                   <th class="border-bottom textkecil border-top">Lidah</th>
                                   <th class="border-bottom textkecil border-top">Visus</th>
+                                  <th class="border-bottom textkecil border-top">Berkacamata</th>
                                   <th class="border-bottom textkecil border-top">Tenggorokan</th>
                                   <th class="border-bottom textkecil border-top">Faring</th>
                                   <th class="border-bottom textkecil border-top">Buta Warna</th>
@@ -187,6 +188,7 @@
                             <td nowrap="">{{ $item->pemeriksaanFisik?->bibir }}</td>
                             <td nowrap="">{{ $item->pemeriksaanFisik?->lidah }}</td>
                             <td nowrap="">{{ $item->pemeriksaanFisik?->visus }}</td>
+                            <td nowrap="">{{ $item->pemeriksaanFisik?->berkacamata ? 'YA' : 'TIDAK' }}</td>
                             <td nowrap="">{{ $item->pemeriksaanFisik?->tenggorokan_text }}</td>
                             <td nowrap="">{{ $item->pemeriksaanFisik?->faring }}</td>
                             <td nowrap="">{{ $item->pemeriksaanFisik?->buta_warna }}</td>

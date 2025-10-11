@@ -5,7 +5,6 @@ namespace App\Imports;
 use App\Events\ImportCompleted;
 use App\Models\Participant;
 use App\Models\Radiologi;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Event;
 use Maatwebsite\Excel\Concerns\Importable;
 use Maatwebsite\Excel\Concerns\RegistersEventListeners;
@@ -14,7 +13,7 @@ use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithStartRow;
 
-class RadiologiImport implements ToModel, WithStartRow, WithChunkReading, WithHeadingRow, ShouldQueue
+class RadiologiImport implements ToModel, WithStartRow, WithChunkReading, WithHeadingRow
 {
     use Importable, RegistersEventListeners;
     protected  $client_id;
@@ -31,6 +30,7 @@ class RadiologiImport implements ToModel, WithStartRow, WithChunkReading, WithHe
         if ($row['no_mcu'] != null) {
             $unixTimestamp = ($row['tgl_mcu'] - 25569) * 86400;
             $formattedDate = date("Y-m-d H:i:s", $unixTimestamp - 7 * 3600);
+            $participant = Participant::where('code', $row['no_mcu'])->where('contract_id',9)->first();
             $data = [
                 'date_mcu' => $formattedDate ?? null, // Date can be processed later if needed
                 'nama' => $row['nama'] ?? null,
@@ -43,7 +43,7 @@ class RadiologiImport implements ToModel, WithStartRow, WithChunkReading, WithHe
                 'selesai' => 1,
                 'employee_id' => 3,
             ];
-            $participant = Participant::where('code', $row['no_mcu'])->first();
+            
             if ($participant) {
                 Radiologi::updateOrCreate([
                     'participant_id' => $participant->id
@@ -67,21 +67,9 @@ class RadiologiImport implements ToModel, WithStartRow, WithChunkReading, WithHe
         return 1; // Set the heading row to row 6
     }
 
-    public function onImportComplete()
+    public function afterImport()
     {
         // Kirim notifikasi setelah semua data diproses
         Event::dispatch(new ImportCompleted($this->client_id));
-    }
-
-    public function onQueueComplete()
-    {
-        // Trigger this method when the queue processing is done
-        $this->onImportComplete();
-    }
-
-    public function afterImport()
-    {
-        // Trigger this method after the import job is done
-        $this->onImportComplete();
     }
 }
