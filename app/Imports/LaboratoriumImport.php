@@ -69,7 +69,9 @@ class LaboratoriumImport implements ToModel, WithStartRow, WithChunkReading, Wit
                 "hbsag" => $row['hbsag'] ?? null,
                 "selesai" => 1,
             ];
-            $pemeriksaan = Participant::with('laboratorium')->where('no_form', $row['no_form'] ?? null)->orWhere('code', $row['code'])->first();
+          
+            $pemeriksaan = Participant::with('laboratorium')->where('code', $row['code'])->where('contract_id',Session::get('client_id'))->first();
+           
             if ($pemeriksaan) {
                 $pemeriksaan->laboratorium()->updateOrCreate(['participant_id' => $pemeriksaan->id], $data);
             }

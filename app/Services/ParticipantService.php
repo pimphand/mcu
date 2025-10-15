@@ -468,7 +468,7 @@ class ParticipantService
 
     public function getClient()
     {
-        return Client::with('contracts', 'divisi')->find(\Session::get('client_id'));
+        return Client::with('contracts', 'divisi')->find(Session::get('client_id'));
     }
     public function getJK(): array
     {

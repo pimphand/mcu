@@ -205,8 +205,8 @@
             });
         });
         $('#cari').click(function (e){
-            let url = "{{ route('upload.laboratorium') }}"
-            url = url + "?date_range="+ $('#fp-range').val()+`&client_id=${$('#client_id').val()}`;
+            let url = "{{ route('get.laboratorium') }}"
+            url = url + "?date_range="+ $('#fp-range').val()+`&client_id={{Session::get('client_id')}}`;
             $.ajax({
                 url: url,  // URL untuk mengirim data
                 type: 'get',
@@ -217,49 +217,49 @@
                     var tableRows = '';
 
                     // Iterasi data lab
-                    $.each(labData, function(index, item) {
+                    $.each(response, function(index, item) {
                         tableRows += `<tr>
                             <td class="border-bottom border-top text-right">${index + 1}</td>
                             <td class="border-bottom border-top text-right">${item.date_mcu}</td>
                             <td class="border-bottom border-top">${item.participant.code}</td>
                             <td class="border-bottom border-top">${item.participant.name}</td>
-                            <td class="border-bottom border-top">${item.hemoglobin}</td>
-                            <td class="border-bottom border-top">${item.hematokrit}</td>
-                            <td class="border-bottom border-top">${item.lekosit}</td>
-                            <td class="border-bottom border-top">${item.trombosit}</td>
-                            <td class="border-bottom border-top">${item.eritrosit}</td>
-                            <td class="border-bottom border-top">${item.basofil}</td>
-                            <td class="border-bottom border-top">${item.eosinofil}</td>
-                            <td class="border-bottom border-top">${item.nbatang}</td>
-                            <td class="border-bottom border-top">${item.nsegmen}</td>
-                            <td class="border-bottom border-top">${item.limfosit}</td>
-                            <td class="border-bottom border-top">${item.monosit}</td>
-                            <td class="border-bottom border-top">${item.sgpt}</td>
-                            <td class="border-bottom border-top">${item.creatinin}</td>
-                            <td class="border-bottom border-top">${item.glukosa_puasa}</td>
-                            <td class="border-bottom border-top">${item.cholesterol_total}</td>
-                            <td class="border-bottom border-top">${item.asam_urat}</td>
-                            <td class="border-bottom border-top">${item.sgot}</td>
-                            <td class="border-bottom border-top">${item.ureum}</td>
-                            <td class="border-bottom border-top">${item.berat_jenis}</td>
-                            <td class="border-bottom border-top">${item.ph_reaksi}</td>
-                            <td class="border-bottom border-top">${item.warna}</td>
-                            <td class="border-bottom border-top">${item.kekeruhan}</td>
-                            <td class="border-bottom border-top">${item.urobilinogen}</td>
-                            <td class="border-bottom border-top">${item.bilirubin}</td>
-                            <td class="border-bottom border-top">${item.eritrosit_urine}</td>
-                            <td class="border-bottom border-top">${item.keton}</td>
-                            <td class="border-bottom border-top">${item.protein}</td>
-                            <td class="border-bottom border-top">${item.sedimen_epitel}</td>
-                            <td class="border-bottom border-top">${item.sedimen_eritrosit}</td>
-                            <td class="border-bottom border-top">${item.sedimen_leukosit}</td>
-                            <td class="border-bottom border-top">${item.sedimen_bakteri}</td>
-                            <td class="border-bottom border-top">${item.sedimen_kristal}</td>
-                            <td class="border-bottom border-top">${item.user_lab}</td>
-                            <td class="border-bottom border-top">${item.lab_date}</td>
-                            <td class="border-bottom border-top">${item.kesimpulan_lab}</td>
-                            <td class="border-bottom border-top">${item.pemeriksa_lab}</td>
-                            <td class="border-bottom border-top">${item.reduksi}</td>
+                            <td class="border-bottom border-top">${item.hemoglobin ?? "-"}</td>
+                            <td class="border-bottom border-top">${item.hematokrit ?? "-"}</td>
+                            <td class="border-bottom border-top">${item.lekosit ?? "-"}</td>
+                            <td class="border-bottom border-top">${item.trombosit ?? "-"}</td>
+                            <td class="border-bottom border-top">${item.eritrosit ?? "-"}</td>
+                            <td class="border-bottom border-top">${item.basofil ?? "-"}</td>
+                            <td class="border-bottom border-top">${item.eosinofil ?? "-"}</td>
+                            <td class="border-bottom border-top">${item.nbatang ?? "-"}</td>
+                            <td class="border-bottom border-top">${item.nsegmen ?? "-"}</td>
+                            <td class="border-bottom border-top">${item.limfosit ?? "-"}</td>
+                            <td class="border-bottom border-top">${item.monosit ?? "-"}</td>
+                            <td class="border-bottom border-top">${item.sgpt ?? "-"}</td>
+                            <td class="border-bottom border-top">${item.creatinin ?? "-"}</td>
+                            <td class="border-bottom border-top">${item.glukosa_puasa ?? "-"}</td>
+                            <td class="border-bottom border-top">${item.cholesterol_total ?? "-"}</td>
+                            <td class="border-bottom border-top">${item.asam_urat ?? "-"}</td>
+                            <td class="border-bottom border-top">${item.sgot ?? "-"}</td>
+                            <td class="border-bottom border-top">${item.ureum ?? "-"}</td>
+                            <td class="border-bottom border-top">${item.berat_jenis ?? "-"}</td>
+                            <td class="border-bottom border-top">${item.ph_reaksi ?? "-"}</td>
+                            <td class="border-bottom border-top">${item.warna ?? "-"}</td>
+                            <td class="border-bottom border-top">${item.kekeruhan ?? "-"}</td>
+                            <td class="border-bottom border-top">${item.urobilinogen ?? "-"}</td>
+                            <td class="border-bottom border-top">${item.bilirubin ?? "-"}</td>
+                            <td class="border-bottom border-top">${item.eritrosit_urine ?? "-"}</td>
+                            <td class="border-bottom border-top">${item.keton ?? "-"}</td>
+                            <td class="border-bottom border-top">${item.protein ?? "-"}</td>
+                            <td class="border-bottom border-top">${item.sedimen_epitel ?? "-"}</td>
+                            <td class="border-bottom border-top">${item.sedimen_eritrosit ?? "-"}</td>
+                            <td class="border-bottom border-top">${item.sedimen_leukosit ?? "-"}</td>
+                            <td class="border-bottom border-top">${item.sedimen_bakteri ?? "-"}</td>
+                            <td class="border-bottom border-top">${item.sedimen_kristal ?? "-"}</td>
+                            <td class="border-bottom border-top">${item.user_lab ?? "-"}</td>
+                            <td class="border-bottom border-top">${item.lab_date ?? "-"}</td>
+                            <td class="border-bottom border-top">${item.kesimpulan_lab ?? "-"}</td>
+                            <td class="border-bottom border-top">${item.pemeriksa_lab ?? "-"}</td>
+                            <td class="border-bottom border-top">${item.reduksi ?? "-"}</td>
                         </tr>`;
                     });
 

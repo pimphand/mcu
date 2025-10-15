@@ -8,6 +8,7 @@ use App\Imports\LaboratoriumImport;
 use App\Imports\RadiologiImport;
 use App\Jobs\TestJob;
 use App\Models\Radiologi;
+use App\Models\Laboratorium;
 use App\Services\ParticipantService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
@@ -39,7 +40,13 @@ class UploadFileController extends Controller
     {
         $participantService = new ParticipantService();
         $client = $participantService->getClient();
+      
         return view('pages.upload.laboratorium', compact('client'));
+    }
+
+    public function getlaboratoriumData(Request $request)
+    {
+        return Laboratorium::with('participant')->where('contract_id', 9)->limit(10)->get();
     }
 
     public function laboratorium(Request $request)

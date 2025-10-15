@@ -128,6 +128,7 @@ Route::middleware('auth')->group(function () {
         Route::get('participant-upload-validasi-dokter', [\App\Http\Controllers\UploadFileController::class, 'getValidateDoctor'])->name('upload.validasi.dokter');
         Route::post('participant-upload-validasi-dokter', [\App\Http\Controllers\UploadFileController::class, 'validateDoctor']);
         Route::get('participant-upload-laboratorium', [\App\Http\Controllers\UploadFileController::class, 'getlaboratorium'])->name('upload.laboratorium');
+        Route::get('get-participant-upload-laboratorium', [\App\Http\Controllers\UploadFileController::class, 'getlaboratoriumData'])->name('get.laboratorium');
         Route::post('participant-upload-laboratorium', [\App\Http\Controllers\UploadFileController::class, 'laboratorium']);
         Route::get('participant-upload-radiologi', [\App\Http\Controllers\UploadFileController::class, 'getradiologi'])->name('upload.radiologi');
         Route::post('participant-upload-radiologi', [\App\Http\Controllers\UploadFileController::class, 'radiologi']);
