@@ -134,15 +134,15 @@ class RecapController extends Controller
                         $endDate = Carbon::parse($date[1])->endOfDay();
                     }
 
-                    $query->whereBetween('register_date', [$startDate, $endDate]);
+                    $query->whereBetween('participants.register_date', [$startDate, $endDate]);
                     if ($request->contract_id) {
-                        $query->where('contract_id', $request->contract_id);
+                        $query->where('participants.contract_id', $request->contract_id);
                     }
                     if ($request->divisi_id) {
-                        $query->where('divisi_id', $request->divisi_id);
+                        $query->where('participants.divisi_id', $request->divisi_id);
                     }
                     if ($request->client_id) {
-                        $query->where('client_id', $request->client_id);
+                        $query->where('participants.client_id', $request->client_id);
                     }
                 })
                 ->get();
