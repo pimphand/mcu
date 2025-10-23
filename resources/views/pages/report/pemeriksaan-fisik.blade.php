@@ -507,17 +507,17 @@
                 <tr>
                     <td class="border">Salmonella Thypi</td>
                     <td class="border text-center">
-                        {{ $participant->rectal?->salmonella_thypi ? 'DIPERIKSA' : 'TIDAK DIPERIKSA' }}</td>
+                        {{ $participant->rectal?->salmonella_thypi }}</td>
                 </tr>
                 <tr>
                     <td class="border">Shigella SP</td>
                     <td class="border text-center">
-                        {{ $participant->rectal?->shigella_sp ? 'DIPERIKSA' : 'TIDAK DIPERIKSA' }}</td>
+                        {{ $participant->rectal?->shigella_sp }}</td>
                 </tr>
                 <tr>
                     <td class="border">E. Coli Pathogen</td>
                     <td class="border text-center">
-                        {{ $participant->rectal?->e_coli_pathogen ? 'DIPERIKSA' : 'TIDAK DIPERIKSA' }}</td>
+                        {{ $participant->rectal?->e_coli_pathogen }}</td>
                 </tr>
             @endif
 
