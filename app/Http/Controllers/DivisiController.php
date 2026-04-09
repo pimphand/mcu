@@ -92,6 +92,8 @@ class DivisiController extends Controller
      */
     public function select2(Request $request)
     {
-        return $this->divisiService->paginate($request->get('limit', 10));
+        return \App\Models\Divisi::where('client_id', session('client_id'))
+            ->where('name', 'like', '%' . $request->get('search') . '%')
+            ->paginate(10)->withQueryString();
     }
 }

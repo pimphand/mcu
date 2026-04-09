@@ -92,6 +92,8 @@ class DepartmentController extends Controller
      */
     public function select2(Request $request)
     {
-        return $this->departmentService->paginate($request->get('limit', 10));
+        return \App\Models\Department::where('client_id', session('client_id'))
+            ->where('name', 'like', '%' . $request->get('search') . '%')
+            ->paginate(10)->withQueryString();
     }
 }
