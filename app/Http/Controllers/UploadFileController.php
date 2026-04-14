@@ -46,7 +46,7 @@ class UploadFileController extends Controller
 
     public function getlaboratoriumData(Request $request)
     {
-        return Laboratorium::with('participant')->where('contract_id', Session::get('client_id'))->limit(10)->get();
+        return Laboratorium::with('participant')->get();
     }
 
     public function laboratorium(Request $request)
