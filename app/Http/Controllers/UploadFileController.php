@@ -40,13 +40,13 @@ class UploadFileController extends Controller
     {
         $participantService = new ParticipantService();
         $client = $participantService->getClient();
-      
+
         return view('pages.upload.laboratorium', compact('client'));
     }
 
     public function getlaboratoriumData(Request $request)
     {
-        return Laboratorium::with('participant')->where('contract_id', 9)->limit(10)->get();
+        return Laboratorium::with('participant')->where('contract_id', Session::get('client_id'))->limit(10)->get();
     }
 
     public function laboratorium(Request $request)
