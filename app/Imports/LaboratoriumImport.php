@@ -6,6 +6,7 @@ use App\Models\Laboratorium;
 use App\Models\Participant;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Session;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
@@ -69,9 +70,9 @@ class LaboratoriumImport implements ToModel, WithStartRow, WithChunkReading, Wit
                 "hbsag" => $row['hbsag'] ?? null,
                 "selesai" => 1,
             ];
-          
-            $pemeriksaan = Participant::with('laboratorium')->where('code', $row['code'])->where('contract_id',Session::get('client_id'))->first();
-           
+
+            $pemeriksaan = Participant::with('laboratorium')->where('code', $row['code'])->where('contract_id', Session::get('client_id'))->first();
+
             if ($pemeriksaan) {
                 $pemeriksaan->laboratorium()->updateOrCreate(['participant_id' => $pemeriksaan->id], $data);
             }
