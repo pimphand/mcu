@@ -29,6 +29,7 @@ return "{$roundedYears} Tahun {$roundedMonths} Bulan {$roundedDays} Hari";
     <style>
         @page {
             size: 21cm 33cm;
+            margin: 1cm 1cm 1cm 2.5cm; /* top right bottom left */
         }
     </style>
     <style>

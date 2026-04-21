@@ -11,6 +11,12 @@
             width: 100%;
         }
 
+        @page {
+            size: 21cm 33cm;
+            margin: 1cm 1cm 1cm 2.5cm;
+            /* top right bottom left */
+        }
+
         .text-center {
             text-align: center;
         }
@@ -89,7 +95,7 @@
                             <tr>
                                 <td>Dept. ID</td>
                                 <td>:</td>
-                                                               <td>{{ $participant->divisi?->name }}</td>
+                                <td>{{ $participant->divisi?->name }}</td>
 
                             </tr>
                             <tr>
@@ -111,7 +117,8 @@
     @php
         $radiologi = $participant->radiologi;
     @endphp
-    <div class="text-center" style="font-size: 18px; width: 100%; margin-bottom: 10px; margin-top: 10px;">RADIOLOGI</div>
+    <div class="text-center" style="font-size: 18px; width: 100%; margin-bottom: 10px; margin-top: 10px;">RADIOLOGI
+    </div>
     <table style="border-collapse: collapse;">
         <thead>
             <tr>
@@ -123,25 +130,29 @@
             <tr>
                 <td class="border">COR</td>
                 <td class="border text-center">
-                    {!! $radiologi->cor !!}</td>
+                    {!! $radiologi->cor !!}
+                </td>
 
             </tr>
             <tr>
                 <td class="border">Diafragma Sinus </td>
                 <td class="border text-center">
-                    {!! $radiologi->diafragma_sinus !!}</td>
+                    {!! $radiologi->diafragma_sinus !!}
+                </td>
 
             </tr>
             <tr>
                 <td class="border">Pulmo</td>
                 <td class="border text-center">
-                    {!! $radiologi->pulmo !!}</td>
+                    {!! $radiologi->pulmo !!}
+                </td>
 
             </tr>
             <tr>
                 <td class="border">Kesan</td>
                 <td class="border text-center">
-                    {!! $radiologi->kesan !!}</td>
+                    {!! $radiologi->kesan !!}
+                </td>
 
             </tr>
         </tbody>
@@ -163,8 +174,8 @@
                             </tr>
                             <tr>
                                 <td class="text-center">
-                                    <img src="{{ public_path($radiologi->employee?->ttd ? $radiologi->employee?->ttd : 'images/ttd-kosong.png') }}" width="100"
-                                        alt="img" alt="img">
+                                    <img src="{{ public_path($radiologi->employee?->ttd ? $radiologi->employee?->ttd : 'images/ttd-kosong.png') }}"
+                                        width="100" alt="img" alt="img">
                                 </td>
                             </tr>
                             <tr>
