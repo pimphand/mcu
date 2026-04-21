@@ -13,6 +13,7 @@
 
         @page {
             size: 21cm 33cm;
+            margin: 1cm 1cm 1cm 2.5cm; /* top right bottom left */
         }
 
         .text-center {
@@ -553,8 +554,13 @@
                             <tr>
                                 <td class="text-center">
                                     <br>
-                                    <img src="{{ public_path($pemeriksaanFisik->employee?->ttd) }}" width="150"
-                                        alt="img">
+                                    @php
+                                        $ttdRelativePath = $pemeriksaanFisik->employee?->ttd;
+                                        $ttdAbsolutePath = $ttdRelativePath ? public_path($ttdRelativePath) : null;
+                                    @endphp
+                                    @if ($ttdAbsolutePath && is_file($ttdAbsolutePath))
+                                        <img src="{{ $ttdAbsolutePath }}" width="150" alt="img">
+                                    @endif
                                 </td>
                             </tr>
                             <tr>
@@ -567,7 +573,7 @@
         </tbody>
     </table>
 
-   
+
 </body>
 
 </html>
