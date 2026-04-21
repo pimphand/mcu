@@ -121,7 +121,7 @@ class ParticipantService
         }
 
         $query = $query->where('client_id', Session::get('client_id'));
-        return $query->orderBy('no_form', 'asc')->paginate($limit)->withQueryString();
+        return $query->orderBy('code', 'asc')->paginate($limit)->withQueryString();
     }
 
     public function create(array $data)

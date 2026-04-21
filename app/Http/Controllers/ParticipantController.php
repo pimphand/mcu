@@ -484,7 +484,7 @@ class ParticipantController extends Controller
                     AllowedFilter::exact('divisi_id'),
                     AllowedFilter::scope('date_range'),
                 ])
-                ->defaultSort('created_at')
+                ->defaultSort('code')
                 ->get();
         }
         return view('pages.participant.print-mcu', compact('client', 'data'));
