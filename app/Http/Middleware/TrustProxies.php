@@ -10,9 +10,12 @@ class TrustProxies extends Middleware
     /**
      * The trusted proxies for this application.
      *
+     * Aplikasi selalu berada di belakang reverse proxy (nginx di host /
+     * Cloudflare), jadi semua IP klien dianggap berasal dari proxy.
+     *
      * @var array<int, string>|string|null
      */
-    protected $proxies;
+    protected $proxies = '*';
 
     /**
      * The headers that should be used to detect proxies.
