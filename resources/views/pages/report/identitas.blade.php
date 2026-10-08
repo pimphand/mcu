@@ -33,7 +33,7 @@
         <tbody>
             <tr>
                 <td>
-                    <img src="{{ public_path('logo.png') }}" width="60" alt="img" alt="img">
+                    <img src="{{ public_path('logo-drdini.png') }}" width="60" alt="img" alt="img">
                 </td>
                 <td class="text-center">
                     <table>

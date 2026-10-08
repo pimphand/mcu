@@ -5,7 +5,7 @@
             <li class="nav-item me-auto"><a class="navbar-brand" href="{{ route('welcome.index') }}">
             <span
                         class="brand-logo">
-                        <img src="{{ asset('logo.png') }}" alt="" width="30">
+                        <img src="{{ asset('logo-drdini.png') }}" alt="" width="30">
                         </span>
                     <h2 class="brand-text">{{ config('app.name') }}</h2>
                 </a></li>

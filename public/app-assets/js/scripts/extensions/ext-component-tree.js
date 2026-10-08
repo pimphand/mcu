@@ -56,7 +56,7 @@ $(function () {
                 type: 'img'
               },
               {
-                text: 'logo.png',
+                text: 'logo-drdini.png',
                 type: 'img'
               },
               {
@@ -146,7 +146,7 @@ $(function () {
                 type: 'img'
               },
               {
-                text: 'logo.png',
+                text: 'logo-drdini.png',
                 type: 'img'
               },
               {
@@ -236,7 +236,7 @@ $(function () {
                 type: 'img'
               },
               {
-                text: 'logo.png',
+                text: 'logo-drdini.png',
                 type: 'img'
               },
               {
@@ -325,7 +325,7 @@ $(function () {
                 type: 'img'
               },
               {
-                text: 'logo.png',
+                text: 'logo-drdini.png',
                 type: 'img'
               },
               {

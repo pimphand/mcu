@@ -82,7 +82,7 @@ echo $result;
         <tr>
             <td>
                 <div class="qr-code">
-                    <img src="{{ public_path('logo.png') }}" alt="Logo Perusahaan" width="60" height="">
+                    <img src="{{ public_path('logo-drdini.png') }}" alt="Logo Perusahaan" width="60" height="">
                 </div>
             </td>
             <td style="text-align: center">
@@ -133,7 +133,7 @@ echo $result;
     <table>
         <td><img src="{{ public_path('register-transformed.jpg') }}" width="100%" alt=""></td>
     </table>
-    Paket MCU: 
+    Paket MCU:
         {{ collect([
             'U' => $participant->plan_u,
             'A' => $participant->plan_a,
@@ -150,28 +150,28 @@ echo $result;
                     <br><br>                    <br>
                 </td>
                 <td style="border: 1px solid black; vertical-align: middle; width:16.66%;">
-                    {{ $participant->pemeriksaanFisik?->selesai ? 'SELESAI' : '' }} 
+                    {{ $participant->pemeriksaanFisik?->selesai ? 'SELESAI' : '' }}
                     <br>Pemeriksaan Fisik
                     <br><br>                    <br>
                 </td>
                 <td style="border: 1px solid black; vertical-align: middle; width:16.66%;">
-                    {{ $participant->pemeriksaanFisik?->selesai ? 'SELESAI' : '' }} 
+                    {{ $participant->pemeriksaanFisik?->selesai ? 'SELESAI' : '' }}
                     <br>Visus
                     <br><br>                    <br>
                 </td>
                 <td style="border: 1px solid black; vertical-align: middle; width:16.66%;">
-                    {{ $participant->laboratorium?->selesai ? 'SELESAI' : '' }} 
+                    {{ $participant->laboratorium?->selesai ? 'SELESAI' : '' }}
                     <br>Laboratorium
                     <br><br>                    <br>
                 </td>
                 <td style="border: 1px solid black; vertical-align: middle; width:16.66%;">
-                    {{ $participant->radiologi?->selesai ? 'SELESAI' : '' }} 
+                    {{ $participant->radiologi?->selesai ? 'SELESAI' : '' }}
                     <br>Radiologi
                     <br><br>                    <br>
                 </td>
                 @if ($participant->plan_r)
                     <td style="border: 1px solid black; vertical-align: middle; width:16.66%;">
-                        {{ $participant->rectal?->selesai ? 'SELESAI' : '' }} 
+                        {{ $participant->rectal?->selesai ? 'SELESAI' : '' }}
                         <br>Rectal
                         <br><br>                    <br>
                     </td>

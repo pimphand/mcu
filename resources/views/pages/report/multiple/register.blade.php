@@ -64,7 +64,7 @@ return "{$roundedYears} Tahun {$roundedMonths} Bulan {$roundedDays} Hari";
         <tr>
             <td>
                 <div class="qr-code">
-                    <img src="{{ asset('logo.png') }}" alt="Logo Perusahaan" width="60" height="">
+                    <img src="{{ asset('logo-drdini.png') }}" alt="Logo Perusahaan" width="60" height="">
                 </div>
             </td>
             <td style="text-align: center">

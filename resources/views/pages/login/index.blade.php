@@ -12,7 +12,7 @@
     <div class="card mb-0">
         <div class="card-body">
             <a href="javascript:void(0)" class="brand-logo" style="display: flex; align-items: center; justify-content: center;">
-                <img src="{{asset('logo.png')}}" width="40px" style="margin-right: 10px;">
+                <img src="{{asset('logo-drdini.png')}}" width="40px" style="margin-right: 10px;">
                 <h2 class="brand-text text-primary ms-1" style="margin: 0;">Klinik Dr Dini</h2>
             </a>
 
