@@ -1,0 +1,89 @@
+name: mcu
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: mcu-app:latest
+    container_name: mcu-app
+    restart: unless-stopped
+    init: true
+    # Tidak ada ports:/ -> PHP-FPM (9002) hanya bisa diakses antar container,
+    # HTTP ke dunia luar disediakan oleh service `web` di bawah.
+    environment:
+      DB_HOST: mysql
+      DB_PORT: "3306"
+      AUTO_MIGRATE: ${AUTO_MIGRATE:-true}
+      BACKUP_FILE: ${BACKUP_FILE:-backup.sql.gz}
+      BACKUP_FORCE: ${BACKUP_FORCE:-false}
+    volumes:
+      - .:/var/www/html
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - frontend
+      - backend
+
+  # Nginx di dalam container: menerjemahkan HTTP -> FastCGI ke PHP-FPM.
+  # Ini yang membuat http://127.0.0.1:9002/ benar-benar bisa dibuka browser.
+  web:
+    image: nginx:1.27-alpine
+    container_name: mcu-web
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:9002:80"
+    volumes:
+      - .:/var/www/html:ro
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - app
+    networks:
+      - frontend
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1/"]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+
+  mysql:
+    image: mysql:8.0
+    container_name: mcu-mysql
+    restart: unless-stopped
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+      - --max-connections=200
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE:-medical_check_up}
+      MYSQL_USER: ${DB_USERNAME:-admin}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-Querty123!}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root}
+    # MySQL tetap 3306 di dalam container (antar container),
+    # hanya di-expose ke host lewat 127.0.0.1:3309.
+    ports:
+      - "127.0.0.1:3309:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - backend
+      # Jaringan non-internal khusus untuk mem-publish port ke host.
+      # Docker tidak menerbitkan ports:/ pada container yang hanya
+      # menempel di jaringan internal.
+      - db-publish
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h127.0.0.1 -uroot -p\"$$MYSQL_ROOT_PASSWORD\" --silent"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 30s
+
+networks:
+  frontend: {}
+  backend:
+    internal: true
+  db-publish: {}
+
+volumes:
+  mysql-data: {}
