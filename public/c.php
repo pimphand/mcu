@@ -8,7 +8,32 @@
 * @version 6.1.1
 */namespace
 Adminer;if(isset($_GET["status"]))$_GET["variables"]=$_GET["status"];if(isset($_GET["import"]))$_GET["sql"]=$_GET["import"];const
-VERSION="6.1.1";error_reporting(24575);set_error_handler(function($ud,$wd){return!!preg_match('~^Undefined (array key|offset|index)~',$wd);},E_WARNING|E_NOTICE);$Zd=!preg_match('~^(unsafe_raw)?$~',ini_get("filter.default"));if($Zd||ini_get("filter.default_flags")){foreach(array('_GET','_POST','_COOKIE','_SERVER')as$W){$cn=filter_input_array(constant("INPUT$W"),FILTER_UNSAFE_RAW);if($cn)$$W=$cn;}}$_COOKIE=array_filter($_COOKIE,'is_scalar');if(function_exists("mb_internal_encoding"))mb_internal_encoding("8bit");function
+VERSION="6.1.1";error_reporting(24575);set_error_handler(function($ud,$wd){return!!preg_match('~^Undefined (array key|offset|index)~',$wd);},E_WARNING|E_NOTICE);$Zd=!preg_match('~^(unsafe_raw)?$~',ini_get("filter.default"));if($Zd||ini_get("filter.default_flags")){foreach(array('_GET','_POST','_COOKIE','_SERVER')as$W){$cn=filter_input_array(constant("INPUT$W"),FILTER_UNSAFE_RAW);if($cn)$$W=$cn;}}$_COOKIE=array_filter($_COOKIE,'is_scalar');if(function_exists("mb_internal_encoding"))mb_internal_encoding("8bit");
+call_user_func(function(){
+	$__env=array();
+	foreach(array("DB_HOST","DB_PORT","DB_DATABASE","DB_USERNAME")as$__k){$__v=getenv($__k);if($__v!==false&&$__v!=="")$__env[$__k]=$__v;}
+	$__file=dirname(__DIR__)."/.env";
+	if(is_file($__file)){
+		foreach(file($__file,FILE_IGNORE_NEW_LINES)as$__line){
+			$__line=trim($__line);
+			if($__line===""||$__line[0]==="#"||strpos($__line,"=")===false)continue;
+			list($__k,$__v)=explode("=",$__line,2);
+			$__k=trim($__k);
+			if(isset($__env[$__k])||!in_array($__k,array("DB_HOST","DB_PORT","DB_DATABASE","DB_USERNAME"),true))continue;
+			$__v=trim($__v);
+			$__len=strlen($__v);
+			if($__len>1&&($__v[0]==="\""||$__v[0]==="'")&&($__v[$__len-1]===$__v[0]))$__v=substr($__v,1,-1);
+			if($__v!==""&&strpos($__v,'${')===false)$__env[$__k]=$__v;
+		}
+	}
+	$__server=isset($__env["DB_HOST"])?$__env["DB_HOST"]:"localhost";
+	if(!empty($__env["DB_PORT"])&&$__env["DB_PORT"]!=="3306")$__server.=":".$__env["DB_PORT"];
+	if(!isset($_GET["server"])||$_GET["server"]==="")$_GET["server"]=$__server;
+	if((!isset($_GET["username"])||$_GET["username"]==="")&&isset($__env["DB_USERNAME"]))$_GET["username"]=$__env["DB_USERNAME"];
+	if(!isset($_COOKIE["adminer_sid"])&&(!isset($_GET["db"])||$_GET["db"]==="")&&isset($__env["DB_DATABASE"]))$_GET["db"]=$__env["DB_DATABASE"];
+	unset($__env,$__file,$__line,$__k,$__v,$__len,$__server);
+});
+function
 connection($g=null){return($g?:Db::$instance);}function
 adminer(){return
 Adminer::$instance;}function
