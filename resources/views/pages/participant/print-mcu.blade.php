@@ -337,7 +337,7 @@
         var channel = pusher.subscribe('report-channel');
         channel.bind('pdf-generated', function (data) {
             // Handle the received data
-            alert('Report generated: ' + data.filename);
+            Swal.fire({ icon: 'success', title: 'Report generated', text: data.filename });
             // Optionally update your UI here
         });
     </script>

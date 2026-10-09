@@ -37,13 +37,19 @@
                                     Search</button>
                             </div>
                             @if ($isRegisterPage)
-                                <a href="#" class="btn btn-primary float-right waves-effect waves-float waves-light"
-                                    id="btn-register">Tambah Register</a>
+                                @if ($participants->total() > 0)
+                                    <a href="#" class="btn btn-primary float-right waves-effect waves-float waves-light"
+                                        id="btn-register">Tambah Register</a>
+                                @endif
                             @else
                                 <a href="#" class="btn btn-primary float-right waves-effect waves-float waves-light"
-                                    id="btn-create">Tambah Data</a>
+                                    id="btn-create">Tambah</a>
                                 <a href="#" class="btn btn-success float-right waves-effect waves-float waves-light"
-                                    id="btn-import">Import Data</a>
+                                    id="btn-import">Import</a>
+                                @if ($participants->total() > 0)
+                                    <a href="#" class="btn btn-secondary float-right waves-effect waves-float waves-light"
+                                        id="btn-register">Register</a>
+                                @endif
                             @endif
                         </div>
                     </div>
@@ -137,6 +143,10 @@
                     <tfoot>
                         <tr>
                             <th>Aksi</th>
+                             @if ($isRegisterPage)
+                                <th>Tanggal Register</th>
+                                <th>No. Register</th>
+                            @endif
                             <th>MCU ID</th>
                             <th>NIK</th>
                             <th>Nama</th>
@@ -1081,12 +1091,6 @@
 
         })
 
-
-
-    </script>
-    <script>
-
-
         $('#nilai_normal').click(function (e) {
 
             $('#keadaanUmum').val('Compost Mentis');
@@ -1128,5 +1132,55 @@
 
         });
 
+        //button register (massal)
+        $('#btn-register').on('click', function (e) {
+            e.preventDefault();
+
+            const today = new Date().toISOString().slice(0, 10);
+
+            Swal.fire({
+                title: 'Register Peserta',
+                html: `
+                    <label for="swal-date-register">Tanggal register</label>
+                    <input type="date" id="swal-date-register" class="swal2-input" value="${today}">
+                `,
+                showCancelButton: true,
+                confirmButtonText: 'Register',
+                cancelButtonText: 'Batal',
+                preConfirm: () => {
+                    const value = document.getElementById('swal-date-register').value;
+                    if (!value) {
+                        Swal.showValidationMessage('Tanggal wajib dipilih.');
+                        return false;
+                    }
+                    if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) {
+                        Swal.showValidationMessage('Format tanggal harus YYYY-MM-DD.');
+                        return false;
+                    }
+                    return value;
+                },
+            }).then((result) => {
+                if (!result.isConfirmed) {
+                    return;
+                }
+
+                const date = result.value;
+
+                $.ajax({
+                    url: "{{ route('participant.update.registers', 'xxx') }}".replace('xxx', date),
+                    success: (data) => {
+                        if (!data.success) {
+                            toastError(data.message);
+                            return;
+                        }
+                        toastSuccess(data.message);
+                        setTimeout(() => window.location.reload(), 700);
+                    },
+                    error: (e) => {
+                        toastError('Internal Server Error');
+                    }
+                });
+            });
+        });
     </script>
 @endsection

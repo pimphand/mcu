@@ -7,6 +7,7 @@ use App\Models\Employee;
 use App\Models\Participant;
 use App\Services\DivisiService;
 use App\Services\ParticipantService;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use Spatie\QueryBuilder\AllowedFilter;
@@ -526,12 +527,36 @@ class ParticipantController extends Controller
 
     public function import(Request $request)
     {
-        $data = $request->validate([
+        $request->validate([
             'file' => 'required|mimes:xlsx,xls'
         ]);
 
         Excel::import(new UsersImport(auth()->id(), auth()->user()->client_id, "a"), $request->file('file'));
 
         return redirect()->route('participant.index')->with('success', 'Data berhasil diimport');
+    }
+
+    /**
+     * Register massal (dipanggil dari tombol #btn-register).
+     * Semua peserta client & contract aktif yang belum register di-set
+     * sekaligus dengan satu query UPDATE.
+     */
+    public function updateRegisters(Request $request)
+    {
+        try {
+            $date = Carbon::parse((string) $request->route('date'))->format('Y-m-d');
+        } catch (\Throwable $th) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Format tanggal tidak valid.',
+            ], 422);
+        }
+
+        $total = $this->participantService->updateRegisters($date);
+
+        return response()->json([
+            'success' => true,
+            'message' => sprintf('%d peserta berhasil di register pada %s.', $total, $date),
+        ]);
     }
 }

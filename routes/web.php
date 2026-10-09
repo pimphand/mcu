@@ -148,6 +148,7 @@ Route::middleware('auth')->group(function () {
         Route::put('/{id}', [ParticipantController::class, 'update'])->name('participant.update');
         Route::delete('/{id}', [ParticipantController::class, 'destroy'])->name('participant.delete');
         Route::get('/register/{id}', [ParticipantController::class, 'updateRegister'])->name('participant.update.register');
+        Route::get('/register-bulk/{date}', [ParticipantController::class, 'updateRegisters'])->name('participant.update.registers');
         Route::get('/scan/{mcuId}', [ParticipantController::class, 'scan'])->name('participant.scan');
 
         Route::get('/detail/tanda-vital/{id}', [ParticipantController::class, 'detailTandaVital'])->name('participant.detail.tanda.vital');

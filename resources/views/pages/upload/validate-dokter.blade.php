@@ -143,12 +143,12 @@
                     $('#upload_btn').attr('disabled', true).text('Uploading...');
                 },
                 success: function(response) {
-                    alert(`Data berhasil di import`);
+                    Swal.fire({ icon: 'success', title: 'Berhasil', text: 'Data berhasil di import' });
                 },
                 error: function(xhr, status, error) {
                     // Proses jika terjadi error
                     console.log(xhr.responseText);
-                    alert('Upload failed. Please try again.');
+                    Swal.fire({ icon: 'error', title: 'Gagal', text: 'Upload failed. Please try again.' });
                 },
                 complete: function() {
                     // Reset tombol setelah selesai

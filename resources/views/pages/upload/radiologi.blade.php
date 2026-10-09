@@ -162,10 +162,10 @@
                     $('#upload_btn').attr('disabled', true).text('Uploading...');
                 },
                 success: function(response) {
-                    alert('Data sedang di proses')
+                    Swal.fire({ icon: 'info', title: 'Info', text: 'Data sedang di proses' });
                 },
                 error: function(xhr, status, error) {
-                    alert('Upload failed. Please try again.');
+                    Swal.fire({ icon: 'error', title: 'Gagal', text: 'Upload failed. Please try again.' });
                 },
                 complete: function() {
                     $('#upload_btn').attr('disabled', false).text('Upload');
@@ -202,7 +202,7 @@
                     $('#tabelLap tbody').html(tableRows);  // Populate the table body
                 },
                 error: function(xhr, status, error) {
-                    alert('Upload failed. Please try again.');
+                    Swal.fire({ icon: 'error', title: 'Gagal', text: 'Upload failed. Please try again.' });
                 },
                 complete: function() {
                     $('#cari').attr('disabled', false).text('Cari');
@@ -218,7 +218,7 @@
 
         var channel = pusher.subscribe('notification-channel');
         channel.bind('import-completed', function(data) {
-            alert(data.message); // Atau gunakan metode lain untuk menampilkan notifikasi
+            Swal.fire({ icon: 'info', title: 'Notifikasi', text: data.message });
         });
     </script>
 

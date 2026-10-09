@@ -44,6 +44,7 @@
 <!-- BEGIN: Vendor JS-->
 <script src="{{ asset('app-assets/vendors/js/vendors.min.js') }}"></script>
 <script src="{{ asset('app-assets/vendors/js/extensions/toastr.min.js') }}"></script>
+<script src="{{ asset('app-assets/vendors/js/extensions/sweetalert2.all.min.js') }}"></script>
 <!-- BEGIN Vendor JS-->
 
 <!-- BEGIN: Theme JS-->
@@ -83,6 +84,22 @@
             closeButton: true,
             progressBar: true,
             rtl: false
+        });
+    }
+
+    // Konfirmasi SweetAlert2 lalu arahkan ke url bila dikonfirmasi
+    function confirmSwal(message, url, title = 'Yakin?') {
+        Swal.fire({
+            title: title,
+            text: message,
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Ya',
+            cancelButtonText: 'Batal',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = url;
+            }
         });
     }
 </script>

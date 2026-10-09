@@ -16,6 +16,7 @@ use App\Models\TandaVital;
 use App\Models\User;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 
@@ -820,5 +821,22 @@ class ParticipantService
         return $data;
     }
 
-    public function import() {}
+    /**
+     * Register massal untuk client & contract yang sedang aktif.
+     * Hanya peserta yang belum pernah di register (register_date kosong),
+     * dikerjakan dalam satu query UPDATE tanpa loop per peserta.
+     *
+     * @return int jumlah peserta yang ter-register
+     */
+    public function updateRegisters(string $date): int
+    {
+        return $this->participant
+            ->where('client_id', Session::get('client_id'))
+            ->where('contract_id', Session::get('contract_id'))
+            ->whereNull('register_date')
+            ->update([
+                'register_date' => $date,
+                'register_number' => \DB::raw('no_form'),
+            ]);
+    }
 }

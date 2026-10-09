@@ -208,10 +208,10 @@
                         }, 1000); // Update every second
 
                     } else {
-                        alert('Data tidak ditemukan');
+                        Swal.fire({ icon: 'warning', title: 'Tidak ada data', text: 'Data tidak ditemukan' });
                     }
                 }).fail(function() {
-                    alert('Terjadi kesalahan saat memproses permintaan.');
+                    Swal.fire({ icon: 'error', title: 'Gagal', text: 'Terjadi kesalahan saat memproses permintaan.' });
                 }).always(function() {
                     // Re-enable the button and restore the original text
                     setTimeout(() => {
@@ -241,10 +241,10 @@
                         }, 1000); // Update every second
 
                     } else {
-                        alert('Data tidak ditemukan');
+                        Swal.fire({ icon: 'warning', title: 'Tidak ada data', text: 'Data tidak ditemukan' });
                     }
                 }).fail(function() {
-                    alert('Terjadi kesalahan saat memproses permintaan.');
+                    Swal.fire({ icon: 'error', title: 'Gagal', text: 'Terjadi kesalahan saat memproses permintaan.' });
                 }).always(function() {
                     // Re-enable the button and restore the original text
                     setTimeout(() => {

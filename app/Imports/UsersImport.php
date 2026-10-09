@@ -51,7 +51,7 @@ class UsersImport implements ToModel, WithStartRow, WithChunkReading //, ShouldQ
      */
     public function model(array $row)
     {
-        if ($row[0] != null) {
+        if (!empty($row[0])) {
             $sequence = Department::count();
             $devisi = Divisi::firstOrCreate([
                 'name' => $row[3],
@@ -69,10 +69,9 @@ class UsersImport implements ToModel, WithStartRow, WithChunkReading //, ShouldQ
 
             $participantService = new  ParticipantService;
             $plans = ['U', 'A', 'E', 'S', 'R'];
-            $selected = [];
-            if (!empty($row[6])) {
-                $selected = array_map('trim', explode('+', $row[6]));
-            }
+            $ket = $row[6] ?? null;
+            $ket = is_scalar($ket) ? trim((string) $ket) : '';
+            $selected = $this->parsePlans($ket);
 
             $data = [
                 'nik' => $row[1],
@@ -88,12 +87,6 @@ class UsersImport implements ToModel, WithStartRow, WithChunkReading //, ShouldQ
                 'packet_d' => false,
                 'packet_e' => false,
                 'packet_f' => false,
-                'plan_name' => $row[6],
-                'plan_u' => false,
-                'plan_a' => false,
-                'plan_e' => false,
-                'plan_s' => false,
-                'plan_r' => false,
                 'lab_special' => false,
                 'divisi_id' => $devisi->id,
                 'department_id' => $departemen->id,
@@ -102,9 +95,19 @@ class UsersImport implements ToModel, WithStartRow, WithChunkReading //, ShouldQ
                 'no_form' => (int)$row[0],
             ];
 
-            foreach ($plans as $p) {
-
-                $data['plan_' . strtolower($p)] = in_array($p, $selected) ? 1 : 0;
+            // Flag plan dan plan_name hanya ditulis bila KET memberi informasi,
+            // supaya baris dari sheet berikutnya tidak menimpa / mengosongkan
+            // data plan yang sudah tersimpan (misal sheet "PESERTA MCU" menulis
+            // "U + R" lalu sheet "800" menimpa dengan "RECTAL SWAB").
+            if ($selected) {
+                foreach ($plans as $p) {
+                    $data['plan_' . strtolower($p)] = in_array($p, $selected, true) ? 1 : 0;
+                }
+                $data['plan_name'] = $ket;
+            } elseif ($ket !== '' && !$this->existingHasPlanCode($row)) {
+                // KET hanya catatan (HIL, CUTI MELAHIRKAN, RECTAL SWAB, dst).
+                // Isi plan_name hanya jika peserta belum memiliki kode plan.
+                $data['plan_name'] = $ket;
             }
 
             $user = $this->userId;
@@ -116,6 +119,36 @@ class UsersImport implements ToModel, WithStartRow, WithChunkReading //, ShouldQ
                 'no_form' => (int)$row[0],
             ], $data);
         }
+    }
+
+    /**
+     * Ambil kode plan (U, A, E, S, R) dari isi kolom KET.
+     * Contoh: "U + R" -> [U, R], "u+r" -> [U, R], "RECTAL SWAB" -> [].
+     */
+    protected function parsePlans(string $value): array
+    {
+        $value = trim($value);
+        if ($value === '') {
+            return [];
+        }
+
+        $parts = preg_split('/[\s\x{00A0},\/+&]+/u', mb_strtoupper($value), -1, PREG_SPLIT_NO_EMPTY);
+
+        return array_values(array_intersect($parts, ['U', 'A', 'E', 'S', 'R']));
+    }
+
+    /**
+     * Cek apakah peserta pada baris ini sudah punya plan_name berisi kode plan.
+     */
+    protected function existingHasPlanCode(array $row): bool
+    {
+        $existing = Participant::query()
+            ->where('client_id', Session::get('client_id'))
+            ->where('contract_id', Session::get('contract_id'))
+            ->where('no_form', (int) $row[0])
+            ->first();
+
+        return $existing !== null && $this->parsePlans((string) $existing->plan_name) !== [];
     }
 
     public function startRow(): int
