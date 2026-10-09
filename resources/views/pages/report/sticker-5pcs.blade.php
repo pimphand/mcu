@@ -19,7 +19,7 @@
         .new-page {
             width: 90%;
             height: 90%;
-            font-size: 28px;
+            font-size: 25px;
         }
         @page { size: 6cm 10cm landscape; }
     </style>
@@ -32,7 +32,7 @@
     @foreach ($data as $item)
         <div class="new-page">
             <p>{{ $participant->code }}</p>
-            <p>{{ $participant->name }} [{{ $participant->gender }}]</p>
+            <p>{{ $participant->name }} [{{ $participant->gender == "Laki - laki" ? "L" : "P" }}]</p>
             <p>{{ \Carbon\Carbon::parse($participant->birthday)->diff(\Carbon\Carbon::now())->format('%y Th %m Bl %d Hr') }}
             </p>
             @if ($item)

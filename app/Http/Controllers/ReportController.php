@@ -119,7 +119,6 @@ class ReportController extends Controller
     public function register($participantId)
     {
         $participant = $this->participantService->find($participantId);
-        
         $pdf = Pdf::loadView('pages.report.register', compact('participant'))
 
             ->setOption('margin-top', 0)  // Atur margin atas menjadi 0
