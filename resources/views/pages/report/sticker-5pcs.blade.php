@@ -19,7 +19,7 @@
         .new-page {
             width: 90%;
             height: 90%;
-            font-size: 25px;
+            font-size: 28px;
         }
         @page { size: 6cm 10cm landscape; }
     </style>
