@@ -1,80 +1,71 @@
-@extends('layouts/contentLayoutMaster')
+@extends('layouts.main')
 
 @section('title', 'Tambah Menu')
 
-@section('vendor-style')
-    {{-- vendor css files --}}
-@endsection
-
-@section('page-style')
-    {{-- Page Css files --}}
-@endsection
-
 @section('content')
-    <!-- Basic Tabs starts -->
     <div class="card">
         <div class="card-header d-flex">
+            <h4 class="card-title">Tambah Menu</h4>
         </div>
         <div class="card-body">
-            <form action="{{ route('menu.store') }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('menu.store') }}" method="POST">
                 @csrf
                 <div class="row">
                     <div class="col-12">
                         <div class="card">
                             <div class="card-body">
-                                @if (session('error'))
-                                    {{ session('error') }}
-                                @endif
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label class="form-label mt-1">Induk Menu</label>
-                                            <select name="parent_id" id="parent" class="form-control">
-                                                <option value="">--Tidak Ada--</option>
-                                                @foreach ($parents as $item)
-                                                    <option value="{{ $item->id }}"
-                                                        {{ old('parent_id') == $item->id ? 'selected' : '' }}>
-                                                        {{ $item->name }}
-                                                    </option>
+                                            <select name="parent_id" id="parent_id" class="form-control">
+                                                <option value="">— Tanpa induk (menu utama) —</option>
+                                                @foreach ($menus as $parent)
+                                                    <option value="{{ $parent->id }}"
+                                                        {{ old('parent_id', $parentId ?? 0) == $parent->id ? 'selected' : '' }}>
+                                                        {{ $parent->name }}</option>
                                                 @endforeach
                                             </select>
+                                            @error('parent_id')
+                                                <span class="text-danger">{{ $message }}</span>
+                                            @enderror
                                         </div>
                                         <div class="form-group">
-                                            <label class="form-label mt-1">Nama </label>
-                                            <input type="text" name="name" class="form-control" placeholder="nama"
+                                            <label class="form-label mt-1">Nama</label>
+                                            <input type="text" name="name" class="form-control" placeholder="nama menu"
                                                 value="{{ old('name') }}" required>
                                             @error('name')
                                                 <span class="text-danger">{{ $message }}</span>
                                             @enderror
                                         </div>
                                         <div class="form-group">
-                                            <label class="form-label mt-1">Urutan </label>
-                                            <input type="number" name="sort_order" class="form-control" placeholder="0"
-                                                value="{{ old('sort_order', 1) }}" required>
-                                            @error('sort_order')
-                                                <span class="text-danger">{{ $message }}</span>
-                                            @enderror
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="form-label mt-1">URL (tanda # tanpa URL) </label>
-                                            <input type="text" name="url" class="form-control" placeholder="url"
-                                                value="{{ old('url') }}" required>
+                                            <label class="form-label mt-1">URL</label>
+                                            <input type="text" name="url" class="form-control"
+                                                placeholder="/contoh  atau  #" value="{{ old('url') }}">
                                             @error('url')
                                                 <span class="text-danger">{{ $message }}</span>
                                             @enderror
                                         </div>
                                         <div class="form-group">
-                                            <label class="form-label mt-1">Icon </label>
+                                            <label class="form-label mt-1">Icon</label>
                                             <input type="text" name="icon" class="form-control"
-                                                placeholder="image, users, package, list" value="{{ old('icon') }}"
-                                                required>
+                                                placeholder="nama icon feather, contoh: circle" value="{{ old('icon') }}">
                                             @error('icon')
                                                 <span class="text-danger">{{ $message }}</span>
                                             @enderror
                                         </div>
                                         <div class="form-group">
+                                            <label class="form-label mt-1">Urutan</label>
+                                            <input type="number" name="sort_order" class="form-control" min="0"
+                                                value="{{ old('sort_order', 0) }}" required>
+                                            @error('sort_order')
+                                                <span class="text-danger">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+                                        <div class="form-group">
                                             <label class="form-label mt-1">Tampilkan ?</label><br>
-                                            <input type="checkbox" name="is_active" value="1">
+                                            <input type="checkbox" name="is_active" value="1"
+                                                {{ old('is_active', 1) ? 'checked' : '' }}>
                                             @error('is_active')
                                                 <span class="text-danger">{{ $message }}</span>
                                             @enderror
@@ -92,11 +83,7 @@
             </form>
         </div>
     </div>
-@endsection('content')
-
-@section('vendor-script')
-    {{-- vendor files --}}
 @endsection
-@section('page-script')
-    {{-- Page js files --}}
+
+@section('js')
 @endsection

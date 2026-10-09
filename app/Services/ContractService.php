@@ -4,6 +4,8 @@ namespace App\Services;
 
 use App\Models\Contract;
 use App\Models\Participant;
+use GuzzleHttp\Psr7\Request;
+use Illuminate\Support\Facades\Session;
 
 class ContractService
 {
@@ -55,11 +57,6 @@ class ContractService
 
     public function delete($id)
     {
-        $checkRelation = $this->participant->where(['contract_id' => $id])->exists();
-        if ($checkRelation) {
-            return false;
-        }
-
-        return $this->contract->where('id', $id)->delete();
+        return $this->contract->where('id', $id)->update(['deleted_at'=> now()]);
     }
 }

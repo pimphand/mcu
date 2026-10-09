@@ -1,25 +1,16 @@
-@extends('layouts/contentLayoutMaster')
+@extends('layouts.main')
 
 @section('title', 'Edit Menu')
 
-@section('vendor-style')
-    {{-- vendor css files --}}
-@endsection
-
-@section('page-style')
-    {{-- Page Css files --}}
-@endsection
-
 @section('content')
-    <!-- Basic Tabs starts -->
     <div class="card">
         <div class="card-header d-flex">
+            <h4 class="card-title">Edit Menu</h4>
         </div>
         <div class="card-body">
-            <form action="{{ route('menu.update', $result['data']['id']) }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('menu.update', $menu->id) }}" method="POST">
                 @csrf
                 @method('put')
-                <input type="hidden" name="id" value="{{ $result['data']['id'] }}">
                 <div class="row">
                     <div class="col-12">
                         <div class="card">
@@ -28,13 +19,12 @@
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label class="form-label mt-1">Induk Menu</label>
-                                            <select name="parent_id" id="parent" class="form-control">
-                                                <option value="">--Tidak Ada--</option>
-                                                @foreach ($parents as $item)
-                                                    <option value="{{ $item['id'] }}"
-                                                        {{ old('parent_id', $result['data']['parent_id']) == $item['id'] && $result['data']['parent_id'] != $result['data']['id'] ? 'selected' : '' }}>
-                                                        {{ $item['name'] }}
-                                                    </option>
+                                            <select name="parent_id" id="parent_id" class="form-control">
+                                                <option value="">— Tanpa induk (menu utama) —</option>
+                                                @foreach ($menus as $parent)
+                                                    <option value="{{ $parent->id }}"
+                                                        {{ old('parent_id', $menu->parent_id) == $parent->id ? 'selected' : '' }}>
+                                                        {{ $parent->name }}</option>
                                                 @endforeach
                                             </select>
                                             @error('parent_id')
@@ -42,42 +32,42 @@
                                             @enderror
                                         </div>
                                         <div class="form-group">
-                                            <label class="form-label mt-1">Nama </label>
-                                            <input type="text" name="name" class="form-control" placeholder="nama"
-                                                value="{{ old('name', $result['data']['name']) }}" required>
+                                            <label class="form-label mt-1">Nama</label>
+                                            <input type="text" name="name" class="form-control" placeholder="nama menu"
+                                                value="{{ old('name', $menu->name) }}" required>
                                             @error('name')
                                                 <span class="text-danger">{{ $message }}</span>
                                             @enderror
                                         </div>
                                         <div class="form-group">
-                                            <label class="form-label mt-1">Urutan </label>
-                                            <input type="number" name="sort_order" class="form-control" placeholder="0"
-                                                value="{{ old('sort_order', $result['data']['sort_order']) }}" required>
-                                            @error('sort_order')
-                                                <span class="text-danger">{{ $message }}</span>
-                                            @enderror
-                                        </div>
-                                        <div class="form-group">
                                             <label class="form-label mt-1">URL</label>
-                                            <input type="text" name="url" class="form-control" placeholder="url"
-                                                value="{{ old('url', $result['data']['url']) }}" required>
+                                            <input type="text" name="url" class="form-control"
+                                                placeholder="/contoh  atau  #" value="{{ old('url', $menu->url) }}">
                                             @error('url')
                                                 <span class="text-danger">{{ $message }}</span>
                                             @enderror
                                         </div>
                                         <div class="form-group">
-                                            <label class="form-label mt-1">Icon </label>
+                                            <label class="form-label mt-1">Icon</label>
                                             <input type="text" name="icon" class="form-control"
-                                                placeholder="image, users, package, list"
-                                                value="{{ old('icon', $result['data']['icon']) }}" required>
+                                                placeholder="nama icon feather, contoh: circle"
+                                                value="{{ old('icon', $menu->icon) }}">
                                             @error('icon')
+                                                <span class="text-danger">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label mt-1">Urutan</label>
+                                            <input type="number" name="sort_order" class="form-control" min="0"
+                                                value="{{ old('sort_order', $menu->sort_order) }}" required>
+                                            @error('sort_order')
                                                 <span class="text-danger">{{ $message }}</span>
                                             @enderror
                                         </div>
                                         <div class="form-group">
                                             <label class="form-label mt-1">Tampilkan ?</label><br>
                                             <input type="checkbox" name="is_active" value="1"
-                                                {{ $result['data']['is_active'] ? 'checked' : '' }}>
+                                                {{ old('is_active', $menu->is_active) ? 'checked' : '' }}>
                                             @error('is_active')
                                                 <span class="text-danger">{{ $message }}</span>
                                             @enderror
@@ -95,11 +85,7 @@
             </form>
         </div>
     </div>
-@endsection('content')
-
-@section('vendor-script')
-    {{-- vendor files --}}
 @endsection
-@section('page-script')
-    {{-- Page js files --}}
+
+@section('js')
 @endsection

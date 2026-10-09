@@ -103,14 +103,14 @@ class MenuSeeder extends Seeder
                             'sort_order' => $order++,
                             'is_active' => 1,
                         ],
-                        // [
-                        //     'parent_id' => $value->id,
-                        //     'name' => 'Menu',
-                        //     'icon' => 'circle',
-                        //     'url' => '/menu',
-                        //     'sort_order' => $order++,
-                        //     'is_active' => 1,
-                        // ],
+                        [
+                            'parent_id' => $value->id,
+                            'name' => 'Menu',
+                            'icon' => 'list',
+                            'url' => '/menu',
+                            'sort_order' => $order++,
+                            'is_active' => 1,
+                        ],
                         [
                             'parent_id' => $value->id,
                             'name' => 'Client',

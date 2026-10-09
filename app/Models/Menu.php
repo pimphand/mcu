@@ -15,6 +15,16 @@ class Menu extends Model
         'parent_id', 'name', 'url', 'icon', 'sort_order', 'is_active',
     ];
 
+    public function parent()
+    {
+        return $this->belongsTo(Menu::class, 'parent_id');
+    }
+
+    public function children()
+    {
+        return $this->hasMany(Menu::class, 'parent_id')->orderBy('sort_order')->orderBy('id');
+    }
+
     public function checkAvailabilityMenuPermission(int $menuID, int $roleID, string $condition): int
     {
         return self::join('menus', 'permissions.menu_id', '=', 'menus.id')

@@ -7,6 +7,7 @@ use App\Http\Controllers\ContractController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\DivisiController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\MenuController;
 use App\Http\Controllers\McuController;
 use App\Http\Controllers\ParticipantController;
 use App\Http\Controllers\RecapController;
@@ -59,6 +60,18 @@ Route::middleware('auth')->group(function () {
         Route::delete('/{id}', [RoleController::class, 'destroy'])->name('role.destroy');
         Route::get('/permission/{roleID}', [RoleController::class, 'permission'])->name('role.permission');
         Route::post('/permission', [RoleController::class, 'permissionCreate'])->name('role.permission.store');
+    });
+
+    /** route crud menu (Administrator > Menu) */
+    Route::prefix('menu')->group(function () {
+        Route::get('/', [MenuController::class, 'index'])->name('menu.index');
+        Route::get('/create', [MenuController::class, 'create'])->name('menu.create');
+        Route::get('/detail/{id}', [MenuController::class, 'detail'])->name('menu.detail');
+        Route::post('/', [MenuController::class, 'store'])->name('menu.store');
+        Route::get('/edit/{id}', [MenuController::class, 'edit'])->name('menu.edit');
+        Route::put('/{id}', [MenuController::class, 'update'])->name('menu.update');
+        Route::post('/toggle/{id}', [MenuController::class, 'toggle'])->name('menu.toggle');
+        Route::delete('/{id}', [MenuController::class, 'destroy'])->name('menu.destroy');
     });
 
     /** route crud user account */

@@ -122,7 +122,9 @@ class ParticipantService
         }
 
         $query = $query->where('client_id', Session::get('client_id'));
-        return $query->orderBy('code', 'asc')->paginate($limit)->withQueryString();
+        return $query->whereHas('contract', function ($q) {
+            $q->whereNull('deleted_at');
+        })->orderBy('code', 'asc')->paginate($limit)->withQueryString();
     }
 
     public function create(array $data)

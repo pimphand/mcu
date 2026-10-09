@@ -14,8 +14,8 @@ class PermissionSeeder extends Seeder
     {
         // create permission
         $exceptAdmin = ['MCU IN/OUT','Master Divisi', 'Master Karyawan', 'Master Department', 'Master Data'];
-        $exceptClient = ['Role', 'Client'];
-        $exceptKaryawan = ['MCU IN/OUT','Administrator','Role', 'Client', 'User', 'Master Divisi', 'Master Karyawan', 'Master Department', 'Master Data'];
+        $exceptClient = ['Role', 'Client', 'Menu'];
+        $exceptKaryawan = ['MCU IN/OUT','Administrator','Role', 'Client', 'User', 'Menu', 'Master Divisi', 'Master Karyawan', 'Master Department', 'Master Data'];
         $permission = [];
         $roles = \DB::table('roles')->get();
         $menus = \DB::table('menus')->get();

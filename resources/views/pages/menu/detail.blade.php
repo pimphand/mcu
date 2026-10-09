@@ -1,6 +1,6 @@
 @extends('layouts.main')
 
-@section('title', 'Menu')
+@section('title', 'Detail Menu')
 
 @section('css')
 @endsection
@@ -9,28 +9,57 @@
     <div class="card">
         <div class="card-header border-bottom p-1">
             <div class="head-label">
-                <h6 class="mb-0">List Menu</h6>
+                <h6 class="mb-0">Detail Menu: {{ $menu->name }}</h6>
             </div>
             <div class="dt-action-buttons text-right">
                 <div class="dt-buttons d-inline-flex">
-                    <form action="{{ route('menu.index') }}" method="get">
-                        <div class="input-group input-group" style="margin-top: 5px;">
-                            <input type="text" name="search" value="{{ $search }}" id="sasSearchValue"
-                                class="form-control float-right" placeholder="cari nama, url, icon">
-                            <div class="input-group-append">
-                                <button type="submit" id="sasSearch"
-                                    class="btn btn-outline-facebook waves-effect waves-float waves-light">
-                                    <i data-feather="search"></i>
-                                    Search</button>
-                            </div>
-                            <a href="{{ route('menu.create') }}"
-                                class="btn btn-success float-right waves-effect waves-float waves-light">Tambah</a>
-                        </div>
-                    </form>
+                    <a href="{{ route('menu.index') }}"
+                        class="btn btn-outline-danger float-right waves-effect waves-float waves-light">Kembali</a>
+                    <a href="{{ route('menu.create', ['parent_id' => $menu->id]) }}"
+                        class="btn btn-success float-right waves-effect waves-float waves-light">Tambah Sub Menu</a>
                 </div>
             </div>
         </div>
         <div class="card-body">
+            <div class="row mb-2">
+                <div class="col-md-6">
+                    <table class="table table-sm">
+                        <tr>
+                            <th style="width: 120px">Nama</th>
+                            <td>{{ $menu->name }}</td>
+                        </tr>
+                        <tr>
+                            <th>URL</th>
+                            <td>{{ $menu->url }}</td>
+                        </tr>
+                        <tr>
+                            <th>Icon</th>
+                            <td>{{ $menu->icon }}</td>
+                        </tr>
+                        <tr>
+                            <th>Urutan</th>
+                            <td>{{ $menu->sort_order }}</td>
+                        </tr>
+                        <tr>
+                            <th>Status</th>
+                            <td>
+                                <div class="form-check form-check-success form-switch">
+                                    <input type="checkbox" class="form-check-input js-menu-active"
+                                        id="menu_toggle_{{ $menu->id }}" value="1"
+                                        data-url="{{ route('menu.toggle', $menu->id) }}"
+                                        data-label="menu_toggle_label_{{ $menu->id }}"
+                                        {{ $menu->is_active ? 'checked' : '' }}>
+                                    <label class="form-check-label" id="menu_toggle_label_{{ $menu->id }}"
+                                        for="menu_toggle_{{ $menu->id }}">
+                                        {{ $menu->is_active ? 'Aktif' : 'Non Aktif' }}
+                                    </label>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
             <div class="table-responsive text-nowrap">
                 <table class="dt-responsive table mt-1" id="table">
                     <thead>
@@ -45,7 +74,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @forelse ($menus as $key => $item)
+                        @forelse ($children as $key => $item)
                             <tr>
                                 <td>{{ $key + 1 }}</td>
                                 <td>{{ $item->name }}</td>
@@ -66,11 +95,6 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <a href="{{ route('menu.detail', $item->id) }}" data-bs-toggle="tooltip"
-                                        data-bs-placement="right" data-bs-original-title="Detail Sub Menu"
-                                        class="btn btn-sm btn-outline-info">
-                                        <i data-feather='eye'></i>
-                                    </a>
                                     <a href="{{ route('menu.edit', $item->id) }}" data-bs-toggle="tooltip"
                                         data-bs-placement="right" data-bs-original-title="Edit Menu"
                                         class="btn btn-sm btn-outline-dark edit">
@@ -85,7 +109,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="7" class="text-center">Tidak ada data menu</td>
+                                <td colspan="7" class="text-center">Belum ada sub menu</td>
                             </tr>
                         @endforelse
                     </tbody>
@@ -129,7 +153,7 @@
             })
 
             // toggle aktif / non aktif menu (AJAX)
-            $('table').on('change', '.js-menu-active', function() {
+            $('.card-body').on('change', '.js-menu-active', function() {
                 const $this = $(this)
                 const url = $this.data('url')
                 const label = $('#' + $this.data('label'))
