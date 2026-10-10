@@ -27,7 +27,10 @@
 
 <body>
     @php
-        $data = ['Lab. Urine', 'Lab. Darah', 'Lab. Darah', 'Radiologi', '', 'Rectal'];
+        $data = ['Lab. Urine', 'Lab. Darah', 'Lab. Darah', 'Radiologi', ''];
+        if ($participant->plan_r) {
+            $data[] = 'Rectal';
+        }
     @endphp
     @foreach ($data as $item)
         <div class="new-page">
