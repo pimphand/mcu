@@ -12,7 +12,10 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        // $schedule->command('inspire')->hourly();
+        // Backup database ke Cloudflare R2 setiap tengah malam (00:00 WIB).
+        $schedule->command('backup:database')
+            ->dailyAt('00:00')
+            ->withoutOverlapping();
     }
 
     /**

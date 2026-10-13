@@ -26,6 +26,32 @@ services:
       - frontend
       - backend
 
+  # Scheduler: menjalankan `php artisan schedule:work` supaya command terjadwal
+  # (mis. backup:database tiap tengah malam) benar-benar dieksekusi.
+  scheduler:
+    image: mcu-app:latest
+    container_name: mcu-scheduler
+    restart: unless-stopped
+    init: true
+    entrypoint:
+      - sh
+      - -c
+      - >-
+        mkdir -p storage/logs storage/framework/cache/data
+        storage/framework/sessions storage/framework/views bootstrap/cache &&
+        php artisan schedule:work
+    environment:
+      DB_HOST: mysql
+      DB_PORT: "3306"
+    volumes:
+      - .:/var/www/html
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - frontend
+      - backend
+
   # Nginx di dalam container: menerjemahkan HTTP -> FastCGI ke PHP-FPM.
   # Ini yang membuat http://127.0.0.1:9002/ benar-benar bisa dibuka browser.
   # Set WEB_BIND=0.0.0.0 di .env agar bisa diakses dari luar mesin

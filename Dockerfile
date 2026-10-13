@@ -8,6 +8,7 @@ RUN set -eux; \
     apt-get install -y --no-install-recommends \
         ca-certificates \
         curl \
+        default-mysql-client \
         git \
         gnupg \
         libfreetype6-dev \
