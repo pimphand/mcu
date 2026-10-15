@@ -6,16 +6,112 @@ use App\Models\Employee;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class EmployeeService
 {
     const PREFIX = 'E';
     private Employee $employee;
     private User $user;
+
+    /** @var array<string, int> */
+    private array $resolvedEmployeeIds = [];
+
+    /** @var array<int, string> */
+    private array $createdEmployees = [];
+
     public function __construct()
     {
         $this->employee = new Employee;
         $this->user = new User;
+    }
+
+    /**
+     * Cari employee berdasarkan namanya; bila belum terdaftar maka dibuat baru.
+     * Dipakai proses import supaya hasil pemeriksaan tidak salah ditempelkan
+     * ke dokter lain yang sudah ada.
+     */
+    public function findOrCreateByName(?string $nama, ?int $clientId = null): ?Employee
+    {
+        $nama = $this->normalizeName($nama);
+
+        if ($nama === null) {
+            return null;
+        }
+
+        $employee = $this->employee->newQuery()
+            ->whereRaw('LOWER(TRIM(nama)) = ?', [mb_strtolower($nama)])
+            ->first();
+
+        if ($employee) {
+            return $employee;
+        }
+
+        $employee = $this->employee->create([
+            'nama' => $nama,
+            'code' => $this->generateCode(),
+            'client_id' => $clientId,
+        ]);
+
+        $this->createdEmployees[$employee->id] = $employee->nama;
+
+        Log::info('Employee dibuat otomatis dari import', [
+            'employee_id' => $employee->id,
+            'nama' => $employee->nama,
+            'client_id' => $clientId,
+        ]);
+
+        return $employee;
+    }
+
+    /**
+     * Versi cache dari findOrCreateByName: satu nama hanya di-query/dibuat
+     * sekali walau muncul ratusan kali dalam satu file import.
+     */
+    public function findOrCreateIdByName(?string $nama, ?int $clientId = null): ?int
+    {
+        $nama = $this->normalizeName($nama);
+
+        if ($nama === null) {
+            return null;
+        }
+
+        $key = mb_strtolower($nama);
+
+        if (! array_key_exists($key, $this->resolvedEmployeeIds)) {
+            $this->resolvedEmployeeIds[$key] = $this->findOrCreateByName($nama, $clientId)->id;
+        }
+
+        return $this->resolvedEmployeeIds[$key];
+    }
+
+    /**
+     * Nama employee yang dibuat otomatis selama proses ini berjalan.
+     *
+     * @return array<int, string>
+     */
+    public function getCreatedEmployees(): array
+    {
+        return array_values($this->createdEmployees);
+    }
+
+    private function normalizeName(?string $nama): ?string
+    {
+        $nama = preg_replace('/\s+/', ' ', trim((string) $nama));
+
+        return $nama === '' ? null : $nama;
+    }
+
+    private function generateCode(): string
+    {
+        $sequence = $this->employee->count();
+
+        do {
+            $sequence++;
+            $code = sprintf('%s-%s', self::PREFIX, str_pad((string) $sequence, 5, '0', STR_PAD_LEFT));
+        } while ($this->employee->where('code', $code)->exists());
+
+        return $code;
     }
 
     public function query()

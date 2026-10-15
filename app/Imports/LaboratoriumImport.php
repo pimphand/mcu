@@ -4,9 +4,9 @@ namespace App\Imports;
 
 use App\Models\Laboratorium;
 use App\Models\Participant;
+use App\Services\EmployeeService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Session;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
@@ -15,10 +15,14 @@ use Maatwebsite\Excel\Concerns\WithStartRow;
 class LaboratoriumImport implements ToModel, WithStartRow, WithChunkReading, WithHeadingRow, ShouldQueue
 {
     protected $client_id;
+    protected $contract_id;
+    protected EmployeeService $employeeService;
 
-    public function __construct($client_id)
+    public function __construct($client_id, $contract_id = null)
     {
         $this->client_id = $client_id;
+        $this->contract_id = $contract_id;
+        $this->employeeService = new EmployeeService;
     }
 
     /**
@@ -69,9 +73,19 @@ class LaboratoriumImport implements ToModel, WithStartRow, WithChunkReading, Wit
                 "reduksi" => $row['reduksi'] ?? null,
                 "hbsag" => $row['hbsag'] ?? null,
                 "selesai" => 1,
+                "client_id" => $this->client_id,
+                // Pemeriksa lab dari file dipetakan ke tabel employees; kalau
+                // namanya belum terdaftar maka dibuatkan baru, bukan ke dokter lain.
+                "employee_id" => $this->employeeService->findOrCreateIdByName($row['pemeriksa_lab'] ?? null, $this->client_id),
             ];
 
-            $pemeriksaan = Participant::with('laboratorium')->where('code', $row['code'])->where('contract_id', Session::get('client_id'))->first();
+            $pemeriksaan = Participant::query()
+                ->where('code', $row['code'])
+                ->when($this->client_id, fn ($query) => $query->where('client_id', $this->client_id))
+                ->when($this->contract_id, fn ($query) => $query->where('contract_id', $this->contract_id))
+                ->orderByDesc('register_date')
+                ->orderByDesc('id')
+                ->first();
 
             if ($pemeriksaan) {
                 $pemeriksaan->laboratorium()->updateOrCreate(['participant_id' => $pemeriksaan->id], $data);
@@ -89,5 +103,13 @@ class LaboratoriumImport implements ToModel, WithStartRow, WithChunkReading, Wit
     public function chunkSize(): int
     {
         return 10;
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    public function getCreatedDoctors(): array
+    {
+        return $this->employeeService->getCreatedEmployees();
     }
 }

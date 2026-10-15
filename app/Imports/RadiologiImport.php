@@ -5,6 +5,7 @@ namespace App\Imports;
 use App\Events\ImportCompleted;
 use App\Models\Participant;
 use App\Models\Radiologi;
+use App\Services\EmployeeService;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Log;
@@ -25,11 +26,13 @@ class RadiologiImport implements ToModel, WithStartRow, WithChunkReading, WithHe
     protected $totalRowsProcessed = 0;
     protected $totalRowsSkipped = 0;
     protected $skippedCodes = [];
+    protected EmployeeService $employeeService;
 
     public function __construct($client_id, $contract_id = null)
     {
         $this->client_id = $client_id;
         $this->contract_id = $contract_id;
+        $this->employeeService = new EmployeeService;
     }
 
     /**
@@ -75,7 +78,9 @@ class RadiologiImport implements ToModel, WithStartRow, WithChunkReading, WithHe
             'kesan' => $row['kesan'] ?? null,
             'diperiksa' => $row['pemeriksa'] ?? null,
             'selesai' => 1,
-            'employee_id' => 3,
+            // Pemeriksa dari file dipetakan ke tabel employees; kalau namanya
+            // belum terdaftar maka dibuatkan baru, bukan ke dokter lain.
+            'employee_id' => $this->employeeService->findOrCreateIdByName($row['pemeriksa'] ?? null, $this->client_id),
         ]);
 
         $this->totalRowsProcessed++;
@@ -112,6 +117,14 @@ class RadiologiImport implements ToModel, WithStartRow, WithChunkReading, WithHe
     public function getSkippedCodes(): array
     {
         return $this->skippedCodes;
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    public function getCreatedDoctors(): array
+    {
+        return $this->employeeService->getCreatedEmployees();
     }
 
     /**

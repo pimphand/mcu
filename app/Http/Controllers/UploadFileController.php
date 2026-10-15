@@ -54,7 +54,7 @@ class UploadFileController extends Controller
             'fileExcel' => 'required|mimes:xlsx,xls'
         ]);
 
-        Excel::import(new LaboratoriumImport(Session::get('client_id')), $request->file('fileExcel'));
+        Excel::import(new LaboratoriumImport(Session::get('client_id'), Session::get('contract_id')), $request->file('fileExcel'));
 
         return ['status' => 'success'];
     }
@@ -101,6 +101,7 @@ class UploadFileController extends Controller
             'processed' => $import->getTotalRowsProcessed(),
             'skipped' => $import->getTotalRowsSkipped(),
             'skipped_codes' => $import->getSkippedCodes(),
+            'created_doctors' => $import->getCreatedDoctors(),
         ];
     }
     public function getGeneralResult(Request $request)

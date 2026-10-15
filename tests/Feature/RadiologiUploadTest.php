@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Employee;
 use App\Models\Radiologi;
 use App\Models\User;
 use Illuminate\Http\UploadedFile;
@@ -17,7 +18,9 @@ class RadiologiUploadTest extends TestCase
     {
         $clientId = 1;
         $contractId = 4;
-
+        $examinerName = 'dr. Nicha Stevia Sp. Rad';
+        // Dokter pemeriksa mungkin sudah pernah dibuat oleh upload sebelumnya.
+        $examinerExisted = Employee::whereRaw('LOWER(TRIM(nama)) = ?', [mb_strtolower($examinerName)])->exists();
         $rowsBefore = Radiologi::count();
 
         DB::beginTransaction();
@@ -50,6 +53,19 @@ class RadiologiUploadTest extends TestCase
             $this->assertSame('2026-10-12', substr((string) $sample->date_mcu, 0, 10));
             $this->assertSame('dr. Nicha Stevia Sp. Rad', $sample->diperiksa);
             $this->assertSame(1, (int) $sample->selesai);
+
+            // Pemeriksa harus dipetakan ke namanya sendiri, bukan dokter lain.
+            $examiner = Employee::where('nama', 'dr. Nicha Stevia Sp. Rad')->first();
+            $this->assertNotNull($examiner, 'Pemeriksa dari file tidak dibuatkan di tabel employees.');
+            $this->assertNotSame(3, $examiner->id);
+            $this->assertSame($examiner->id, (int) $sample->employee_id);
+            $this->assertSame(0, (clone $stored)->where('employee_id', 3)->count(), 'Masih ada baris yang menunjuk ke dokter lain.');
+            $this->assertSame([$examiner->id], (clone $stored)->pluck('employee_id')->unique()->values()->all());
+            $this->assertSame(
+                $examinerExisted ? [] : [$examinerName],
+                $response->json('created_doctors'),
+                'created_doctors tidak sesuai dengan kondisi awal tabel employees.'
+            );
         } finally {
             DB::rollBack();
         }

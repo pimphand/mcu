@@ -162,6 +162,10 @@
                         }
                     }
 
+                    if (response.created_doctors && response.created_doctors.length) {
+                        text += `. Dokter baru dibuat di master karyawan: ${response.created_doctors.join(', ')}`;
+                    }
+
                     Swal.fire({ icon: icon, title: 'Info', text: text });
                 },
                 error: function(xhr, status, error) {

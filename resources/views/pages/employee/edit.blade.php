@@ -25,7 +25,7 @@
                                 <div class="form-group">
                                     <label class="form-label mt-1">NIK</label>
                                     <input type="text" name="nik" class="form-control" placeholder="nik"
-                                        value="{{ old('nik', $employee->nik) }}" required>
+                                        value="{{ old('nik', $employee->nik) }}" >
                                     @error('nik')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
@@ -33,7 +33,7 @@
                                 <div class="form-group">
                                     <label class="form-label mt-1">Nama</label>
                                     <input type="text" name="nama" class="form-control" placeholder="nama"
-                                        value="{{ old('nama', $employee->nama) }}" required>
+                                        value="{{ old('nama', $employee->nama) }}" >
                                     @error('nama')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
@@ -41,7 +41,7 @@
                                 <div class="form-group">
                                     <label class="form-label mt-1">Jenis Kelamin</label>
                                     <select name="jenis_kelamin" id="jenis_kelamin" class="form-control form-select"
-                                        required>
+                                        >
                                         @foreach ($employeeMaster->getJK() as $key => $item)
                                             <option value="{{ $key }}"
                                                 {{ old('jenis_kelamin', $employee->jenis_kelamin) == $key ? 'selected' : '' }}>
@@ -55,7 +55,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label mt-1">Agama</label>
-                                    <select name="agama" id="agama" class="form-control form-select" required>
+                                    <select name="agama" id="agama" class="form-control form-select" >
                                         <option value="-t">-</option>
                                         @foreach ($employeeMaster->getAgama() as $key => $item)
                                             <option value="{{ $key }}"
@@ -70,7 +70,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label mt-1">Status</label>
-                                    <select name="status" id="status" class="form-control form-select" required>
+                                    <select name="status" id="status" class="form-control form-select" >
                                         @foreach ($employeeMaster->getStatusKTP() as $key => $item)
                                             <option value="{{ $key }}"
                                                 {{ old('status', $employee->status) == $key ? 'selected' : '' }}>
@@ -86,7 +86,7 @@
                                     <label class="form-label mt-1">Tanggal Lahir</label>
                                     <input type="date" name="tanggal_lahir" class="form-control"
                                         placeholder="tanggal lahir"
-                                        value="{{ old('tanggal_lahir', $employee->tanggal_lahir) }}" required>
+                                        value="{{ old('tanggal_lahir', $employee->tanggal_lahir) }}" >
                                     @error('tanggal_lahir')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
@@ -95,7 +95,7 @@
                                     <label class="form-label mt-1">Tempat Lahir</label>
                                     <input type="text" name="tempat_lahir" class="form-control"
                                         placeholder="tempat lahir"
-                                        value="{{ old('tempat_lahir', $employee->tempat_lahir) }}" required>
+                                        value="{{ old('tempat_lahir', $employee->tempat_lahir) }}" >
                                     @error('tempat_lahir')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
@@ -113,7 +113,7 @@
                                 <div class="form-group">
                                     <label class="form-label mt-1">Golongan Darah</label>
                                     <select name="golongan_darah" id="golongan_darah" class="form-control form-select"
-                                        required>
+                                        >
                                         <option value="-">-</option>
                                         @foreach ($employeeMaster->getGolonganDarah() as $key => $item)
                                             <option value="{{ $key }}"
@@ -136,7 +136,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label mt-1">Pendidikan</label>
-                                    <select name="pendidikan" id="pendidikan" class="form-control form-select" required>
+                                    <select name="pendidikan" id="pendidikan" class="form-control form-select" >
                                         <option value="-">-</option>
                                         @foreach ($employeeMaster->getPendidikan() as $key => $item)
                                             <option value="{{ $key }}"
@@ -152,7 +152,7 @@
                                 <div class="form-group">
                                     <label class="form-label mt-1">Telp</label>
                                     <input type="tel" name="telp" class="form-control" placeholder="telp"
-                                        value="{{ old('telp', $employee->telp) }}" required>
+                                        value="{{ old('telp', $employee->telp) }}" >
                                     @error('telp')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
@@ -167,7 +167,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label mt-1">Status Karyawan</label>
-                                    <select name="pendidikan" id="pendidikan" class="form-control form-select" required>
+                                    <select name="pendidikan" id="pendidikan" class="form-control form-select" >
                                         <option value="-">-</option>
                                         @foreach ($employeeMaster->getStatusKaryawan() as $key => $item)
                                             <option value="{{ $key }}"
@@ -218,7 +218,7 @@
                                 <div class="form-group">
                                     <label class="form-label mt-1">Status Warga Negara</label>
                                     <select name="warga_negara" id="warga_negara" class="form-control form-select"
-                                        required>
+                                        >
                                         @foreach ($employeeMaster->getStatusWargaNegara() as $key => $item)
                                             <option value="{{ $key }}"
                                                 {{ old('warga_negara', $employee->warga_negara) == $key ? 'selected' : '' }}>
@@ -244,6 +244,24 @@
                                         placeholder="input.."
                                         value="{{ old('nomor_rekening', $employee->nomor_rekening) }}">
                                     @error('nomor_rekening')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label mt-1">Gambar TTD</label>
+                                    @if ($employee->ttd)
+                                        <div class="mb-1">
+                                            <img src="{{ asset($employee->ttd) }}" alt="ttd {{ $employee->nama }}"
+                                                style="max-height: 90px; background: #fff; border: 1px solid #dfe3e7; padding: 2px;">
+                                        </div>
+                                    @else
+                                        <div class="text-muted small mb-1">Belum ada gambar tanda tangan.</div>
+                                    @endif
+                                    <input type="file" name="ttd" class="form-control form-control-file"
+                                        accept="image/png,image/jpeg,image/jpg">
+                                    <small class="text-muted">Biarkan kosong bila tidak ingin mengubah tanda tangan. Format
+                                        JPG/PNG.</small>
+                                    @error('ttd')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
                                 </div>
