@@ -63,6 +63,8 @@ class UploadFileController extends Controller
     {
         $participantService = new ParticipantService();
         $client = $participantService->getClient();
+        $contractId = Session::get('contract_id');
+        $contract = $client->contracts->firstWhere('id', $contractId);
 
         if ($request->ajax()) {
             $data = QueryBuilder::for(Radiologi::class)
@@ -71,6 +73,8 @@ class UploadFileController extends Controller
                         ->Divisi($request->divisi_id);
                 })
                 ->DateRange($request->date_range)
+                // Kontrak tidak difilter dari request, melainkan dari sesi MCU IN.
+                ->Contract($contractId)
                 ->orderByDesc('date_mcu')
                 ->orderByDesc('id')
                 ->get();
@@ -79,7 +83,7 @@ class UploadFileController extends Controller
                 "data" => $data
             ];
         }
-        return view('pages.upload.radiologi', compact('client'));
+        return view('pages.upload.radiologi', compact('client', 'contract'));
     }
 
     public function radiologi(Request $request)

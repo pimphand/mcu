@@ -21,6 +21,23 @@ class Radiologi extends Model
         return $this->belongsTo(Participant::class);
     }
 
+    public function contract()
+    {
+        return $this->belongsTo(Contract::class);
+    }
+
+    /**
+     * Filter berdasarkan kontrak pemeriksaan. Kosong berarti tanpa filter.
+     */
+    public function scopeContract(Builder $query, $contractId)
+    {
+        if (empty($contractId)) {
+            return $query;
+        }
+
+        return $query->where('contract_id', $contractId);
+    }
+
     /**
      * Filter berdasarkan tanggal MCU (kolom TGL_MCU pada template radiologi).
      * Rentang kosong berarti tanpa filter, sehingga seluruh data tetap tampil.

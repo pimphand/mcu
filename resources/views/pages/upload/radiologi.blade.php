@@ -34,7 +34,7 @@
         <div class="card-body">
             <form action="{{ route('participant.print.mcu') }}" method="get">
                 <div class="row">
-                    <div class="col-md-3">
+                    <div class="col-md-3" style="display:none">
                         <label class="form-label" for="fp-range">Tanggal</label>
                         <input type="text" name="filter[date_range]" id="fp-range" class="form-control flatpickr-range"
                                placeholder="YYYY-MM-DD to YYYY-MM-DD" />
@@ -47,13 +47,9 @@
                     </div>
                     <div class="col-md-3">
                         <label for="" class="form-label">Kontrak</label>
-                        <select name="filter[contract_id]" id="contract_id" class="form-select">
-                            <option value="">Pilih</option>
-                            @foreach ($client->contracts as $item)
-                                <option value="{{ $item->id }}"
-                                    {{ session('contract_id') == $item->id ? 'selected' : '' }}>{{ $item->name }}</option>
-                            @endforeach
-                        </select>
+                        {{-- Kontrak bukan filter lagi: selalu mengikuti kontrak sesi MCU IN. --}}
+                        <input type="text" class="form-control" id="contract_name"
+                               value="{{ $contract->name ?? 'Belum ada kontrak aktif' }}" disabled>
                     </div>
                     <div class="col-md-2">
                         <label for="" class="form-label">Divisi</label>

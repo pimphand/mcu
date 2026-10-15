@@ -67,6 +67,7 @@ class RadiologiImport implements ToModel, WithStartRow, WithChunkReading, WithHe
         Radiologi::updateOrCreate([
             'participant_id' => $participant->id,
         ], [
+            'contract_id' => $participant->contract_id,
             'date_mcu' => $this->toDate($row['tgl_mcu'] ?? null),
             'cor' => $row['cor'] ?? null,
             'diafragma_sinus' => $row['diafragma_sinus'] ?? null,

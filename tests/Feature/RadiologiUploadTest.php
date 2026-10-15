@@ -46,6 +46,7 @@ class RadiologiUploadTest extends TestCase
 
             $sample = (clone $stored)->whereHas('participant', fn ($query) => $query->where('code', 'MCU00001'))->first();
             $this->assertNotNull($sample);
+            $this->assertSame($contractId, (int) $sample->contract_id, 'contract_id radiologi tidak ikut terisi dari peserta.');
             $this->assertSame('2026-10-12', substr((string) $sample->date_mcu, 0, 10));
             $this->assertSame('dr. Nicha Stevia Sp. Rad', $sample->diperiksa);
             $this->assertSame(1, (int) $sample->selesai);
