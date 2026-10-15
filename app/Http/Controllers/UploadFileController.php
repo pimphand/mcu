@@ -6,7 +6,6 @@ use App\Imports\DoctorValidateImport;
 use App\Imports\GeneralResultImport;
 use App\Imports\LaboratoriumImport;
 use App\Imports\RadiologiImport;
-use App\Jobs\TestJob;
 use App\Models\Radiologi;
 use App\Models\Laboratorium;
 use App\Services\ParticipantService;
@@ -69,10 +68,13 @@ class UploadFileController extends Controller
             $data = QueryBuilder::for(Radiologi::class)
                 ->withWhereHas('participant', function ($query) use ($request) {
                     $query->where('client_id', Session::get('client_id'))
-                        ->DateRange($request->date_range);
+                        ->Divisi($request->divisi_id);
                 })
+                ->DateRange($request->date_range)
+                ->orderByDesc('date_mcu')
+                ->orderByDesc('id')
                 ->get();
-            TestJob::dispatch();
+
             return [
                 "data" => $data
             ];
@@ -86,9 +88,16 @@ class UploadFileController extends Controller
             'fileExcel' => 'required|mimes:xlsx,xls'
         ]);
 
-        Excel::Import(new RadiologiImport(Session::get('client_id')), $request->file('fileExcel'));
+        $import = new RadiologiImport(Session::get('client_id'), Session::get('contract_id'));
 
-        return ['status' => 'success'];
+        Excel::Import($import, $request->file('fileExcel'));
+
+        return [
+            'status' => 'success',
+            'processed' => $import->getTotalRowsProcessed(),
+            'skipped' => $import->getTotalRowsSkipped(),
+            'skipped_codes' => $import->getSkippedCodes(),
+        ];
     }
     public function getGeneralResult(Request $request)
     {

@@ -129,19 +129,12 @@
     <script src="{{ asset('app-assets/vendors/js/pickers/pickadate/picker.time.js') }}"></script>
     <script src="{{ asset('app-assets/vendors/js/pickers/pickadate/legacy.js') }}"></script>
     <script src="{{ asset('app-assets/vendors/js/pickers/flatpickr/flatpickr.min.js') }}"></script>
-    @php
-        $date1 = now()->subDay()->format('Y-m-d');
-        $date2 = now()->format('Y-m-d');
-        if (request()->get('date_range')) {
-            $date1 = explode(' to ', request()->get('date_range'))[0];
-            $date2 = explode(' to ', request()->get('date_range'))[1] ?? null;
-        }
-    @endphp
     <script>
+        // Tanggal sengaja dikosongkan agar tabel langsung menampilkan seluruh
+        // data radiologi; filter baru aktif setelah rentang tanggal dipilih.
         let rangePickr = $('.flatpickr-range').flatpickr({
             mode: 'range',
-            maxDate: 'today',
-            defaultDate: ["{{ $date1 }}", "{{ $date2 }}"]
+            maxDate: 'today'
         });
     </script>
 
@@ -162,7 +155,18 @@
                     $('#upload_btn').attr('disabled', true).text('Uploading...');
                 },
                 success: function(response) {
-                    Swal.fire({ icon: 'info', title: 'Info', text: 'Data sedang di proses' });
+                    let text = `${response.processed} data berhasil disimpan`;
+                    let icon = 'success';
+
+                    if (response.skipped > 0) {
+                        icon = response.processed > 0 ? 'warning' : 'error';
+                        text += `, ${response.skipped} baris dilewati karena no MCU tidak ditemukan pada kontrak yang aktif`;
+                        if (response.skipped_codes && response.skipped_codes.length) {
+                            text += ` (contoh: ${response.skipped_codes.slice(0, 5).join(', ')})`;
+                        }
+                    }
+
+                    Swal.fire({ icon: icon, title: 'Info', text: text });
                 },
                 error: function(xhr, status, error) {
                     Swal.fire({ icon: 'error', title: 'Gagal', text: 'Upload failed. Please try again.' });
@@ -173,9 +177,13 @@
             });
         });
 
-        $('#cari').click(function (e){
-            let url = "{{ route('upload.radiologi') }}"
-            url = url + "?date_range="+ $('#fp-range').val()+`&client_id=${$('#client_id').val()}`;
+        let loadRadiologi = function() {
+            let params = new URLSearchParams({
+                date_range: $('#fp-range').val(),
+                client_id: $('#client_id').val(),
+                divisi_id: $('#divisi_id').val()
+            });
+            let url = "{{ route('upload.radiologi') }}" + "?" + params.toString();
             $.ajax({
                 url: url,  // URL untuk mengirim data
                 type: 'get',
@@ -187,28 +195,38 @@
                     $.each(response.data, function(index, item) {
                         tableRows += `<tr>
                             <td class="border-bottom border-top text-right" nowrap="">${index + 1}</td>
-                            <td class="border-bottom border-top text-right" nowrap="">${item.date_mcu}</td>
-                            <td class="border-bottom border-top">${item.created_at.split('T')[0]}</td>
-                            <td class="border-bottom border-top">${item.participant.code}</td>
-                            <td class="border-bottom border-top">${item.participant.name}</td>
-                            <td class="border-bottom border-top">${item.participant.gender}</td>
-                            <td class="border-bottom border-top">${item.cor}</td>
-                            <td class="border-bottom border-top">${item.diafragma_sinus}</td>
-                            <td class="border-bottom border-top">${item.pulmo}</td>
-                            <td class="border-bottom border-top">${item.kesan}</td>
-                            <td class="border-bottom border-top">${item.diperiksa}</td>
+                            <td class="border-bottom border-top text-right" nowrap="">${item.date_mcu ?? '-'}</td>
+                            <td class="border-bottom border-top">${item.created_at ? item.created_at.split('T')[0] : '-'}</td>
+                            <td class="border-bottom border-top">${item.participant ? item.participant.code : '-'}</td>
+                            <td class="border-bottom border-top">${item.participant ? item.participant.name : '-'}</td>
+                            <td class="border-bottom border-top">${item.participant ? item.participant.gender : '-'}</td>
+                            <td class="border-bottom border-top">${item.cor ?? '-'}</td>
+                            <td class="border-bottom border-top">${item.diafragma_sinus ?? '-'}</td>
+                            <td class="border-bottom border-top">${item.pulmo ?? '-'}</td>
+                            <td class="border-bottom border-top">${item.kesan ?? '-'}</td>
+                            <td class="border-bottom border-top">${item.diperiksa ?? '-'}</td>
                         </tr>`;
                     });
+
+                    if (!response.data.length) {
+                        tableRows = `<tr><td colspan="11" class="text-center">Tidak ada data radiologi untuk filter tanggal tersebut</td></tr>`;
+                    }
+
                     $('#tabelLap tbody').html(tableRows);  // Populate the table body
                 },
                 error: function(xhr, status, error) {
-                    Swal.fire({ icon: 'error', title: 'Gagal', text: 'Upload failed. Please try again.' });
+                    Swal.fire({ icon: 'error', title: 'Gagal', text: 'Gagal memuat data radiologi. Silakan coba lagi.' });
                 },
                 complete: function() {
                     $('#cari').attr('disabled', false).text('Cari');
                 }
             });
-        })
+        }
+
+        $('#cari').click(loadRadiologi);
+
+        // Tampilkan data begitu halaman dibuka (tanpa filter tanggal).
+        loadRadiologi();
     </script>
     <script>
         // Inisialisasi Pusher

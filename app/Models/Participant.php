@@ -83,6 +83,18 @@ class Participant extends Model
         return $this->hasOne(ValidateDoctor::class, 'no_mcu', 'code');
     }
 
+    /**
+     * Filter berdasarkan divisi peserta. Kosong berarti tanpa filter.
+     */
+    public function scopeDivisi(Builder $query, $divisiId)
+    {
+        if (empty($divisiId)) {
+            return $query;
+        }
+
+        return $query->where('divisi_id', $divisiId);
+    }
+
     public function scopeDateRange(Builder $query, $date)
     {
         if (empty($date)) {
