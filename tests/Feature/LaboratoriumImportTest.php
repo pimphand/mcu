@@ -36,6 +36,7 @@ class LaboratoriumImportTest extends TestCase
             $this->assertNotNull($lab, 'Baris laboratorium tidak tersimpan.');
             $this->assertSame('13.1', $lab->hemoglobin);
             $this->assertSame(1, (int) $lab->client_id);
+            $this->assertSame(4, (int) $lab->contract_id, 'contract_id laboratorium tidak ikut terisi dari peserta.');
             $this->assertSame($examiner->id, (int) $lab->employee_id);
             $this->assertSame([], $import->getCreatedDoctors());
         } finally {

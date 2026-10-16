@@ -472,23 +472,71 @@ class ParticipantController extends Controller
         return $this->participantService->updateEkg($data, $id);
     }
 
+    /**
+     * Daftar peserta yang dipakai untuk mencetak hasil MCU.
+     *
+     * Filter yang didukung (query string):
+     * - filter[date_range] : rentang tanggal register peserta (YYYY-MM-DD to YYYY-MM-DD)
+     * - filter[divisi_id]  : divisi peserta
+     * - filter[contract_id]: kontrak lain milik client yang sama (opsional)
+     *
+     * Tanpa filter, halaman menampilkan kontrak yang sedang aktif (sesi MCU IN)
+     * untuk rentang tanggal default supaya tabel tidak kosong saat dibuka.
+     */
     public function printMCU(Request $request)
     {
-        // dd($request->all());
-        $data = [];
         $client = $this->participantService->getClient();
-        if ($request->filter) {
-            $data = QueryBuilder::for(Participant::class)
-                ->allowedFilters([
-                    AllowedFilter::exact('client_id'),
-                    AllowedFilter::exact('contract_id'),
-                    AllowedFilter::exact('divisi_id'),
-                    AllowedFilter::scope('date_range'),
-                ])
-                ->defaultSort('code')
-                ->get();
+        $contractId = $request->session()->get('contract_id');
+
+        $filters = (array) $request->input('filter', []);
+        $divisiId = ($filters['divisi_id'] ?? null) ?: null;
+        $requestedContract = ($filters['contract_id'] ?? null) ?: null;
+
+        // Kontrak hanya boleh milik client yang sedang aktif; kalau tidak dikenal,
+        // kembali memakai kontrak sesi MCU IN.
+        $contractIds = $client->contracts->pluck('id')->map(fn ($id) => (int) $id)->all();
+
+        if ($requestedContract && in_array((int) $requestedContract, $contractIds, true)) {
+            $contractId = (int) $requestedContract;
         }
-        return view('pages.participant.print-mcu', compact('client', 'data'));
+
+        // Rentang tanggal memakai default yang sama dengan yang ditampilkan pada
+        // input tanggal: tanggal 1 bulan berjalan sampai hari ini, supaya saat
+        // halaman dibuka selalu terisi data bulan berjalan.
+        $dateRange = trim((string) ($filters['date_range'] ?? ''));
+
+        if ($dateRange === '') {
+            $dateRange = Carbon::now()->startOfMonth()->format('Y-m-d')
+                . ' to '
+                . Carbon::now()->format('Y-m-d');
+        }
+
+        $data = Participant::query()
+            // Peserta di luar client yang sedang aktif tidak pernah ditampilkan.
+            ->where('client_id', $client->id)
+            ->when($contractId, fn ($query) => $query->where('contract_id', $contractId))
+            ->when($divisiId, fn ($query) => $query->where('divisi_id', $divisiId))
+            ->DateRange($dateRange)
+            // Relasi yang dipakai kolom status/tombol cetak diambil sekaligus,
+            // kalau tidak satu baris tabel memicu puluhan query.
+            ->with([
+                'divisi',
+                'department',
+                'validateDoctor',
+                'pemeriksaanFisik',
+                'laboratorium',
+                'radiologi',
+                'audiometri',
+                'ekg',
+                'spirometri',
+                'rectal',
+            ])
+            ->orderBy('code')
+            ->get();
+
+        $contract = $client->contracts->firstWhere('id', $contractId);
+
+        return view('pages.participant.print-mcu', compact('client', 'contract', 'data', 'dateRange', 'divisiId', 'contractId'));
     }
 
     public function detailFotoKamera(int $id)

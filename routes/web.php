@@ -140,6 +140,8 @@ Route::middleware('auth')->group(function () {
     Route::middleware('mcu')->group(function () {
         Route::get('participant-upload-validasi-dokter', [\App\Http\Controllers\UploadFileController::class, 'getValidateDoctor'])->name('upload.validasi.dokter');
         Route::post('participant-upload-validasi-dokter', [\App\Http\Controllers\UploadFileController::class, 'validateDoctor']);
+        Route::get('get-participant-upload-validasi-dokter', [\App\Http\Controllers\UploadFileController::class, 'getValidateDoctorData'])->name('get.validasi.dokter');
+        Route::get('participant-upload-validasi-dokter/template', [\App\Http\Controllers\UploadFileController::class, 'validateDoctorTemplate'])->name('upload.validasi.dokter.template');
         Route::get('participant-upload-laboratorium', [\App\Http\Controllers\UploadFileController::class, 'getlaboratorium'])->name('upload.laboratorium');
         Route::get('get-participant-upload-laboratorium', [\App\Http\Controllers\UploadFileController::class, 'getlaboratoriumData'])->name('get.laboratorium');
         Route::post('participant-upload-laboratorium', [\App\Http\Controllers\UploadFileController::class, 'laboratorium']);
@@ -147,6 +149,7 @@ Route::middleware('auth')->group(function () {
         Route::post('participant-upload-radiologi', [\App\Http\Controllers\UploadFileController::class, 'radiologi']);
         Route::get('participant-upload-umum', [\App\Http\Controllers\UploadFileController::class, 'getGeneralResult'])->name('upload.generalResult');
         Route::post('participant-upload-umum', [\App\Http\Controllers\UploadFileController::class, 'generalResult']);
+        Route::get('participant-upload-umum/template', [\App\Http\Controllers\UploadFileController::class, 'generalResultTemplate'])->name('upload.generalResult.template');
         //   participant-upload-umum
     });
 
@@ -225,6 +228,8 @@ Route::middleware('auth')->group(function () {
     Route::middleware('mcu')->get('/multiple-rectal', [ReportMultipleController::class, 'rectal'])->name('multiple.rectal');
     Route::middleware('mcu')->get('/multiple-radiologi', [ReportMultipleController::class, 'radiologi'])->name('multiple.radiologi');
     Route::middleware('mcu')->get('/multiple-pemeriksaan-fisik', [ReportMultipleController::class, 'pemFisik'])->name('multiple.pemFisik');
+    Route::middleware('mcu')->get('/multiple-resume', [ReportMultipleController::class, 'resume'])->name('multiple.resume');
+    Route::middleware('mcu')->get('/multiple-audiometri', [ReportMultipleController::class, 'audiometri'])->name('multiple.audiometri');
 
     Route::middleware('mcu')->get('/participant-print-mcu', action: [ParticipantController::class, 'printMCU'])->name('participant.print.mcu');
 

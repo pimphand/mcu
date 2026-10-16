@@ -1,6 +1,6 @@
 @extends('layouts.main')
 
-@section('title', 'Upload Radiologi')
+@section('title', 'Upload Hasil Umum')
 
 @section('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/vendors/css/pickers/pickadate/pickadate.css') }}">
@@ -20,97 +20,159 @@
         }
 
         .table th, .table td {
-            padding: 0.75rem;
-            vertical-align: top
+            padding: 0.5rem 0.75rem;
+            vertical-align: top;
+        }
+
+        /* Hasil umum berupa kalimat panjang, jadi kolomnya diberi ruang dan
+           boleh membungkus supaya tabel tidak melebar berlebihan. */
+        #tabelLap td.hasil-umum {
+            min-width: 320px;
+            white-space: normal;
+        }
+
+        /* Penanda kolom yang bisa diklik untuk sortir */
+        #tabelLap th.sortable {
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        #tabelLap th.sortable::after {
+            content: "\21C5";
+            font-size: 9px;
+            margin-left: 4px;
+            opacity: .35;
+        }
+
+        #tabelLap th.sortable.sorting_asc::after {
+            content: "\2191";
+            opacity: 1;
+        }
+
+        #tabelLap th.sortable.sorting_desc::after {
+            content: "\2193";
+            opacity: 1;
         }
     </style>
 @endsection
 
 @section('content')
     <div class="card">
-        <div class="card-header">
-            <h3> Upload Hasil Umum</h3>
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h3 class="mb-0">Upload Hasil Umum</h3>
+            <span class="badge rounded-pill bg-light-secondary text-body">
+                Kontrak: {{ $contract->name ?? 'Belum ada kontrak aktif' }}
+            </span>
         </div>
         <div class="card-body">
-            <form action="{{ route('participant.print.mcu') }}" method="get">
-                <div class="row">
+            {{-- Filter dikirim lewat AJAX, jadi submit form default dimatikan. --}}
+            <form action="{{ route('participant.print.mcu') }}" method="get" onsubmit="return false">
+                <div class="row g-3 align-items-end">
+
+                    {{-- Tanggal --}}
                     <div class="col-md-3">
-                        <label class="form-label" for="fp-range">Tanggal</label>
-                        <input type="text" name="filter[date_range]" id="fp-range" class="form-control flatpickr-range"
-                               placeholder="YYYY-MM-DD to YYYY-MM-DD" />
+                        <label for="fp-range" class="form-label">Tanggal MCU</label>
+                        <input
+                            type="text"
+                            name="filter[date_range]"
+                            id="fp-range"
+                            class="form-control flatpickr-range"
+                            placeholder="YYYY-MM-DD to YYYY-MM-DD"
+                        >
                     </div>
-                    <div class="col-md-3">
-                        <label for="" class="form-label">Client</label>
+
+                    {{-- Client --}}
+                    <div class="col-md-2">
+                        <label for="client_id" class="form-label">Client</label>
                         <select name="client_id" id="client_id" class="form-select">
                             <option value="{{ $client->id }}">{{ $client->name }}</option>
                         </select>
                     </div>
-                    <div class="col-md-3">
-                        <label for="" class="form-label">Kontrak</label>
-                        <select name="filter[contract_id]" id="contract_id" class="form-select">
-                            <option value="">Pilih</option>
-                            @foreach ($client->contracts as $item)
-                                <option value="{{ $item->id }}"
-                                    {{ session('contract_id') == $item->id ? 'selected' : '' }}>{{ $item->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
+
+                    {{-- Divisi --}}
                     <div class="col-md-2">
-                        <label for="" class="form-label">Divisi</label>
+                        <label for="divisi_id" class="form-label">Divisi</label>
                         <select name="filter[divisi_id]" id="divisi_id" class="form-select">
-                            <option value="">Pilih</option>
+                            <option value="">Semua Divisi</option>
                             @foreach ($client->divisi as $item)
                                 <option value="{{ $item->id }}">{{ $item->name }}</option>
                             @endforeach
                         </select>
                     </div>
-                    <div class="col-md-1">
-                        <label for="" class="form-label text-white">cari</label>
-                        <button type="button" class="btn btn-primary" id="cari">Cari</button>
+
+                    {{-- Pencarian --}}
+                    <div class="col-md-2">
+                        <label for="search" class="form-label">Nama / Kode MCU</label>
+                        <input
+                            type="text"
+                            name="filter[search]"
+                            id="search"
+                            class="form-control"
+                            placeholder="Cari nama/kode..."
+                        >
                     </div>
+
+                    {{-- Tombol aksi: tingginya mengikuti input karena baris ini align-items-end. --}}
+                    <div class="col-md-3">
+                        <div class="d-flex gap-2">
+                            <button type="button" class="btn btn-primary flex-fill" id="cari">
+                                {{-- <i class="fas fa-search me-1" id="cari_icon"></i> --}}
+                                <span id="cari_text">Cari</span>
+                            </button>
+                            <button type="button" class="btn btn-outline-secondary flex-fill" id="reset">
+                                {{-- <i class="fas fa-undo me-1"></i> --}}
+                                Reset
+                            </button>
+                        </div>
+                    </div>
+
                 </div>
             </form>
+
             <div class="row">
-                <div class="col-md-12 mt-2">
+                <div class="col-md-12 mt-3">
                     <h3>Import Data</h3>
                     <form id="formUpload" method="post" enctype="multipart/form-data">
                         @csrf
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-8">
                                 <div class="form-group">
-                                    <label>Pilih File Excel</label>
-                                    <input type="file" name="fileExcel" class="">
-                                    <button class="btn btn-success left" id="upload_btn" type="button">
-                                        <i class="mdi mdi-cloud-upload"></i>
-                                        Upload
-                                    </button>
-                                    <a href="https://docs.google.com/spreadsheets/d/1qlsSuNyR7Uf7T8YVIL49Oi_ehLF5DkBTls2JEW5jSJU/edit?usp=sharing" target="_blank" class="btn btn-success left" type="button">
-                                        <i class="mdi mdi-cloud-upload"></i>
-                                        Template
-                                    </a>
+                                    <label for="fileExcel">Pilih File Excel</label>
+                                    <input type="file" name="fileExcel" id="fileExcel" class="form-control">
+                                    <div class="d-flex gap-2 mt-2">
+                                        <button class="btn btn-success" id="upload_btn" type="button">
+                                            <i class="mdi mdi-cloud-upload" id="upload_icon"></i>
+                                            <span id="upload_text">Upload</span>
+                                        </button>
+                                        <a href="{{ route('upload.generalResult.template') }}" class="btn btn-outline-success">
+                                            <i class="mdi mdi-file-excel"></i>
+                                            Template
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </form>
-                    <div id="progress">
-                        <div id="progress-bar" style="width: 0%; background-color: green; height: 25px;"></div>
-                    </div>
                 </div>
             </div>
-            <div class="table-responsive small textkecil">
-                <table id="tabelLap" border="1" class="table customize-table table-bordered mb-0 v-middle ">
+
+            <div class="table-responsive textkecil mt-3">
+                <table id="tabelLap" class="table customize-table table-bordered mb-0 v-middle textkecil">
                     <thead>
                     <tr>
-                        <th class="border-bottom border-top">No.</th>
-                        <th class="border-bottom border-top">TANGGAL MCU</th>
-                        <th class="border-bottom border-top">TANGGAL UPLOAD</th>
-                        <th class="border-bottom border-top">MCU ID</th>
-                        <th class="border-bottom border-top">NAMA</th>
-                        <th class="border-bottom border-top">Hasil Umum / Diagnosa Akhir</th>
+                        <th class="border-bottom border-top textkecil">No.</th>
+                        {{-- Klik judul kolom untuk sortir (asc/desc). --}}
+                        <th class="border-bottom border-top textkecil sortable" data-sort="mcu_date">TANGGAL MCU</th>
+                        <th class="border-bottom border-top textkecil sortable" data-sort="created_at">TANGGAL UPLOAD</th>
+                        <th class="border-bottom border-top textkecil sortable" data-sort="mcu_id">MCU ID</th>
+                        <th class="border-bottom border-top textkecil sortable" data-sort="name">NAMA</th>
+                        <th class="border-bottom border-top textkecil">HASIL UMUM / DIAGNOSA AKHIR</th>
                     </tr>
                     </thead>
                     <tbody id="data">
-
+                    <tr>
+                        <td colspan="6" class="text-center">Memuat data...</td>
+                    </tr>
                     </tbody>
                 </table>
             </div>
@@ -125,85 +187,211 @@
     <script src="{{ asset('app-assets/vendors/js/pickers/pickadate/legacy.js') }}"></script>
     <script src="{{ asset('app-assets/vendors/js/pickers/flatpickr/flatpickr.min.js') }}"></script>
     @php
-        $date1 = now()->subDay()->format('Y-m-d');
-        $date2 = now()->format('Y-m-d');
-        if (request()->get('date_range')) {
-            $date1 = explode(' to ', request()->get('date_range'))[0];
-            $date2 = explode(' to ', request()->get('date_range'))[1] ?? null;
-        }
+        // Rentang tanggal dibiarkan kosong saat halaman dibuka supaya daftar
+        // tidak langsung terpotong; filter tanggal aktif kalau dipilih.
+        $dateRange = request()->input('filter.date_range');
+        $date1 = $dateRange ? explode(' to ', $dateRange)[0] : null;
+        $date2 = $dateRange ? (explode(' to ', $dateRange)[1] ?? null) : null;
     @endphp
     <script>
         let rangePickr = $('.flatpickr-range').flatpickr({
             mode: 'range',
             maxDate: 'today',
-            defaultDate: ["{{ $date1 }}", "{{ $date2 }}"]
+            @if ($date1)
+            defaultDate: ["{{ $date1 }}", "{{ $date2 ?? $date1 }}"],
+            @endif
         });
     </script>
 
     <script type="module">
-        $("#upload_btn").click(function (e){
+        // Sortir aktif: null berarti urutan default dari server (upload terbaru dulu).
+        let sortColumn = null;
+        let sortDirection = 'asc';
+
+        // Hasil umum berupa teks bebas, jadi harus di-escape sebelum masuk HTML.
+        let escapeHtml = function (value) {
+            if (value === null || value === undefined || value === '') {
+                return '-';
+            }
+
+            return String(value)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        };
+
+        let shortDate = function (value) {
+            if (!value) {
+                return '-';
+            }
+
+            return String(value).replace('T', ' ').split(' ')[0];
+        };
+
+        // Parameter filter mengikuti nama yang diizinkan endpoint: filter[date_range],
+        // filter[divisi_id], filter[search], plus sort. Parameter kosong tidak dikirim.
+        let filterParams = function () {
+            let params = new URLSearchParams();
+            let dateRange = $('#fp-range').val();
+            let divisi = $('#divisi_id').val();
+            let search = $.trim($('#search').val());
+
+            if (dateRange) {
+                params.set('filter[date_range]', dateRange);
+            }
+            if (divisi) {
+                params.set('filter[divisi_id]', divisi);
+            }
+            if (search) {
+                params.set('filter[search]', search);
+            }
+            if (sortColumn) {
+                params.set('sort', (sortDirection === 'desc' ? '-' : '') + sortColumn);
+            }
+
+            return params;
+        };
+
+        let showSortIndicator = function () {
+            $('#tabelLap th.sortable').removeClass('sorting_asc sorting_desc');
+
+            if (sortColumn) {
+                $('#tabelLap th.sortable[data-sort="' + sortColumn + '"]')
+                    .addClass(sortDirection === 'desc' ? 'sorting_desc' : 'sorting_asc');
+            }
+        };
+
+        // Status tombol Cari. Teks dan ikon diubah satu per satu: memakai .text()
+        // pada tombolnya akan menghapus ikon secara permanen.
+        let setCariState = function (loading) {
+            $('#cari').prop('disabled', loading);
+            $('#cari_text').text(loading ? 'Diproses...' : 'Cari');
+            $('#cari_icon').attr('class', loading ? 'fas fa-spinner fa-spin me-1' : 'fas fa-search me-1');
+        };
+
+        let setUploadState = function (loading) {
+            $('#upload_btn').prop('disabled', loading);
+            $('#upload_text').text(loading ? 'Uploading...' : 'Upload');
+            $('#upload_icon').attr('class', loading ? 'mdi mdi-loading mdi-spin' : 'mdi mdi-cloud-upload');
+        };
+
+        let loadHasilUmum = function () {
+            showSortIndicator();
+            let url = "{{ route('upload.generalResult') }}" + "?" + filterParams().toString();
+
+            $.ajax({
+                url: url,
+                type: 'get',
+                beforeSend: function () {
+                    setCariState(true);
+                },
+                success: function (response) {
+                    let tableRows = '';
+
+                    $.each(response.data, function (index, item) {
+                        tableRows += `<tr>
+                            <td class="border-bottom border-top text-right">${index + 1}</td>
+                            <td class="border-bottom border-top" nowrap>${escapeHtml(shortDate(item.mcu_date))}</td>
+                            <td class="border-bottom border-top" nowrap>${escapeHtml(shortDate(item.created_at))}</td>
+                            <td class="border-bottom border-top" nowrap>${escapeHtml(item.mcu_id)}</td>
+                            <td class="border-bottom border-top">${escapeHtml(item.name)}</td>
+                            <td class="border-bottom border-top hasil-umum">${escapeHtml(item.result)}</td>
+                        </tr>`;
+                    });
+
+                    if (!response.data.length) {
+                        tableRows = `<tr><td colspan="6" class="text-center">Tidak ada hasil umum untuk kontrak dan filter yang aktif</td></tr>`;
+                    }
+
+                    $('#data').html(tableRows);
+                },
+                error: function (xhr, status, error) {
+                    Swal.fire({ icon: 'error', title: 'Gagal', text: 'Gagal memuat daftar hasil umum.' });
+                },
+                complete: function () {
+                    setCariState(false);
+                }
+            });
+        };
+
+        $("#upload_btn").click(function (e) {
             e.preventDefault();  // Mencegah form submit otomatis
 
             let form = $('#formUpload')[0];  // Ambil elemen form
             let formData = new FormData(form);  // Buat objek FormData dari elemen form
 
             $.ajax({
-                url: "{{ route('upload.generalResult') }}",  // URL untuk mengirim data
+                url: "{{ route('upload.generalResult') }}",
                 type: 'POST',
                 data: formData,  // Data yang dikirim adalah FormData
                 processData: false,  // Jangan proses data
                 contentType: false,  // Jangan tentukan jenis konten (biarkan browser melakukannya)
-                beforeSend: function() {
-                    $('#upload_btn').attr('disabled', true).text('Uploading...');
+                beforeSend: function () {
+                    setUploadState(true);
                 },
-                success: function(response) {
-                    Swal.fire({ icon: 'info', title: 'Info', text: 'Data sedang di proses' });
+                success: function (response) {
+                    let text = `${response.processed} data berhasil disimpan`;
+                    let icon = 'success';
+
+                    if (response.skipped > 0) {
+                        icon = response.processed > 0 ? 'warning' : 'error';
+                        text += `, ${response.skipped} baris dilewati karena kode peserta tidak ditemukan pada kontrak yang aktif`;
+                        if (response.skipped_codes && response.skipped_codes.length) {
+                            text += ` (contoh: ${response.skipped_codes.slice(0, 5).join(', ')})`;
+                        }
+                    }
+
+                    Swal.fire({ icon: icon, title: 'Info', text: text });
+                    // Import berjalan sinkron, jadi tabel bisa langsung disegarkan.
+                    loadHasilUmum();
                 },
-                error: function(xhr, status, error) {
+                error: function (xhr, status, error) {
                     Swal.fire({ icon: 'error', title: 'Gagal', text: 'Upload failed. Please try again.' });
                 },
-                complete: function() {
-                    $('#upload_btn').attr('disabled', false).text('Upload');
+                complete: function () {
+                    setUploadState(false);
                 }
             });
         });
 
-        $('#cari').click(function (e){
-            let url = "{{ route('upload.generalResult') }}"
-            url = url + "?date_range="+ $('#fp-range').val()+`&client_id=${$('#client_id').val()}`;
-            $.ajax({
-                url: url,  // URL untuk mengirim data
-                type: 'get',
-                beforeSend: function() {
-                    $('#cari').attr('disabled', true).text('Diproses...');
-                },
-                success: function(response) {
-                    let tableRows = '';
-                    $.each(response.data, function(index, item) {
-                        tableRows += `<tr>
-                            <td class="border-bottom border-top text-right" nowrap="">${index + 1}</td>
-                            <td class="border-bottom border-top text-right" nowrap="">${item.date_mcu}</td>
-                            <td class="border-bottom border-top">${item.created_at.split('T')[0]}</td>
-                            <td class="border-bottom border-top">${item.participant.code}</td>
-                            <td class="border-bottom border-top">${item.participant.name}</td>
-                            <td class="border-bottom border-top">${item.participant.gender}</td>
-                            <td class="border-bottom border-top">${item.cor}</td>
-                            <td class="border-bottom border-top">${item.diafragma_sinus}</td>
-                            <td class="border-bottom border-top">${item.pulmo}</td>
-                            <td class="border-bottom border-top">${item.kesan}</td>
-                            <td class="border-bottom border-top">${item.diperiksa}</td>
-                        </tr>`;
-                    });
-                    $('#tabelLap tbody').html(tableRows);  // Populate the table body
-                },
-                error: function(xhr, status, error) {
-                    Swal.fire({ icon: 'error', title: 'Gagal', text: 'Upload failed. Please try again.' });
-                },
-                complete: function() {
-                    $('#cari').attr('disabled', false).text('Cari');
-                }
-            });
-        })
+        $('#cari').click(loadHasilUmum);
+
+        // Klik judul kolom: klik pertama asc, klik berikutnya desc.
+        $('#tabelLap').on('click', 'th.sortable', function () {
+            let column = $(this).data('sort');
+
+            if (sortColumn === column) {
+                sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
+            } else {
+                sortColumn = column;
+                sortDirection = 'asc';
+            }
+
+            loadHasilUmum();
+        });
+
+        $('#search').on('keyup', function (e) {
+            if (e.key === 'Enter') {
+                loadHasilUmum();
+            }
+        });
+
+        $('#reset').click(function () {
+            $('#fp-range').val('');
+            if (rangePickr) {
+                rangePickr.clear();
+            }
+            $('#divisi_id').val('');
+            $('#search').val('');
+            sortColumn = null;
+            sortDirection = 'asc';
+            loadHasilUmum();
+        });
+
+        // Tampilkan data begitu halaman dibuka, mengikuti kontrak sesi MCU IN.
+        loadHasilUmum();
     </script>
     <script>
         // Inisialisasi Pusher

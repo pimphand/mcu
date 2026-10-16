@@ -420,11 +420,11 @@
                 </tr>
                 <tr>
                     <td style="text-align: center" class="text-center">
-                        <img src="{{ public_path($participant->pemeriksaanFisik->employee?->ttd ? $participant->pemeriksaanFisik->employee?->ttd : 'images/ttd-kosong.png') }}" width="100" alt="img" alt="img">
+                        <img src="{{ public_path($participant->pemeriksaanFisik?->employee?->ttd ? $participant->pemeriksaanFisik?->employee?->ttd : 'images/ttd-kosong.png') }}" width="100" alt="img" alt="img">
                     </td>
                 </tr>
                 <tr>
-                    <td style="text-align: center" class="text-center">{{ $participant->pemeriksaanFisik->employee?->nama }}</td>
+                    <td style="text-align: center" class="text-center">{{ $participant->pemeriksaanFisik?->employee?->nama }}</td>
                 </tr>
                 </tbody>
             </table>
