@@ -22,6 +22,14 @@ class LaboratoriumUploadTest extends TestCase
     private const EXAMINER = 'dr. Uji Laboratorium';
 
     /**
+     * Nama pemeriksa yang di file ditulis tanpa gelar, sedangkan di master
+     * karyawan sudah terdaftar lengkap dengan gelarnya.
+     */
+    private const EXAMINER_BASE = 'Pemeriksa Uji Gelar';
+
+    private const EXAMINER_TITLED = self::EXAMINER_BASE . ', A.Md.A.K';
+
+    /**
      * Judul kolom file hasil lab. Kolom "Code" sengaja diisi nomor formulir
      * peserta (bukan kode MCU) karena itu bentuk file yang dipakai di lapangan
      * dan pernah membuat seluruh baris dilewati tanpa jejak.
@@ -62,8 +70,9 @@ class LaboratoriumUploadTest extends TestCase
      *
      * @param  \Illuminate\Support\Collection<int, Participant>  $participants
      */
-    private function file($participants, array $hemoglobins = ['17.4', '13.1', '14.0']): UploadedFile
+    private function file($participants, array $hemoglobins = ['17.4', '13.1', '14.0'], ?string $examiner = null): UploadedFile
     {
+        $examiner ??= self::EXAMINER;
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
         $sheet->fromArray(self::HEADINGS, null, 'A1');
@@ -77,7 +86,7 @@ class LaboratoriumUploadTest extends TestCase
             $values[array_search('Nama', self::HEADINGS, true)] = $participant->name;
             $values[array_search('Hemoglobin', self::HEADINGS, true)] = $hemoglobins[$index] ?? '14.0';
             $values[array_search('kesimpulan_lab', self::HEADINGS, true)] = 'Normal';
-            $values[array_search('pemeriksa_lab', self::HEADINGS, true)] = self::EXAMINER;
+            $values[array_search('pemeriksa_lab', self::HEADINGS, true)] = $examiner;
             $values[array_search('hbsag', self::HEADINGS, true)] = 'Negatif';
             $rows[] = $values;
         }
@@ -147,6 +156,138 @@ class LaboratoriumUploadTest extends TestCase
                 $examinerExisted ? [] : [self::EXAMINER],
                 $response->json('created_doctors')
             );
+        } finally {
+            DB::rollBack();
+
+            @unlink($file->getPathname());
+        }
+    }
+
+    /**
+     * Pemeriksa di file ditulis tanpa gelar ("Murni Islamiati") padahal di
+     * master karyawan sudah ada lengkap dengan gelarnya ("Murni Islamiati,
+     * A.Md.A.K"). Upload harus memakai karyawan yang sudah terdaftar itu,
+     * bukan membuat karyawan baru dengan nama tanpa gelar.
+     */
+    public function test_upload_uses_the_employee_whose_name_only_differs_by_its_title(): void
+    {
+        $participants = $this->participants();
+        $file = $this->file($participants, ['17.4', '13.1', '14.0'], self::EXAMINER_BASE);
+
+        // Hanya versi lengkap dengan gelar yang terdaftar di master karyawan.
+        $this->assertSame(
+            0,
+            Employee::whereRaw('LOWER(TRIM(nama)) = ?', [mb_strtolower(self::EXAMINER_BASE)])->count(),
+            'Nama tanpa gelar untuk uji ini sudah ada di master, data uji tidak bersih.'
+        );
+
+        DB::beginTransaction();
+
+        try {
+            $employee = Employee::create([
+                'nama' => self::EXAMINER_TITLED,
+                'code' => 'E-99998',
+                'client_id' => self::CLIENT_ID,
+            ]);
+            $employeesBefore = Employee::count();
+
+            $response = $this->actingAs(User::find(1))
+                ->withSession(['client_id' => self::CLIENT_ID, 'contract_id' => self::CONTRACT_ID])
+                ->post('/participant-upload-laboratorium', ['fileExcel' => $file]);
+
+            $response->assertOk();
+            $response->assertJson([
+                'status' => 'success',
+                'processed' => 3,
+                'skipped' => 0,
+            ]);
+
+            $this->assertSame(
+                [],
+                $response->json('created_doctors'),
+                'Pemeriksa yang sudah terdaftar (lengkap dengan gelar) tidak boleh dibuat ulang.'
+            );
+            $this->assertSame($employeesBefore, Employee::count(), 'Upload membuat karyawan baru.');
+            $this->assertSame(
+                0,
+                Employee::whereRaw('LOWER(TRIM(nama)) = ?', [mb_strtolower(self::EXAMINER_BASE)])->count(),
+                'Upload membuat karyawan baru bernama tanpa gelar.'
+            );
+
+            $rows = Laboratorium::where('contract_id', self::CONTRACT_ID)
+                ->whereIn('participant_id', $participants->pluck('id'))
+                ->with('employee')
+                ->get();
+
+            $this->assertCount(3, $rows, 'Baris hasil lab tidak tersimpan.');
+
+            foreach ($rows as $row) {
+                $this->assertSame(
+                    $employee->id,
+                    (int) $row->employee_id,
+                    'Pemeriksa lab tidak dipetakan ke karyawan dengan gelar yang sudah terdaftar.'
+                );
+                $this->assertSame(self::EXAMINER_TITLED, $row->employee?->nama);
+            }
+        } finally {
+            DB::rollBack();
+
+            @unlink($file->getPathname());
+        }
+    }
+
+    /**
+     * Bila nama tanpa gelar juga ada di master (sisa upload lama), nama yang
+     * lengkap dengan gelarlah yang dipakai supaya hasil pemeriksaan tidak
+     * menempel ke karyawan yang cuma diketik ulang dari file.
+     */
+    public function test_upload_prefers_the_employee_name_that_carries_the_title(): void
+    {
+        $participants = $this->participants();
+        $file = $this->file($participants, ['17.4', '13.1', '14.0'], self::EXAMINER_BASE);
+
+        DB::beginTransaction();
+
+        try {
+            // Nama tanpa gelar sengaja dibuat lebih dulu dan milik client sesi
+            // supaya hanya urutan prioritas yang menentukan hasilnya.
+            $duplicate = Employee::create([
+                'nama' => self::EXAMINER_BASE,
+                'code' => 'E-99997',
+                'client_id' => self::CLIENT_ID,
+            ]);
+            $titled = Employee::create([
+                'nama' => self::EXAMINER_TITLED,
+                'code' => 'E-99996',
+            ]);
+
+            $response = $this->actingAs(User::find(1))
+                ->withSession(['client_id' => self::CLIENT_ID, 'contract_id' => self::CONTRACT_ID])
+                ->post('/participant-upload-laboratorium', ['fileExcel' => $file]);
+
+            $response->assertOk();
+            $response->assertJson([
+                'status' => 'success',
+                'processed' => 3,
+                'skipped' => 0,
+            ]);
+            $this->assertSame([], $response->json('created_doctors'));
+
+            $rows = Laboratorium::where('contract_id', self::CONTRACT_ID)
+                ->whereIn('participant_id', $participants->pluck('id'))
+                ->with('employee')
+                ->get();
+
+            $this->assertCount(3, $rows, 'Baris hasil lab tidak tersimpan.');
+
+            foreach ($rows as $row) {
+                $this->assertSame(
+                    $titled->id,
+                    (int) $row->employee_id,
+                    'Upload memakai karyawan tanpa gelar padahal master sudah punya nama dengan gelar.'
+                );
+                $this->assertNotSame($duplicate->id, (int) $row->employee_id);
+            }
         } finally {
             DB::rollBack();
 

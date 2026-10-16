@@ -39,9 +39,7 @@ class EmployeeService
             return null;
         }
 
-        $employee = $this->employee->newQuery()
-            ->whereRaw('LOWER(TRIM(nama)) = ?', [mb_strtolower($nama)])
-            ->first();
+        $employee = $this->findByName($nama, $clientId);
 
         if ($employee) {
             return $employee;
@@ -62,6 +60,61 @@ class EmployeeService
         ]);
 
         return $employee;
+    }
+
+    /**
+     * Cari employee tanpa membuat data baru.
+     *
+     * Nama pemeriksa di file hasil pemeriksaan sering ditulis tanpa gelar
+     * ("Murni Islamiati") padahal di master karyawan sudah ada lengkap dengan
+     * gelarnya ("Murni Islamiati, A.Md.A.K"). Karena itu nama dicocokkan dua
+     * tahap: nama yang sama persis, lalu nama yang hanya berbeda pada gelar
+     * setelah tanda koma. Bila ada beberapa karyawan yang cocok, urutannya:
+     * nama lengkap dengan gelar, nama yang sama persis dengan file, karyawan
+     * milik client sesi MCU IN, lalu id terkecil. Dengan begitu hasil
+     * pemeriksaan tidak menempel ke nama yang cuma diketik ulang dari file.
+     */
+    public function findByName(?string $nama, ?int $clientId = null): ?Employee
+    {
+        $nama = $this->normalizeName($nama);
+
+        if ($nama === null) {
+            return null;
+        }
+
+        $base = $this->withoutTitle($nama) ?: $nama;
+        $like = addcslashes($base, '%_\\') . ',%';
+
+        $candidates = $this->employee->newQuery()
+            ->where(function ($query) use ($base, $like) {
+                $query->whereRaw('LOWER(TRIM(nama)) = ?', [mb_strtolower($base)])
+                    ->orWhereRaw('LOWER(TRIM(nama)) LIKE ?', [mb_strtolower($like)]);
+            })
+            ->get();
+
+        if ($candidates->isEmpty()) {
+            return null;
+        }
+
+        $lower = mb_strtolower($nama);
+
+        return $candidates->sortBy(function (Employee $employee) use ($lower, $clientId) {
+            $stored = mb_strtolower(trim((string) $employee->nama));
+
+            // Karyawan milik client sesi MCU IN lebih diprioritaskan daripada
+            // nama sama pada client lain; id dipakai supaya urutannya stabil.
+            $sameClient = $clientId === null
+                ? $employee->client_id === null
+                : (int) $employee->client_id === $clientId;
+
+            return sprintf(
+                '%d%d%d%08d',
+                str_contains($stored, ',') ? 0 : 1,
+                $stored === $lower ? 0 : 1,
+                $sameClient ? 0 : 1,
+                $employee->id
+            );
+        })->first();
     }
 
     /**
@@ -100,6 +153,16 @@ class EmployeeService
         $nama = preg_replace('/\s+/', ' ', trim((string) $nama));
 
         return $nama === '' ? null : $nama;
+    }
+
+    /**
+     * Nama tanpa gelar: "Murni Islamiati, A.Md.A.K" -> "Murni Islamiati".
+     * Hanya gelar setelah tanda koma yang dilepas supaya gelar depan yang
+     * memang bagian dari nama (mis. "dr.") tidak ikut terhapus.
+     */
+    private function withoutTitle(string $nama): string
+    {
+        return trim((string) preg_replace('/\s*,.*$/su', '', $nama));
     }
 
     private function generateCode(): string
