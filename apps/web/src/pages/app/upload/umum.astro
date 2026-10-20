@@ -1,0 +1,13 @@
+---
+import UploadPageShell from '@/components/upload/UploadPageShell.astro';
+import { uploadReports } from '@/lib/upload-reports';
+
+const report = uploadReports.general_result;
+---
+
+<UploadPageShell
+    type="general_result"
+    title={report.title}
+    description={report.description}
+    legacyUrl={report.legacyUrl}
+/>

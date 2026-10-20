@@ -1,0 +1,174 @@
+@import '@fontsource/montserrat/300.css';
+@import '@fontsource/montserrat/400.css';
+@import '@fontsource/montserrat/500.css';
+@import '@fontsource/montserrat/600.css';
+@import '@fontsource/montserrat/700.css';
+@import 'tailwindcss';
+@source '../**/*.{astro,vue,ts}';
+
+/* Token visual mengikuti tema Vuexy lama: primary #7367f0, Montserrat, dan
+   permukaan terang #f8f8f8. Jangan mengganti palet ini tanpa memperbarui
+   halaman lama di resources/views. */
+@theme {
+    --font-sans:
+        'Montserrat', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue',
+        Arial, sans-serif;
+    --color-ink: #5e5873;
+    --color-body: #6e6b7b;
+    --color-muted: #b9b9c3;
+    --color-surface: #f8f8f8;
+    --color-line: #ebe9f1;
+    --color-brand: #7367f0;
+    --color-brand-dark: #5e50ee;
+    --color-brand-soft: #eeecff;
+    --color-accent: #00cfe8;
+    --color-success: #28c76f;
+    --color-success-soft: #e8f9ef;
+    --color-warning: #ff9f43;
+    --color-warning-soft: #fff3e9;
+    --color-danger: #ea5455;
+    --color-danger-soft: #fcebeb;
+    --shadow-vx: 0 4px 24px 0 rgba(34, 41, 47, 0.06);
+    --shadow-vx-lg: 0 8px 25px -8px rgba(115, 103, 240, 0.55);
+    --radius-vx: 0.5rem;
+}
+
+:root {
+    color-scheme: light;
+    background: var(--color-surface);
+    color: var(--color-body);
+    font-size: 16px;
+}
+
+html,
+body {
+    min-height: 100%;
+}
+
+body {
+    margin: 0;
+    font-family: var(--font-sans);
+    color: var(--color-body);
+    background-color: var(--color-surface);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    color: var(--color-ink);
+    font-weight: 600;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+:focus-visible {
+    outline: 2px solid var(--color-brand);
+    outline-offset: 2px;
+}
+
+::selection {
+    background: var(--color-brand-soft);
+    color: var(--color-brand-dark);
+}
+
+/* Komponen dasar tema lama, dipakai lintas halaman Astro/Vue. */
+.vx-card {
+    background: #fff;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-vx);
+    box-shadow: var(--shadow-vx);
+}
+
+.vx-card-body {
+    padding: 1.5rem;
+}
+
+.vx-btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: 0.357rem;
+    background: var(--color-brand);
+    padding: 0.625rem 1.25rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #fff;
+    transition:
+        background-color 0.15s ease,
+        box-shadow 0.15s ease,
+        transform 0.15s ease;
+}
+
+.vx-btn-primary:hover {
+    background: var(--color-brand-dark);
+    box-shadow: var(--shadow-vx-lg);
+}
+
+.vx-btn-primary:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+    box-shadow: none;
+}
+
+.vx-btn-outline {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border: 1px solid var(--color-line);
+    border-radius: 0.357rem;
+    background: #fff;
+    padding: 0.625rem 1.25rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--color-body);
+    transition:
+        border-color 0.15s ease,
+        color 0.15s ease,
+        background-color 0.15s ease;
+}
+
+.vx-btn-outline:hover {
+    border-color: var(--color-brand);
+    color: var(--color-brand);
+    background: var(--color-brand-soft);
+}
+
+.vx-input {
+    width: 100%;
+    border: 1px solid var(--color-line);
+    border-radius: 0.357rem;
+    background: #fff;
+    padding: 0.625rem 0.875rem;
+    font-size: 0.875rem;
+    color: var(--color-body);
+    transition:
+        border-color 0.15s ease,
+        box-shadow 0.15s ease;
+}
+
+.vx-input::placeholder {
+    color: var(--color-muted);
+}
+
+.vx-input:focus {
+    border-color: var(--color-brand);
+    outline: none;
+    box-shadow: 0 0 0 0.2rem rgba(115, 103, 240, 0.16);
+}
+
+.vx-label {
+    display: block;
+    margin-bottom: 0.375rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--color-ink);
+}

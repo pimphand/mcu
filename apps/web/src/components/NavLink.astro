@@ -1,0 +1,35 @@
+---
+import Icon from '@/components/Icon.astro';
+import type { NavItem } from '@/lib/nav';
+
+interface Props {
+    item: NavItem;
+    active: boolean;
+}
+
+const { item, active } = Astro.props;
+---
+
+{item.href ? (
+    <a
+        href={item.href}
+        aria-current={active ? 'page' : undefined}
+        class:list={[
+            'flex items-center gap-3 rounded-[0.5rem] px-3 py-2.5 text-[0.875rem] transition-colors',
+            active
+                ? 'bg-[linear-gradient(118deg,#7367f0,#a098f8)] font-medium text-white shadow-[0_0_10px_1px_rgba(115,103,240,0.4)]'
+                : 'text-body hover:bg-[#f3f2f7] hover:text-ink',
+        ]}
+    >
+        <Icon name={item.icon} size={17} />
+        <span class="truncate">{item.label}</span>
+    </a>
+) : (
+    <span class="flex items-center gap-3 rounded-[0.5rem] px-3 py-2.5 text-[0.875rem] text-muted">
+        <Icon name={item.icon} size={17} />
+        <span class="truncate">{item.label}</span>
+        <span class="ml-auto rounded bg-[#f3f2f7] px-1.5 py-0.5 text-[0.625rem] text-muted">
+            soon
+        </span>
+    </span>
+)}

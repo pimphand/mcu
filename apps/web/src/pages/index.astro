@@ -1,0 +1,186 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import SystemStatus from '@/components/SystemStatus.vue';
+
+const features = [
+    {
+        title: 'Shell operasional',
+        body: 'Layout, navigasi, dan halaman dasar untuk dashboard, peserta, dan konteks MCU.',
+    },
+    {
+        title: 'Security baseline',
+        body: 'Origin check, security headers, cookie httpOnly, rate limit login, dan CSP Astro.',
+    },
+    {
+        title: 'BFF siap pakai',
+        body: 'Proxy /api/db dengan allowlist resource dan JWT; PostgREST tidak diekspos ke browser.',
+    },
+    {
+        title: 'Quality gate',
+        body: 'TypeScript strict, astro check, ESLint, Prettier, Vitest, dan build SSR.',
+    },
+];
+
+const stack = [
+    { name: 'Astro 7', detail: 'SSR + Node adapter' },
+    { name: 'Vue 3', detail: 'Islands untuk form dan tabel' },
+    { name: 'PostgreSQL', detail: 'Schema, RLS, view' },
+    { name: 'PostgREST', detail: 'Data API di balik BFF' },
+];
+---
+
+<BaseLayout
+    title="Base MCU"
+    description="Base aplikasi MCU berbasis Astro, Vue, PostgreSQL, dan PostgREST."
+>
+    <div class="min-h-screen">
+        <header class="border-b border-line bg-white">
+            <div class="mx-auto flex max-w-[1440px] items-center justify-between gap-4 px-4 py-3 sm:px-6">
+                <a href="/" class="flex items-center gap-3">
+                    <img
+                        src="/logo-drdini.png"
+                        alt="Logo Klinik Dr Dini"
+                        width="32"
+                        height="43"
+                        class="h-10 w-auto"
+                    />
+                    <span>
+                        <span class="block text-[0.9375rem] font-semibold text-ink">
+                            Klinik Dr Dini
+                        </span>
+                        <span class="block text-[0.7rem] text-muted">Medical Check Up</span>
+                    </span>
+                </a>
+                <div class="flex items-center gap-2">
+                    <a
+                        href="/api/health"
+                        class="hidden rounded-[0.357rem] border border-line px-3 py-2 text-[0.75rem] font-medium text-body transition hover:border-brand hover:text-brand sm:inline-flex"
+                    >
+                        Health check
+                    </a>
+                    <a href="/login" class="vx-btn-primary">
+                        Masuk
+                    </a>
+                </div>
+            </div>
+        </header>
+
+        <main class="mx-auto max-w-[1440px] px-4 py-10 sm:px-6 lg:py-14">
+            <section class="grid items-start gap-10 lg:grid-cols-[1.15fr_0.85fr]">
+                <div>
+                    <p class="inline-flex items-center gap-2 rounded-full border border-brand/15 bg-brand-soft px-3 py-1 text-[0.7rem] font-semibold text-brand-dark">
+                        <span class="size-1.5 rounded-full bg-brand"></span>
+                        Base recode · Fase 0
+                    </p>
+                    <h1 class="mt-5 max-w-2xl text-[2rem] font-semibold leading-tight tracking-tight text-ink sm:text-[2.5rem]">
+                        Fondasi MCU baru, siap untuk modul berikutnya.
+                    </h1>
+                    <p class="mt-5 max-w-xl text-[0.9375rem] leading-7 text-body">
+                        Base ini menyiapkan shell Astro + Vue, keamanan awal, koneksi PostgREST, dan
+                        schema PostgreSQL. Modul peserta, pemeriksaan, import, dan cetak dibangun di
+                        atas fondasi ini tanpa memulai ulang struktur.
+                    </p>
+
+                    <div class="mt-7 flex flex-wrap gap-3">
+                        <a href="/app" class="vx-btn-primary">
+                            Buka dashboard
+                            <span aria-hidden="true">→</span>
+                        </a>
+                        <a href="#setup" class="vx-btn-outline">
+                            Lihat setup
+                        </a>
+                    </div>
+
+                    <div class="mt-8 grid gap-3 sm:grid-cols-2">
+                        {features.map((feature) => (
+                            <article class="vx-card p-4">
+                                <h2 class="text-[0.875rem] font-semibold text-ink">
+                                    {feature.title}
+                                </h2>
+                                <p class="mt-1 text-[0.75rem] leading-5 text-body">
+                                    {feature.body}
+                                </p>
+                            </article>
+                        ))}
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <SystemStatus client:load />
+
+                    <div class="vx-card p-5">
+                        <h2 class="text-[0.9375rem] font-semibold text-ink">Stack target</h2>
+                        <ul class="mt-4 space-y-3">
+                            {stack.map((item) => (
+                                <li class="flex items-start justify-between gap-4">
+                                    <span class="text-[0.8125rem] font-medium text-ink">
+                                        {item.name}
+                                    </span>
+                                    <span class="text-right text-[0.7rem] text-muted">
+                                        {item.detail}
+                                    </span>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+
+                    <div class="rounded-[0.5rem] bg-[#1e1e2d] p-5 text-white">
+                        <p class="text-[0.7rem] font-semibold uppercase tracking-[0.16em] text-[#a098f8]">
+                            Prinsip base
+                        </p>
+                        <p class="mt-2 text-[0.8125rem] leading-6 text-white/70">
+                            Jangan menambah data palsu ke UI. Setiap angka dan status harus berasal
+                            dari database atau ditandai jelas sebagai belum tersedia.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="setup" class="vx-card mt-14 p-6 sm:p-8">
+                <div class="grid gap-8 lg:grid-cols-[0.9fr_1.1fr]">
+                    <div>
+                        <p class="text-[0.7rem] font-semibold uppercase tracking-[0.16em] text-brand">
+                            Menjalankan
+                        </p>
+                        <h2 class="mt-2 text-[1.5rem] font-semibold tracking-tight text-ink">
+                            Dari nol ke base berjalan
+                        </h2>
+                        <p class="mt-3 text-[0.8125rem] leading-6 text-body">
+                            Web dapat berjalan tanpa database. Login dan data peserta memerlukan
+                            stack PostgreSQL + PostgREST dan seed user.
+                        </p>
+                        <ul class="mt-5 space-y-2 text-[0.8125rem] text-body">
+                            <li>1. Salin environment dan isi secret minimum.</li>
+                            <li>2. Jalankan database, PostgREST, dan web.</li>
+                            <li>3. Seed role, menu, dan akun administrator.</li>
+                            <li>4. Masuk, pilih konteks MCU, lalu buka peserta.</li>
+                        </ul>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div>
+                            <p class="mb-2 text-[0.7rem] font-medium text-muted">Web saja</p>
+                            <pre class="overflow-x-auto rounded-[0.357rem] bg-[#1e1e2d] p-4 text-xs leading-6 text-[#d0d2d6]"><code>cd apps/web
+cp .env.example .env
+npm install
+npm run dev</code></pre>
+                        </div>
+                        <div>
+                            <p class="mb-2 text-[0.7rem] font-medium text-muted">Stack lengkap</p>
+                            <pre class="overflow-x-auto rounded-[0.357rem] bg-[#1e1e2d] p-4 text-xs leading-6 text-[#d0d2d6]"><code>cp infra/.env.example infra/.env
+docker compose -f infra/compose.dev.yml up --build</code></pre>
+                        </div>
+                        <p class="text-[0.7rem] leading-5 text-muted">
+                            Detail environment, migrasi, dan seed ada di{' '}
+                            <code>infra/README.md</code> dan <code>db/README.md</code>.
+                        </p>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="border-t border-line px-4 py-8 text-center text-[0.7rem] text-muted sm:px-6">
+            Klinik Dr Dini · Base MCU · Astro + Vue + PostgreSQL + PostgREST · 2026
+        </footer>
+    </div>
+</BaseLayout>

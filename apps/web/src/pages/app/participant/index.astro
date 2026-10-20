@@ -1,0 +1,51 @@
+---
+import AppLayout from '@/layouts/AppLayout.astro';
+import ParticipantTable from '@/components/ParticipantTable.vue';
+
+const user = Astro.locals.user;
+---
+
+<AppLayout title="Peserta" user={user}>
+    <div class="mb-5 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+            <p class="text-[0.7rem] font-semibold uppercase tracking-[0.16em] text-brand">
+                Operasional
+            </p>
+            <h1 class="mt-1 text-[1.714rem] font-semibold tracking-tight text-ink">Peserta MCU</h1>
+            <p class="mt-1 text-[0.8125rem] text-body">
+                Data mengikuti client dan kontrak aktif di klaim sesi.
+            </p>
+        </div>
+        <div class="flex items-center gap-2">
+            <span class="rounded-full bg-warning-soft px-3 py-1.5 text-[0.7rem] font-medium text-[#b76e00]">
+                Read-only base
+            </span>
+            <button
+                type="button"
+                class="cursor-not-allowed rounded-[0.357rem] border border-line px-3 py-2 text-sm font-medium text-muted"
+                disabled
+                title="Form tambah peserta belum diimplementasikan"
+            >
+                Tambah peserta
+            </button>
+        </div>
+    </div>
+
+    {user?.contract_id ? (
+        <ParticipantTable client:load />
+    ) : (
+        <div class="rounded-[0.5rem] border border-[#ffe4c9] bg-warning-soft p-6">
+            <h2 class="text-[1rem] font-semibold text-[#b76e00]">Konteks MCU belum dipilih</h2>
+            <p class="mt-1 max-w-xl text-[0.875rem] leading-6 text-[#b76e00]/80">
+                Pilih client dan kontrak terlebih dahulu agar daftar peserta mengikuti kontrak yang
+                benar.
+            </p>
+            <a
+                href="/app/mcu-in-out"
+                class="mt-4 inline-flex rounded-[0.357rem] bg-[#b76e00] px-4 py-2 text-sm font-medium text-white transition hover:bg-[#9a5c00]"
+            >
+                Atur konteks MCU
+            </a>
+        </div>
+    )}
+</AppLayout>

@@ -1,0 +1,220 @@
+---
+import QRCode from 'qrcode';
+import PrintBio from './PrintBio.astro';
+import PrintHeader from './PrintHeader.astro';
+import PrintSignature from './PrintSignature.astro';
+import Audiometri from './reports/Audiometri.vue';
+import Ekg from './reports/Ekg.vue';
+import Identitas from './reports/Identitas.vue';
+import Laboratorium from './reports/Laboratorium.vue';
+import MedicalRecord from './reports/MedicalRecord.vue';
+import PemeriksaanFisik from './reports/PemeriksaanFisik.vue';
+import Radiologi from './reports/Radiologi.vue';
+import Rectal from './reports/Rectal.vue';
+import Resume from './reports/Resume.vue';
+import ResumeHeading from './reports/ResumeHeading.vue';
+import Spirometri from './reports/Spirometri.vue';
+import {
+    printQrValue,
+    type DoctorRow,
+    type PrintParticipant,
+    type PrintType,
+    type RelatedResults,
+    type ResumeSummaryRow,
+    type SignatureInfo,
+} from '@/lib/print';
+
+interface Props {
+    type: PrintType;
+    participant: PrintParticipant;
+    row?: Record<string, unknown> | null;
+    summary?: ResumeSummaryRow[];
+    doctor?: DoctorRow | null;
+    signature?: SignatureInfo | null;
+    vitals?: Record<string, unknown> | null;
+    related?: RelatedResults;
+}
+
+const {
+    type,
+    participant,
+    row = null,
+    summary = [],
+    doctor = null,
+    signature = null,
+    vitals = null,
+    related = {},
+} = Astro.props;
+
+type SimplePrintType = Exclude<PrintType, 'identitas' | 'resume'>;
+
+/**
+ * Satu komponen per jenis cetak (`reports/*.vue`). Stiker identitas dan resume
+ * punya tata letak khusus (header sendiri / dua halaman), jadi ditangani
+ * langsung di bawah; sisanya cukup komponen dengan props `ReportProps`.
+ */
+const reports: Record<SimplePrintType, typeof Audiometri> = {
+    'pemeriksaan-fisik': PemeriksaanFisik,
+    laboratorium: Laboratorium,
+    radiologi: Radiologi,
+    audiometri: Audiometri,
+    ekg: Ekg,
+    spirometri: Spirometri,
+    rectal: Rectal,
+};
+
+const Report =
+    reports[
+        type as SimplePrintType
+    ]; /** Lab & rectal legacy menaruh kesimpulan di kolom kiri blok tanda tangan. */
+const signatureNotes =
+    (type === 'laboratorium' || type === 'rectal') &&
+    row?.kesimpulan !== null &&
+    row?.kesimpulan !== undefined &&
+    row.kesimpulan !== ''
+        ? { label: 'Kesimpulan', value: String(row.kesimpulan) }
+        : null;
+
+const examiner =
+    signature?.name ?? (row?.diperiksa as string | undefined) ?? doctor?.doctor ?? null;
+const signerLabel =
+    type === 'laboratorium' || type === 'rectal' ? 'Pemeriksa,' : 'Dokter Pemeriksa,';
+const signatureWidth =
+    type === 'pemeriksaan-fisik' ? 150 : type === 'radiologi' || type === 'resume' ? 100 : 80;
+
+/**
+ * Tabel hasil view legacy radiologi/audiometri/EKG/spirometri/rectal memakai
+ * `td { padding: 5px }`; laboratorium 3px; sisanya default DomPDF 2px.
+ * Padding ini menentukan tinggi baris header (posisi judul) tabel hasil.
+ */
+const paddedCells: PrintType[] = ['radiologi', 'audiometri', 'ekg', 'spirometri', 'rectal'];
+const cellPadding = paddedCells.includes(type)
+    ? '5px'
+    : type === 'laboratorium'
+      ? '3px'
+      : '2px 3px';
+/** Offset header mengikuti padding sel: makin besar padding, makin turun judul. */
+const headerOffset = paddedCells.includes(type)
+    ? '5.2px'
+    : type === 'laboratorium'
+      ? '3.9px'
+      : '2.4px';
+
+/**
+ * Blok identitas dicetak seragam 12px di semua jenis hasil (stiker punya
+ * komponennya sendiri). View 16px legacy membuat "Tgl Lahir" dan
+ * "Perusahaan" membungkus dua baris sehingga kolom kiri/kanan tidak sejajar.
+ * Hanya laboratorium yang mempertahankan offset & padding selnya.
+ */
+const bioOffset = type === 'laboratorium' ? 3 : 0;
+const bioPadding = type === 'laboratorium' ? '4px' : undefined;
+const sheetStyle = `--print-cell-padding: ${cellPadding}; --print-header-padding: ${cellPadding}; --print-header-offset: ${headerOffset};`;
+
+/** Stiker memakai QR besar (150px) di samping data peserta, bukan di header. */
+const stickerQr =
+    type === 'identitas'
+        ? await QRCode.toDataURL(printQrValue(participant.code, participant.contract_id, type), {
+              margin: 0,
+              width: 150,
+          })
+        : null;
+---
+
+{type === 'identitas' ? (
+    <section class="print-sheet">
+        <PrintHeader
+            variant="sticker"
+            code={participant.code}
+            contractId={participant.contract_id}
+            type={type}
+        />
+        <Identitas
+            participant={participant}
+            row={row}
+            summary={summary}
+            doctor={doctor}
+            qr={stickerQr}
+        />
+    </section>
+) : (
+    <section class="print-sheet" style={sheetStyle}>
+        <PrintHeader code={participant.code} contractId={participant.contract_id} type={type} />
+        {/* Susunan baris identitas beda per view legacy: pemeriksaan fisik tanpa
+            Tgl Register, laboratorium tanpa Usia & Tgl Register, resume tanpa
+            Usia/Status/Tgl Register (usia ada di tabel MEDICAL RECORD). */}
+        <PrintBio
+            participant={participant}
+            birthDate={type === 'pemeriksaan-fisik' ? 'date' : 'date-age'}
+            dateFormat={type === 'resume' ? 'short' : 'raw'}
+            showRegisterDate={!['pemeriksaan-fisik', 'laboratorium', 'resume'].includes(type)}
+            showAge={!['laboratorium', 'resume'].includes(type)}
+            showStatus={type !== 'resume'}
+            topOffset={bioOffset}
+            cellPadding={bioPadding}
+        />
+
+        {type === 'resume' ? (
+            <>
+                <MedicalRecord
+                    participant={participant}
+                    row={row}
+                    summary={summary}
+                    doctor={doctor}
+                />
+
+                {/* Resume legacy terdiri dari dua halaman: MEDICAL RECORD lalu
+                    KESIMPULAN DAN SARAN, masing-masing dengan header & bio. */}
+                <div class="print-page-break" />
+
+                <PrintHeader
+                    code={participant.code}
+                    contractId={participant.contract_id}
+                    type={type}
+                />
+                {/* Urutan legacy halaman 2: judul, bio, lalu tabel kesimpulan. */}
+                <ResumeHeading />
+                {/* Halaman 2 resume mencetak Status (urutan berbeda dari halaman 1). */}
+                <PrintBio
+                    participant={participant}
+                    dateFormat="short"
+                    showRegisterDate={false}
+                    showAge={false}
+                />
+                <Resume
+                    participant={participant}
+                    row={row}
+                    summary={summary}
+                    doctor={doctor}
+                    vitals={vitals}
+                    related={related}
+                />
+                <PrintSignature
+                    name={examiner}
+                    ttd={signature?.ttd ?? null}
+                    label={signerLabel}
+                    width={signatureWidth}
+                />
+            </>
+        ) : (
+            <>
+                <Report
+                    participant={participant}
+                    row={row}
+                    summary={summary}
+                    doctor={doctor}
+                    vitals={vitals}
+                    related={related}
+                />
+
+                <PrintSignature
+                    name={examiner}
+                    ttd={signature?.ttd ?? null}
+                    label={signerLabel}
+                    width={signatureWidth}
+                    code={type === 'pemeriksaan-fisik' ? participant.code : null}
+                    notes={signatureNotes}
+                />
+            </>
+        )}
+    </section>
+)}

@@ -1,0 +1,128 @@
+---
+import AppLayout from '@/layouts/AppLayout.astro';
+import { defaultPrintRange } from '@/lib/print';
+import { parseIdentitasQuery } from '@/lib/identitas';
+import { menuAllows } from '@/lib/nav';
+
+const user = Astro.locals.user;
+const menus = Astro.locals.menus ?? [];
+const canView = menuAllows(menus, '/participant-print-identitas', 'view');
+const hasContext = Boolean(user?.contract_id && user.client_id);
+const query = parseIdentitasQuery(Astro.url.searchParams);
+const today = defaultPrintRange().end;
+---
+
+<AppLayout title="Print Identitas" user={user}>
+    <div class="mb-5 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+            <p class="text-[0.7rem] font-semibold uppercase tracking-[0.16em] text-brand">MCU</p>
+            <h1 class="mt-1 text-[1.714rem] font-semibold tracking-tight text-ink">
+                Print Identitas
+            </h1>
+            <p class="mt-1 max-w-2xl text-[0.8125rem] leading-6 text-body">
+                Cetak stiker identitas peserta sesuai rentang No. Form dan tanggal register.
+            </p>
+        </div>
+        <a href="/app/print/mcu" class="vx-btn-outline">
+            Print Hasil MCU
+        </a>
+    </div>
+
+    {!canView ? (
+        <div class="rounded-[0.5rem] border border-[#f8d4d4] bg-danger-soft p-6">
+            <h2 class="text-[1rem] font-semibold text-danger">Tidak berwenang</h2>
+            <p class="mt-1 text-[0.875rem] leading-6 text-danger/80">
+                Role Anda tidak memiliki akses ke menu Print Identitas.
+            </p>
+        </div>
+    ) : !hasContext ? (
+        <div class="rounded-[0.5rem] border border-[#ffe4c9] bg-warning-soft p-6">
+            <h2 class="text-[1rem] font-semibold text-[#b76e00]">Konteks MCU belum dipilih</h2>
+            <p class="mt-1 max-w-xl text-[0.875rem] leading-6 text-[#b76e00]/80">
+                Pilih client dan kontrak terlebih dahulu agar stiker mengikuti kontrak yang benar.
+            </p>
+            <a
+                href="/app/mcu-in-out"
+                class="mt-4 inline-flex rounded-[0.357rem] bg-[#b76e00] px-4 py-2 text-sm font-medium text-white"
+            >
+                Atur konteks MCU
+            </a>
+        </div>
+    ) : (
+        <form
+            method="get"
+            action="/app/print/identitas/print"
+            target="_blank"
+            class="vx-card space-y-4 p-5"
+        >
+            {query.divisiId && <input type="hidden" name="divisi_id" value={query.divisiId} />}
+            <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                <div>
+                    <label for="tgl_awal" class="vx-label">
+                        Tanggal awal
+                    </label>
+                    <input
+                        id="tgl_awal"
+                        name="tgl_awal"
+                        type="date"
+                        max={today}
+                        value={query.tglAwal ?? ''}
+                        class="vx-input"
+                    />
+                </div>
+                <div>
+                    <label for="tgl_akhir" class="vx-label">
+                        Tanggal akhir
+                    </label>
+                    <input
+                        id="tgl_akhir"
+                        name="tgl_akhir"
+                        type="date"
+                        max={today}
+                        value={query.tglAkhir ?? ''}
+                        class="vx-input"
+                    />
+                </div>
+                <div>
+                    <label for="start" class="vx-label">
+                        Dari No. Form
+                    </label>
+                    <input
+                        id="start"
+                        name="start"
+                        type="number"
+                        min="1"
+                        value={query.start}
+                        class="vx-input"
+                    />
+                </div>
+                <div>
+                    <label for="end" class="vx-label">
+                        Sampai No. Form
+                    </label>
+                    <input
+                        id="end"
+                        name="end"
+                        type="number"
+                        min="1"
+                        value={query.end}
+                        class="vx-input"
+                    />
+                </div>
+            </div>
+            <div class="rounded-[0.357rem] border border-line bg-surface px-3 py-2 text-[0.75rem] leading-5 text-body">
+                Kertas stiker <strong class="text-ink">150 × 100 mm</strong> (margin 1,2 cm). Data
+                mengikuti cetakan lama: MCU ID, NIK, nama, tanggal lahir, usia, department, paket
+                MCU, dan tanggal register. Kosongkan tanggal untuk mencetak semua tanggal.
+            </div>{' '}
+            <div class="flex flex-wrap items-center gap-2 border-t border-line pt-4">
+                <button type="submit" class="vx-btn-primary">
+                    Print
+                </button>
+                <a href="/app/print/identitas" class="vx-btn-outline">
+                    Reset
+                </a>
+            </div>
+        </form>
+    )}
+</AppLayout>

@@ -1,0 +1,295 @@
+---
+import AppLayout from '@/layouts/AppLayout.astro';
+import { readSessionToken } from '@/lib/auth/session';
+import { formatDate } from '@/lib/format';
+import {
+    defaultPrintRange,
+    isIsoDate,
+    printTypes,
+    registerDateFilter,
+    type PrintParticipant,
+} from '@/lib/print';
+import { postgrestRows } from '@/lib/server-postgrest';
+
+const user = Astro.locals.user;
+const token = readSessionToken(Astro.cookies);
+const url = Astro.url;
+
+const range = defaultPrintRange();
+const tglAwalParam = url.searchParams.get('tgl_awal');
+const tglAkhirParam = url.searchParams.get('tgl_akhir');
+const tglAwal = isIsoDate(tglAwalParam) ? tglAwalParam : range.start;
+const tglAkhir = isIsoDate(tglAkhirParam) ? tglAkhirParam : range.end;
+
+const divisiParam = Number(url.searchParams.get('divisi_id') ?? '');
+const divisiId = Number.isInteger(divisiParam) && divisiParam > 0 ? divisiParam : null;
+
+const startParam = Number(url.searchParams.get('start') ?? '1');
+const start = Number.isInteger(startParam) && startParam > 0 ? startParam : 1;
+const endRaw = Number(url.searchParams.get('end') ?? '50');
+const end = Number.isInteger(endRaw) && endRaw >= start ? endRaw : start + 49;
+
+let participants: PrintParticipant[] = [];
+let divisis: { id: number; name: string }[] = [];
+let dataError = '';
+
+if (user?.contract_id && user.client_id && token) {
+    try {
+        [participants, divisis] = await Promise.all([
+            postgrestRows<PrintParticipant>(token, 'v_mcu_progress', {
+                select: '*',
+                client_id: `eq.${user.client_id}`,
+                contract_id: `eq.${user.contract_id}`,
+                and: registerDateFilter(tglAwal, tglAkhir),
+                ...(divisiId ? { divisi_id: `eq.${divisiId}` } : {}),
+                order: 'code.asc',
+                limit: 1000,
+            }),
+            postgrestRows<{ id: number; name: string }>(
+                token,
+                'divisis',
+                {
+                    select: 'id,name',
+                    client_id: `eq.${user.client_id}`,
+                    order: 'name.asc',
+                    limit: 200,
+                },
+                'public',
+            ),
+        ]);
+    } catch (error) {
+        dataError = error instanceof Error ? error.message : 'Data peserta gagal dimuat.';
+    }
+}
+
+const hasContext = Boolean(user?.contract_id && user.client_id && token);
+---
+
+<AppLayout title="Print Hasil MCU" user={user}>
+    <div class="mb-5 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+            <p class="text-[0.7rem] font-semibold uppercase tracking-[0.16em] text-brand">MCU</p>
+            <h1 class="mt-1 text-[1.714rem] font-semibold tracking-tight text-ink">
+                Print / Cetak MCU
+            </h1>
+        </div>
+        <span class="rounded-full bg-[#f3f2f7] px-3 py-1.5 text-[0.75rem] text-body">
+            Kontrak: {user?.contract_id ? `#${user.contract_id}` : 'Belum ada kontrak aktif'}
+        </span>
+    </div>
+
+    {!hasContext ? (
+        <div class="rounded-[0.5rem] border border-[#ffe4c9] bg-warning-soft p-6">
+            <h2 class="text-[1rem] font-semibold text-[#b76e00]">Konteks MCU belum dipilih</h2>
+            <p class="mt-1 max-w-xl text-[0.875rem] leading-6 text-[#b76e00]/80">
+                Pilih client dan kontrak terlebih dahulu agar daftar peserta cetak mengikuti kontrak
+                yang benar.
+            </p>
+            <a
+                href="/app/mcu-in-out"
+                class="mt-4 inline-flex rounded-[0.357rem] bg-[#b76e00] px-4 py-2 text-sm font-medium text-white"
+            >
+                Atur konteks MCU
+            </a>
+        </div>
+    ) : (
+        <>
+            <form method="get" action="/app/print/mcu" class="vx-card mb-4 space-y-3 p-4">
+                <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+                    <div>
+                        <label for="tgl_awal" class="vx-label">
+                            Tanggal awal
+                        </label>
+                        <input
+                            id="tgl_awal"
+                            name="tgl_awal"
+                            type="date"
+                            class="vx-input"
+                            value={tglAwal}
+                        />
+                    </div>
+                    <div>
+                        <label for="tgl_akhir" class="vx-label">
+                            Tanggal akhir
+                        </label>
+                        <input
+                            id="tgl_akhir"
+                            name="tgl_akhir"
+                            type="date"
+                            class="vx-input"
+                            value={tglAkhir}
+                        />
+                    </div>
+                    <div>
+                        <label for="divisi_id" class="vx-label">
+                            Divisi
+                        </label>
+                        <select id="divisi_id" name="divisi_id" class="vx-input">
+                            <option value="">Semua Divisi</option>
+                            {divisis.map((item) => (
+                                <option value={item.id} selected={item.id === divisiId}>
+                                    {item.name}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                    <div>
+                        <label for="start" class="vx-label">
+                            Dari No.
+                        </label>
+                        <input
+                            id="start"
+                            name="start"
+                            type="number"
+                            min="1"
+                            class="vx-input"
+                            value={start}
+                        />
+                    </div>
+                    <div>
+                        <label for="end" class="vx-label">
+                            Sampai No.
+                        </label>
+                        <input
+                            id="end"
+                            name="end"
+                            type="number"
+                            min="1"
+                            class="vx-input"
+                            value={end}
+                        />
+                    </div>
+                </div>
+
+                <div class="flex flex-wrap items-center gap-2">
+                    <button type="submit" class="vx-btn-primary">
+                        Cari
+                    </button>
+                    <a href="/app/print/mcu" class="vx-btn-outline">
+                        Reset
+                    </a>
+                </div>
+
+                <div class="border-t border-line pt-3">
+                    <p class="mb-2 text-[0.75rem] font-medium text-body">
+                        Cetak massal (rentang No. Form, tab baru)
+                    </p>
+                    <div class="flex flex-wrap gap-2">
+                        {printTypes.map((item) => (
+                            <button
+                                type="submit"
+                                formaction={`/app/print/batch/${item.type}`}
+                                formtarget="_blank"
+                                class="rounded-[0.357rem] border border-line px-3 py-1.5 text-[0.75rem] font-medium text-body transition hover:border-brand hover:text-brand"
+                            >
+                                {item.label}
+                            </button>
+                        ))}
+                    </div>
+                </div>
+            </form>
+
+            {dataError && (
+                <p
+                    class="mb-4 rounded-[0.357rem] border border-[#f8d4d4] bg-danger-soft px-3 py-2 text-sm text-danger"
+                    role="alert"
+                >
+                    {dataError}
+                </p>
+            )}
+
+            <div class="vx-card overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full min-w-[1100px] text-left text-[0.7rem]">
+                        <thead class="border-b border-line bg-[#f3f2f7] uppercase tracking-wide text-muted">
+                            <tr>
+                                <th class="px-2 py-2 font-semibold">No</th>
+                                <th class="px-2 py-2 font-semibold">Validasi Dokter</th>
+                                <th class="px-2 py-2 font-semibold">Tgl Register</th>
+                                <th class="px-2 py-2 font-semibold">MCU ID</th>
+                                <th class="px-2 py-2 font-semibold">NIK</th>
+                                <th class="px-2 py-2 font-semibold">Nama Pasien</th>
+                                <th class="px-2 py-2 font-semibold">Paket MCU</th>
+                                {printTypes.map((item) => (
+                                    <th class="px-2 py-2 text-center font-semibold">
+                                        {item.label}
+                                    </th>
+                                ))}
+                                <th class="px-2 py-2 font-semibold">Gedung</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-line">
+                            {participants.length === 0 ? (
+                                <tr>
+                                    <td colspan="17" class="px-4 py-8 text-center text-muted">
+                                        Tidak ada peserta pada kontrak, divisi, dan rentang tanggal
+                                        yang dipilih.
+                                    </td>
+                                </tr>
+                            ) : (
+                                participants.map((participant, index) => (
+                                    <tr class="hover:bg-[#f8f8f8]">
+                                        <td class="px-2 py-1.5 text-right">{index + 1}</td>
+                                        <td class="px-2 py-1.5 text-center">
+                                            <span
+                                                class:list={[
+                                                    'rounded-full px-2 py-0.5 text-[0.65rem]',
+                                                    participant.validated
+                                                        ? 'bg-success-soft text-success'
+                                                        : 'bg-danger-soft text-danger',
+                                                ]}
+                                            >
+                                                {participant.validated ? 'VALID' : 'BELUM'}
+                                            </span>
+                                        </td>
+                                        <td class="whitespace-nowrap px-2 py-1.5 text-center">
+                                            {formatDate(participant.register_date)}
+                                        </td>
+                                        <td class="whitespace-nowrap px-2 py-1.5 text-center font-mono">
+                                            {participant.code}
+                                        </td>
+                                        <td class="whitespace-nowrap px-2 py-1.5 text-center">
+                                            {participant.nik}
+                                        </td>
+                                        <td class="px-2 py-1.5">
+                                            {participant.name} [{participant.gender}]<br />
+                                            <span class="text-muted">
+                                                {formatDate(participant.birthday)}
+                                            </span>
+                                        </td>
+                                        <td class="px-2 py-1.5">
+                                            {participant.packet_name ?? '-'}
+                                        </td>
+                                        {printTypes.map((item) => {
+                                            const done = item.doneKey
+                                                ? participant[item.doneKey]
+                                                : true;
+
+                                            return (
+                                                <td class="px-2 py-1.5 text-center">
+                                                    {done ? (
+                                                        <a
+                                                            href={`/app/print/${item.type}/${participant.participant_id}`}
+                                                            target="_blank"
+                                                            rel="noopener"
+                                                            class="inline-flex rounded-[0.25rem] border border-brand/30 px-2 py-1 text-[0.65rem] font-medium text-brand hover:bg-brand-soft"
+                                                        >
+                                                            Cetak
+                                                        </a>
+                                                    ) : (
+                                                        <span class="text-danger">TIDAK</span>
+                                                    )}
+                                                </td>
+                                            );
+                                        })}
+                                        <td class="px-2 py-1.5 text-center">-</td>
+                                    </tr>
+                                ))
+                            )}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </>
+    )}
+</AppLayout>

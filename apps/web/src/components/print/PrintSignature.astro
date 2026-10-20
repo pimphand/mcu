@@ -1,0 +1,103 @@
+---
+interface Props {
+    /** Nama pemeriksa; `null` memakai titik-titik seperti form kosong. */
+    name?: string | null;
+    /** Path tanda tangan karyawan (`ttd/berkas.png`) dari tabel employees. */
+    ttd?: string | null;
+    label?: string;
+    width?: number;
+    /** Kode peserta di kolom kiri, seperti cetak fisik legacy. */
+    code?: string | null;
+    /** Blok kesimpulan di kolom kiri (cetak lab & rectal legacy). */
+    notes?: { label: string; value: string } | null;
+}
+
+const {
+    name = null,
+    ttd = null,
+    label = 'Dokter Pemeriksa,',
+    width = 100,
+    code = null,
+    notes = null,
+} = Astro.props;
+
+// Legacy memakai `now()->format('d M Y')` (nama bulan Inggris).
+function printDate(now: Date): string {
+    return new Intl.DateTimeFormat('en-GB', {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric',
+        timeZone: 'Asia/Jakarta',
+    }).format(now);
+}
+
+// Endpoint tanda tangan hanya menerima nama berkas; path legacy berbentuk
+// `ttd/namafile.png`. Tanpa berkas, pakai gambar kosong seperti legacy.
+const file = ttd?.split('/').filter(Boolean).pop() ?? '';
+const src = file ? `/app/print/signature/${encodeURIComponent(file)}` : '/ttd-kosong.png';
+---
+
+<!-- Struktur & jarak mengikuti blok tanda tangan `pages/report/*.blade.php`:
+     kota + jabatan + gambar (dengan baris kosong seperti `<br>` legacy) + nama,
+     masing-masing baris tabel supaya tinggi barisnya sama dengan cetakan legacy.
+     Kode peserta berada sebaris dengan tanggal, bukan di bawah blok. -->
+{/* Jarak atas 10px + 3,3px: DomPDF memulai blok tanda tangan sedikit lebih
+   rendah dari Chrome untuk tabel hasil yang sama (lihat pengukuran cetak). */}
+<table style="margin-top: 13.3px;">
+    <tbody>
+        <tr>
+            <td
+                style={`width: 50%; text-align: left; vertical-align: ${notes ? 'middle' : 'top'};`}
+            >
+                {code ? <span style="font-size: 12px;">{code}</span> : null}
+                {/* Kesimpulan lab/rectal legacy memakai huruf body 16px dan sel-nya
+                    rata tengah (default DomPDF). */}
+                {notes && (
+                    <table style="font-size: 16px;">
+                        <tbody>
+                            <tr>
+                                <td>{notes.label}</td>
+                            </tr>
+                            <tr>
+                                <td>{notes.value}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                )}
+            </td>
+            <td style="text-align: center; vertical-align: top;">
+                <table style="width: auto; margin: 0 auto;">
+                    <tbody>
+                        <tr>
+                            <td style="text-align: center; font-size: 16px;">
+                                Sukabumi, {printDate(new Date())}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: center; font-size: 16px;">{label}</td>
+                        </tr>
+                        <tr>
+                            <!-- `font-size` 16px supaya tinggi baris kosong (dari `<br>`)
+                                 sama dengan baris lain; `display: block` supaya tinggi
+                                 baris gambar = tinggi gambar saja. -->
+                            <td style="text-align: center; font-size: 16px;">
+                                <br />
+                                <img
+                                    src={src}
+                                    width={width}
+                                    alt="Tanda tangan"
+                                    style="display: block; height: auto; margin: 0 auto;"
+                                />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: center; font-size: 16px;">
+                                {name ?? '................................'}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+    </tbody>
+</table>

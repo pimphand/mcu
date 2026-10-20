@@ -1,0 +1,229 @@
+---
+import PrintLayout from '@/layouts/PrintLayout.astro';
+import PrintToolbar from '@/components/print/PrintToolbar.astro';
+import ReportSheet from '@/components/print/ReportSheet.astro';
+import { readSessionToken } from '@/lib/auth/session';
+import {
+    buildResumeSummary,
+    isPrintType,
+    printPageConfig,
+    printTitles,
+    printTypeConfig,
+    resumeSources,
+    signatureFor,
+    type DoctorRow,
+    type EmployeeRow,
+    type PrintParticipant,
+    type PrintType,
+    type RelatedResults,
+    type ResumeSummaryRow,
+    type SignatureInfo,
+} from '@/lib/print';
+import { postgrestRow } from '@/lib/server-postgrest';
+
+const { type: typeParam, id: idParam } = Astro.params;
+const user = Astro.locals.user;
+const token = readSessionToken(Astro.cookies);
+
+const rawType = typeParam ?? '';
+const isValid = isPrintType(rawType) && /^\d+$/.test(idParam ?? '');
+const type: PrintType = isPrintType(rawType) ? rawType : 'identitas';
+const participantId = Number(idParam ?? 0);
+const config = printTypeConfig(type);
+const resource = config.resource;
+
+const hasContext = Boolean(user?.contract_id && user.client_id && token);
+const { pageSize, pageMargin, contentWidth } = printPageConfig(type);
+
+let participant: PrintParticipant | null = null;
+let row: Record<string, unknown> | null = null;
+let doctor: DoctorRow | null = null;
+let summary: ResumeSummaryRow[] = [];
+let signature: SignatureInfo | null = null;
+let vitals: Record<string, unknown> | null = null;
+let related: RelatedResults = {};
+let loadError = '';
+
+if (!isValid) {
+    Astro.response.status = 404;
+}
+
+if (isValid && hasContext && token && user?.contract_id && user.client_id) {
+    try {
+        participant = await postgrestRow<PrintParticipant>(token, 'v_mcu_progress', {
+            select: '*',
+            participant_id: `eq.${participantId}`,
+        });
+
+        // Jangan sampai admin bisa mencetak peserta kontrak lain lewat URL.
+        if (!participant || participant.contract_id !== user.contract_id) {
+            participant = null;
+            Astro.response.status = 404;
+        } else {
+            if (resource) {
+                row = await postgrestRow<Record<string, unknown>>(
+                    token,
+                    resource,
+                    { select: '*', participant_id: `eq.${participantId}` },
+                    'public',
+                );
+
+                // Cetak pemeriksaan fisik legacy juga memuat tanda vital dan hasil
+                // pemeriksaan lain yang dilampirkan (lab, radiologi, EKG, dst.).
+                if (type === 'pemeriksaan-fisik') {
+                    vitals = await postgrestRow<Record<string, unknown>>(
+                        token,
+                        'tanda_vitals',
+                        { select: '*', participant_id: `eq.${participantId}` },
+                        'public',
+                    );
+
+                    const relatedResources = [
+                        'laboratoria',
+                        'radiologis',
+                        'audiometris',
+                        'ekgs',
+                        'spirometris',
+                        'rectals',
+                    ];
+                    const relatedRows = await Promise.all(
+                        relatedResources.map((relatedResource) =>
+                            postgrestRow<Record<string, unknown>>(
+                                token!,
+                                relatedResource,
+                                { select: '*', participant_id: `eq.${participantId}` },
+                                'public',
+                            ),
+                        ),
+                    );
+
+                    related = Object.fromEntries(
+                        relatedResources.map((relatedResource, index) => [
+                            relatedResource,
+                            relatedRows[index] ?? null,
+                        ]),
+                    );
+                }
+
+                // Pemeriksa & tanda tangannya tersimpan di employees (employee_id),
+                // sama seperti relasi `->employee` pada view legacy.
+                const employeeId = Number(row?.employee_id ?? 0);
+                const fallbackName = (row?.diperiksa as string | undefined) ?? null;
+
+                if (Number.isInteger(employeeId) && employeeId > 0) {
+                    // v_employee_signature = nama + ttd karyawan yang menandatangani
+                    // hasil peserta ini; tetap terbaca untuk akun client/employee
+                    // walaupun dokter klinik punya employees.client_id NULL.
+                    const employee = await postgrestRow<EmployeeRow>(
+                        token,
+                        'v_employee_signature',
+                        {
+                            select: 'id,nama,ttd',
+                            id: `eq.${employeeId}`,
+                        },
+                    );
+
+                    signature = signatureFor(employee, fallbackName);
+                } else {
+                    signature = signatureFor(null, fallbackName);
+                }
+            }
+
+            if (type === 'resume') {
+                doctor = await postgrestRow<DoctorRow>(
+                    token,
+                    'validate_doctors',
+                    {
+                        select: '*',
+                        client_id: `eq.${user.client_id}`,
+                        no_mcu: `eq.${participant.code}`,
+                    },
+                    'public',
+                );
+
+                const resultRows = await Promise.all(
+                    resumeSources.map((source) =>
+                        postgrestRow<Record<string, unknown>>(
+                            token!,
+                            source.resource,
+                            { select: '*', participant_id: `eq.${participantId}` },
+                            'public',
+                        ),
+                    ),
+                );
+
+                const resultsByResource = new Map(
+                    resumeSources.map((source, index) => [
+                        source.resource,
+                        resultRows[index] ?? null,
+                    ]),
+                );
+
+                summary = buildResumeSummary(resultsByResource);
+
+                // Legacy memakai tanda tangan petugas pemeriksaan fisik pada resume.
+                const employeeId = Number(
+                    resultsByResource.get('pemeriksaan_fisiks')?.employee_id ?? 0,
+                );
+
+                if (Number.isInteger(employeeId) && employeeId > 0) {
+                    const employee = await postgrestRow<EmployeeRow>(
+                        token,
+                        'v_employee_signature',
+                        {
+                            select: 'id,nama,ttd',
+                            id: `eq.${employeeId}`,
+                        },
+                    );
+
+                    signature = signatureFor(employee, doctor?.doctor ?? null);
+                }
+            }
+        }
+    } catch (error) {
+        loadError = error instanceof Error ? error.message : 'Data cetak gagal dimuat.';
+    }
+}
+---
+
+<PrintLayout
+    title={printTitles[type]}
+    pageSize={pageSize}
+    pageMargin={pageMargin}
+    contentWidth={contentWidth}
+>
+    <PrintToolbar backHref="/app/print/mcu" backLabel="Kembali ke Print MCU" />
+
+    {!hasContext ? (
+        <div class="print-sheet">
+            <h1 class="print-title">Konteks MCU belum dipilih</h1>
+            <p style="text-align: center;">
+                Pilih client dan kontrak di <a href="/app/mcu-in-out">MCU IN/OUT</a> sebelum
+                mencetak.
+            </p>
+        </div>
+    ) : loadError ? (
+        <div class="print-sheet">
+            <h1 class="print-title">Cetak gagal</h1>
+            <p style="text-align: center;">{loadError}</p>
+        </div>
+    ) : !participant ? (
+        <div class="print-sheet">
+            <h1 class="print-title">Peserta tidak ditemukan</h1>
+            <p style="text-align: center;">
+                Peserta tidak ada pada kontrak aktif. Periksa kembali nomor atau konteks MCU.
+            </p>
+        </div>
+    ) : (
+        <ReportSheet
+            type={type}
+            participant={participant}
+            row={row}
+            summary={summary}
+            doctor={doctor}
+            signature={signature}
+            vitals={vitals}
+            related={related}
+        />
+    )}
+</PrintLayout>

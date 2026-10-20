@@ -1,0 +1,38 @@
+---
+import AppLayout from '@/layouts/AppLayout.astro';
+import ScanForm from '@/components/ScanForm.vue';
+
+const user = Astro.locals.user;
+---
+
+<AppLayout title="Scan Peserta" user={user}>
+    <div class="mb-6">
+        <a
+            href="/app/participant/register"
+            class="text-[0.75rem] font-medium text-brand hover:underline"
+        >
+            ← Register peserta
+        </a>
+        <h1 class="mt-2 text-[1.714rem] font-semibold tracking-tight text-ink">Scan peserta</h1>
+        <p class="mt-1 text-[0.8125rem] text-body">
+            Cari peserta berdasarkan kode MCU lalu buka detail pemeriksaannya.
+        </p>
+    </div>
+
+    {user?.contract_id ? (
+        <ScanForm client:load />
+    ) : (
+        <div class="rounded-[0.5rem] border border-[#ffe4c9] bg-warning-soft p-6">
+            <h2 class="text-[1rem] font-semibold text-[#b76e00]">Konteks MCU belum dipilih</h2>
+            <p class="mt-1 text-[0.875rem] text-[#b76e00]/80">
+                Pilih client dan kontrak terlebih dahulu agar kode peserta dapat dicari.
+            </p>
+            <a
+                href="/app/mcu-in-out"
+                class="mt-4 inline-flex rounded-[0.357rem] bg-[#b76e00] px-4 py-2 text-sm font-medium text-white"
+            >
+                Atur konteks MCU
+            </a>
+        </div>
+    )}
+</AppLayout>

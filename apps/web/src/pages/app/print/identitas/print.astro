@@ -1,0 +1,96 @@
+---
+import PrintLayout from '@/layouts/PrintLayout.astro';
+import PrintToolbar from '@/components/print/PrintToolbar.astro';
+import PrintHeader from '@/components/print/PrintHeader.astro';
+import IdentitasSticker from '@/components/print/IdentitasSticker.astro';
+import { readSessionToken } from '@/lib/auth/session';
+import { parseIdentitasQuery, type IdentitasParticipant } from '@/lib/identitas';
+import { fetchIdentitasParticipants } from '@/lib/identitas-server';
+import { menuAllows } from '@/lib/nav';
+import { printPageConfig, printTitles } from '@/lib/print';
+
+const user = Astro.locals.user;
+const token = readSessionToken(Astro.cookies);
+const menus = Astro.locals.menus ?? [];
+const canView = menuAllows(menus, '/participant-print-identitas', 'view');
+const query = parseIdentitasQuery(Astro.url.searchParams);
+const { pageSize, pageMargin, contentWidth } = printPageConfig('identitas');
+
+const hasContext = Boolean(user?.contract_id && user.client_id && token);
+let participants: IdentitasParticipant[] = [];
+let loadError = '';
+
+if (hasContext && canView && token && user?.client_id && user.contract_id) {
+    try {
+        participants = await fetchIdentitasParticipants(
+            token,
+            user.client_id,
+            user.contract_id,
+            query,
+        );
+    } catch (error) {
+        loadError = error instanceof Error ? error.message : 'Data stiker gagal dimuat.';
+    }
+}
+
+const backParams = new URLSearchParams({
+    start: String(query.start),
+    end: String(query.end),
+});
+
+if (query.tglAwal) backParams.set('tgl_awal', query.tglAwal);
+if (query.tglAkhir) backParams.set('tgl_akhir', query.tglAkhir);
+if (query.divisiId) backParams.set('divisi_id', String(query.divisiId));
+
+const backHref = `/app/print/identitas?${backParams.toString()}`;
+---
+
+<PrintLayout
+    title={printTitles.identitas}
+    pageSize={pageSize}
+    pageMargin={pageMargin}
+    contentWidth={contentWidth}
+>
+    <PrintToolbar backHref={backHref} backLabel="Kembali ke Print Identitas" />
+
+    {!hasContext ? (
+        <div class="print-sheet">
+            <h1 class="print-title">Konteks MCU belum dipilih</h1>
+            <p style="text-align: center;">
+                Pilih client dan kontrak di <a href="/app/mcu-in-out">MCU IN/OUT</a> sebelum
+                mencetak stiker.
+            </p>
+        </div>
+    ) : !canView ? (
+        <div class="print-sheet">
+            <h1 class="print-title">Tidak berwenang</h1>
+            <p style="text-align: center;">Role Anda tidak memiliki akses ke Print Identitas.</p>
+        </div>
+    ) : loadError ? (
+        <div class="print-sheet">
+            <h1 class="print-title">Cetak gagal</h1>
+            <p style="text-align: center;">{loadError}</p>
+        </div>
+    ) : participants.length === 0 ? (
+        <div class="print-sheet">
+            <h1 class="print-title">Tidak ada data</h1>
+            <p style="text-align: center;">
+                Tidak ada data untuk dicetak pada kontrak, nomor, dan rentang tanggal yang dipilih.
+            </p>
+        </div>
+    ) : (
+        participants.map((participant, index) => (
+            <div class="print-page-break">
+                <section class="print-sheet">
+                    <PrintHeader
+                        variant="sticker"
+                        code={participant.code}
+                        contractId={participant.contract_id}
+                        type="identitas"
+                    />
+                    <IdentitasSticker participant={participant} pageNumber={index + 1} />
+                </section>
+            </div>
+        ))
+    )}
+</PrintLayout>

@@ -1,0 +1,84 @@
+---
+import AppLayout from '@/layouts/AppLayout.astro';
+import UploadPage from '@/components/upload/UploadPage.vue';
+import { readSessionToken } from '@/lib/auth/session';
+import { menuAllows } from '@/lib/nav';
+import { postgrestRow } from '@/lib/server-postgrest';
+import type { ImportType } from '@/lib/imports/types';
+
+interface Props {
+    type: ImportType;
+    title: string;
+    description: string;
+    legacyUrl: string;
+}
+
+const { type, title, description, legacyUrl } = Astro.props;
+const user = Astro.locals.user;
+const menus = Astro.locals.menus ?? [];
+const token = readSessionToken(Astro.cookies);
+const canView = menuAllows(menus, legacyUrl, 'view');
+const canUpload = menuAllows(menus, legacyUrl, 'add');
+const hasContext = Boolean(user?.contract_id && user.client_id);
+
+// Badge "Kontrak: ..." seperti halaman legacy. Nama kontrak dibaca di server
+// (JWT sesi); kontrak yang sudah di-soft delete tampil sebagai "Belum ada
+// kontrak aktif", sama seperti relasi Eloquent legacy yang menyaring soft
+// delete. Kegagalan muat tidak menggagalkan halaman.
+let contractName: string | null = null;
+
+if (token && user?.contract_id) {
+    try {
+        const contract = await postgrestRow<{ name: string }>(
+            token,
+            'contracts',
+            { select: 'name', id: `eq.${user.contract_id}`, deleted_at: 'is.null' },
+            'public',
+        );
+
+        contractName = contract?.name ?? null;
+    } catch (error) {
+        console.error('Nama kontrak gagal dimuat.', error);
+    }
+}
+---
+
+<AppLayout title={title} user={user}>
+    <div class="mb-5 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+            <p class="text-[0.7rem] font-semibold uppercase tracking-[0.16em] text-brand">
+                Upload Hasil
+            </p>
+            <h1 class="mt-1 text-[1.714rem] font-semibold tracking-tight text-ink">{title}</h1>
+            <p class="mt-1 max-w-3xl text-[0.8125rem] leading-6 text-body">{description}</p>
+        </div>
+        <span class="shrink-0 self-start rounded-full bg-[#f3f2f7] px-3 py-1.5 text-[0.7rem] font-medium text-body sm:self-auto">
+            Kontrak: {contractName ?? 'Belum ada kontrak aktif'}
+        </span>
+    </div>
+
+    {!canView ? (
+        <div class="rounded-[0.5rem] border border-[#f8d4d4] bg-danger-soft p-6">
+            <h2 class="text-[1rem] font-semibold text-danger">Tidak berwenang</h2>
+            <p class="mt-1 max-w-xl text-[0.875rem] leading-6 text-danger/80">
+                Role Anda tidak memiliki akses ke menu upload ini.
+            </p>
+        </div>
+    ) : !hasContext ? (
+        <div class="rounded-[0.5rem] border border-[#ffe4c9] bg-warning-soft p-6">
+            <h2 class="text-[1rem] font-semibold text-[#b76e00]">Konteks MCU belum dipilih</h2>
+            <p class="mt-1 max-w-xl text-[0.875rem] leading-6 text-[#b76e00]/80">
+                Pilih client dan kontrak terlebih dahulu agar import dan daftar hasil mengikuti
+                kontrak yang benar.
+            </p>
+            <a
+                href="/app/mcu-in-out"
+                class="mt-4 inline-flex rounded-[0.357rem] bg-[#b76e00] px-4 py-2 text-sm font-medium text-white transition hover:bg-[#9a5c00]"
+            >
+                Atur konteks MCU
+            </a>
+        </div>
+    ) : (
+        <UploadPage client:load type={type} canUpload={canUpload} />
+    )}
+</AppLayout>

@@ -1,0 +1,14 @@
+---
+import AuthLayout from '@/layouts/AuthLayout.astro';
+import LoginForm from '@/components/LoginForm.vue';
+
+if (Astro.locals.user) {
+    return Astro.redirect('/app');
+}
+
+const next = Astro.url.searchParams.get('next') ?? '/app';
+---
+
+<AuthLayout title="Masuk ke MCU" subtitle="Gunakan akun administrator, client, atau karyawan.">
+    <LoginForm client:load next={next} />
+</AuthLayout>

@@ -1,0 +1,13 @@
+---
+import UploadPageShell from '@/components/upload/UploadPageShell.astro';
+import { uploadReports } from '@/lib/upload-reports';
+
+const report = uploadReports.validate_doctor;
+---
+
+<UploadPageShell
+    type="validate_doctor"
+    title={report.title}
+    description={report.description}
+    legacyUrl={report.legacyUrl}
+/>

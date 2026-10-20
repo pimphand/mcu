@@ -1,0 +1,121 @@
+---
+import QRCode from 'qrcode';
+import { printQrValue, type PrintType } from '@/lib/print';
+
+interface Props {
+    /** Kode peserta (MCU ID). */
+    code?: string;
+    /** Kontrak peserta; QR berisi `{contract_id}-{kode MCU}-{jenis cetak}`. */
+    contractId?: number | null;
+    /** Jenis cetak, mis. `radiologi`. */
+    type?: PrintType | null;
+    /**
+     * `sticker` mengikuti header stiker legacy: logo 60px, judul 13px, tanpa QR
+     * di kanan (QR besar diletakkan di samping data peserta).
+     */
+    variant?: 'default' | 'sticker';
+}
+
+const { code, contractId = null, type = null, variant = 'default' } = Astro.props;
+const qrValue = code && variant === 'default' ? printQrValue(code, contractId, type) : null;
+const qrCode = qrValue ? await QRCode.toDataURL(qrValue, { margin: 0, width: 65 }) : null;
+---
+
+<div class="print-header">
+    {variant === 'sticker' ? (
+        <>
+            <table>
+                <tbody>
+                    <tr>
+                        {' '}
+                        <td style="width: 60px; vertical-align: middle;">
+                            <img
+                                src="/logo-drdini.png"
+                                width="60"
+                                alt="Logo Klinik Dr Dini"
+                                style="max-width: none;"
+                            />
+                        </td>{' '}
+                        <td style="text-align: center; vertical-align: middle;">
+                            {/* Huruf & baris sama dengan report/identitas.blade.php. */}
+                            <p style="margin: 0; font-size: 13px; line-height: 1.222;">
+                                KLINIK DR. DINI
+                                <br />
+                                MEDICAL CENTER
+                            </p>
+                            <p style="margin: 0; font-size: 12px; line-height: 1.222;">
+                                No.Izin : 0104220009994
+                                <br />
+                                Jln. Raya Karang Hilir no 815 Desa Karangtengah Kec. Cibadak Kab.
+                                Sukabumi (0266) 6545065
+                            </p>
+                        </td>
+                        <td />
+                    </tr>
+                </tbody>
+            </table>
+            {/* `<hr>` legacy: garis 1px dengan jarak 8px atas/bawah, ditambah
+                 3,9px karena DomPDF memulai blok identitas stiker lebih rendah. */}
+            <hr style="border: 0; border-top: 1px solid #000; margin: 8px 0 11.9px;" />
+        </>
+    ) : (
+        <>
+            <table>
+                <tbody>
+                    <tr>
+                        {/* Lebar kolom kiri/kanan mengikuti header legacy (logo 80px +
+                     padding, QR 65px + padding) supaya kolom tengah cukup lebar
+                     dan alamat klinik tetap satu baris. */}{' '}
+                        <td style="width: 86px; vertical-align: middle;">
+                            {/* `max-width: none` supaya lebar logo tetap 80px walau
+                     padding sel 5px (radiologi, audiometri, EKG, dst.) mempersempit
+                     kolom; DomPDF juga tidak mengecilkan gambar mengikuti sel. */}
+                            <img
+                                src="/logo-drdini.png"
+                                width="80"
+                                alt="Logo Klinik Dr Dini"
+                                style="max-width: none;"
+                            />
+                        </td>
+                        <td style="text-align: center; vertical-align: middle;">
+                            {/* Ukuran huruf sama dengan pages/report/header.blade.php. */}
+                            <p style="margin: 0; font-size: 20px; font-weight: 700; line-height: 1.222;">
+                                KLINIK DR. DINI
+                                <br />
+                                MEDICAL CENTER
+                            </p>
+                            <p style="margin: 0; font-size: 13px; line-height: 1.222;">
+                                No.Izin : 0104220009994
+                                <br />
+                                Jln. Raya Karang Hilir no 815 Desa Karangtengah Kec. Cibadak Kab.
+                                Sukabumi
+                                <br />
+                                (0266) 6545065
+                            </p>
+                        </td>{' '}
+                        <td style="width: 71px; text-align: right; vertical-align: middle;">
+                            {qrCode ? (
+                                <img
+                                    src={qrCode}
+                                    width="65"
+                                    height="65"
+                                    alt={`QR ${qrValue}`}
+                                    style="max-width: none;"
+                                />
+                            ) : (
+                                <span class="print-muted" style="font-size: 10px;">
+                                    {code ?? ''}
+                                </span>
+                            )}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            {/* Garis header memakai border, bukan background: browser tidak mencetak
+         background graphics secara default sehingga garis 1px bisa hilang.
+         Jarak bawah 2px sama dengan header legacy, ditambah 1,7px karena
+         DomPDF memulai blok identitas sedikit lebih rendah. */}
+            <div style="border-top: 1px solid #7e7e7e; margin: 0 0 3.7px;" />
+        </>
+    )}
+</div>

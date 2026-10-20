@@ -1,0 +1,44 @@
+---
+import AppLayout from '@/layouts/AppLayout.astro';
+import ParticipantDetail from '@/components/ParticipantDetail.vue';
+import { menuAllows } from '@/lib/nav';
+
+const user = Astro.locals.user;
+const rawId = Astro.params.id ?? '';
+const participantId = /^\d+$/.test(rawId) ? Number(rawId) : null;
+
+if (participantId === null) {
+    return Astro.redirect('/app/participant');
+}
+
+// Tombol aksi mengikuti permission menu role user (`api.v_my_menus`); server
+// tetap memeriksa RLS saat menyimpan.
+const menus = Astro.locals.menus ?? [];
+const sessionCanWrite = Boolean(
+    user && user.app_role !== 'participant' && user.contract_id !== null,
+);
+const canWrite = sessionCanWrite && menuAllows(menus, '/participant', 'add');
+const canEdit = sessionCanWrite && menuAllows(menus, '/participant', 'edit');
+const canRegister = sessionCanWrite && menuAllows(menus, '/participant-register', 'add');
+---
+
+<AppLayout title="Detail Peserta" user={user}>
+    <div class="mb-5">
+        <a href="/app/participant" class="text-[0.75rem] font-medium text-brand hover:underline">
+            ← Daftar peserta
+        </a>
+        <h1 class="mt-2 text-[1.714rem] font-semibold tracking-tight text-ink">Detail peserta</h1>
+        <p class="mt-1 max-w-2xl text-[0.8125rem] leading-6 text-body">
+            Data hanya dapat dibaca bila peserta berada pada client dan kontrak di klaim sesi (RLS).
+            Hasil tiap pemeriksaan dimuat saat tab dibuka.
+        </p>
+    </div>
+
+    <ParticipantDetail
+        client:load
+        participantId={participantId}
+        canWrite={canWrite}
+        canEdit={canEdit}
+        canRegister={canRegister}
+    />
+</AppLayout>

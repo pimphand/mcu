@@ -8,6 +8,9 @@
 .env
 .env.backup
 .env.production
+# Secret lokal lainnya (mis. infra/.env.supabase, apps/web/.env.local)
+.env.*
+!.env.example
 .phpunit.result.cache
 Homestead.json
 Homestead.yaml
@@ -17,3 +20,10 @@ yarn-error.log
 /.fleet
 /.idea
 /.vscode
+
+# Local MCP overrides (bisa berisi token/secret)
+.mcp.local.json
+.cursor/mcp.local.json
+apps/web/node_modules
+db/etl/node_modules
+db/etl/node_modules

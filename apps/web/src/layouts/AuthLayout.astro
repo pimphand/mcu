@@ -1,0 +1,60 @@
+---
+import BaseLayout from './BaseLayout.astro';
+
+interface Props {
+    title: string;
+    subtitle: string;
+}
+
+const { title, subtitle } = Astro.props;
+---
+
+<BaseLayout title={title} description={subtitle}>
+    <main class="relative flex min-h-screen items-center justify-center overflow-hidden bg-surface px-4 py-10">
+        <div
+            class="pointer-events-none absolute -left-24 top-16 size-72 rounded-full bg-brand-soft opacity-70 blur-3xl"
+            aria-hidden="true"
+        ></div>
+        <div
+            class="pointer-events-none absolute -right-24 bottom-10 size-72 rounded-full bg-[#e3f2fd] opacity-60 blur-3xl"
+            aria-hidden="true"
+        ></div>
+
+        <div class="relative w-full max-w-[28rem]">
+            <div class="vx-card p-6 sm:p-8">
+                <a
+                    href="/"
+                    class="mb-6 flex items-center justify-center gap-3"
+                    aria-label="Klinik Dr Dini"
+                >
+                    <img
+                        src="/logo-drdini.png"
+                        alt="Logo Klinik Dr Dini"
+                        width="40"
+                        height="54"
+                        class="h-12 w-auto"
+                    />
+                    <span class="text-[1.35rem] font-semibold text-brand">Klinik Dr Dini</span>
+                </a>
+
+                <div class="text-center">
+                    <h1 class="text-[1.15rem] font-semibold text-ink">{title}</h1>
+                    <p class="mt-1 text-[0.8125rem] leading-5 text-body">{subtitle}</p>
+                </div>
+
+                <div class="mt-6">
+                    <slot />
+                </div>
+            </div>
+
+            <p class="mt-5 text-center text-[0.75rem] text-muted">
+                <a href="/" class="transition hover:text-brand">
+                    Kembali ke halaman utama
+                </a>
+            </p>
+            <p class="mt-2 text-center text-[0.7rem] text-muted">
+                Klinik Dr Dini · Medical Check Up
+            </p>
+        </div>
+    </main>
+</BaseLayout>

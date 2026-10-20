@@ -1,0 +1,41 @@
+---
+import AppLayout from '@/layouts/AppLayout.astro';
+import McuContextForm from '@/components/McuContextForm.vue';
+import { menuAllows } from '@/lib/nav';
+
+const user = Astro.locals.user;
+const status = Astro.url.searchParams.get('status');
+
+// MCU IN/OUT mengubah konteks sesi; butuh permission tambah/ubah pada menunya.
+const menus = Astro.locals.menus ?? [];
+const canWrite =
+    Boolean(user && user.app_role !== 'participant') &&
+    (menuAllows(menus, '/mcu-in-out', 'add') || menuAllows(menus, '/mcu-in-out', 'edit'));
+---
+
+<AppLayout title="MCU IN/OUT" user={user}>
+    <div class="vx-card">
+        <div class="border-b border-line p-3">
+            <h6 class="mb-0 text-[1rem] font-semibold text-ink">MCU IN/OUT</h6>
+        </div>
+
+        <div class="px-4 py-6">
+            <div class="mx-auto my-4 w-full max-w-[400px]">
+                {status === 'in' && (
+                    <h3 class="mb-4 text-[1.35rem] text-success">MCU IN Berhasil.</h3>
+                )}
+                {status === 'out' && (
+                    <h3 class="mb-4 text-[1.35rem] text-success">MCU OUT Berhasil.</h3>
+                )}
+
+                <McuContextForm
+                    client:load
+                    currentClientId={user?.client_id ?? null}
+                    currentContractId={user?.contract_id ?? null}
+                    appRole={user?.app_role ?? ''}
+                    canWrite={canWrite}
+                />
+            </div>
+        </div>
+    </div>
+</AppLayout>

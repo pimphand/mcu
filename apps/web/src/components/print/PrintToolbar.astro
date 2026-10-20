@@ -1,0 +1,22 @@
+---
+import PrintButton from '@/components/PrintButton.vue';
+
+interface Props {
+    backHref?: string;
+    backLabel?: string;
+}
+
+const { backHref = '/app/print/mcu', backLabel = 'Kembali ke Print MCU' } = Astro.props;
+---
+
+<div
+    class="no-print mx-auto mb-3 flex w-full flex-wrap items-center justify-between gap-2 rounded-[0.5rem] border border-line bg-white px-4 py-3 shadow-sm"
+    style="max-width: var(--print-content-width, 17.5cm);"
+>
+    <a href={backHref} class="text-[0.8125rem] font-medium text-brand hover:underline">
+        ← {backLabel}
+    </a>
+    <div class="flex items-center gap-2">
+        <PrintButton client:load />
+    </div>
+</div>

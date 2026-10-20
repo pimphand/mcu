@@ -1,0 +1,250 @@
+---
+import AppLayout from '@/layouts/AppLayout.astro';
+import { readSessionToken } from '@/lib/auth/session';
+import { menuAllows } from '@/lib/nav';
+import { postgrestRow, postgrestRows } from '@/lib/server-postgrest';
+
+type RoleRow = { id: number; name: string; level: number; is_active: boolean };
+type MenuRow = {
+    id: number;
+    parent_id: number | null;
+    name: string;
+    icon: string | null;
+    url: string | null;
+    sort_order: number;
+    is_active: boolean;
+};
+type PermissionRow = {
+    menu_id: number;
+    is_view: boolean;
+    is_add: boolean;
+    is_edit: boolean;
+    is_delete: boolean;
+};
+
+const roleId = Number(Astro.params.id);
+const user = Astro.locals.user;
+const token = readSessionToken(Astro.cookies);
+const menus = Astro.locals.menus ?? [];
+const canView = menuAllows(menus, '/role', 'view');
+const canEdit = menuAllows(menus, '/role', 'edit');
+const canWrite = canEdit && (user?.app_role === 'admin' || user?.level === 1);
+
+const error = (Astro.url.searchParams.get('error') ?? '').slice(0, 300);
+const notice = (Astro.url.searchParams.get('ok') ?? '').slice(0, 300);
+
+let role: RoleRow | null = null;
+let menuRows: MenuRow[] = [];
+let permissions = new Map<number, PermissionRow>();
+let dataError = '';
+
+if (canView && token && Number.isInteger(roleId) && roleId > 0) {
+    try {
+        role = await postgrestRow<RoleRow>(
+            token,
+            'roles',
+            { select: 'id,name,level,is_active', id: `eq.${roleId}` },
+            'public',
+        );
+
+        if (role) {
+            [menuRows, permissions] = await Promise.all([
+                postgrestRows<MenuRow>(
+                    token,
+                    'menus',
+                    {
+                        select: 'id,parent_id,name,icon,url,sort_order,is_active',
+                        order: 'sort_order.asc,id.asc',
+                        limit: 500,
+                    },
+                    'public',
+                ),
+                postgrestRows<PermissionRow>(
+                    token,
+                    'permissions',
+                    {
+                        select: 'menu_id,is_view,is_add,is_edit,is_delete',
+                        role_id: `eq.${roleId}`,
+                        limit: 500,
+                    },
+                    'public',
+                ).then((rows) => new Map(rows.map((row) => [row.menu_id, row]))),
+            ]);
+        }
+    } catch (cause) {
+        dataError = cause instanceof Error ? cause.message : 'Izin role gagal dimuat.';
+    }
+}
+
+const roots = menuRows
+    .filter((menu) => menu.parent_id === null)
+    .sort((a, b) => a.sort_order - b.sort_order || a.id - b.id);
+const children = new Map<number, MenuRow[]>();
+
+for (const menu of menuRows) {
+    if (menu.parent_id === null) continue;
+
+    const list = children.get(menu.parent_id) ?? [];
+    list.push(menu);
+    children.set(menu.parent_id, list);
+}
+
+for (const list of children.values()) {
+    list.sort((a, b) => a.sort_order - b.sort_order || a.id - b.id);
+}
+
+const ordered: Array<{ menu: MenuRow; parent: string | null }> = [];
+
+for (const root of roots) {
+    ordered.push({ menu: root, parent: null });
+    for (const child of children.get(root.id) ?? []) {
+        ordered.push({ menu: child, parent: root.name });
+    }
+}
+
+function permission(menuId: number, key: keyof PermissionRow): boolean {
+    const row = permissions.get(menuId);
+
+    return row ? Boolean(row[key]) : false;
+}
+---
+
+<AppLayout title={role ? `Izin ${role.name}` : 'Izin Role'} user={user}>
+    <div class="mb-5 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+            <p class="text-[0.7rem] font-semibold uppercase tracking-[0.16em] text-brand">
+                Administrator
+            </p>
+            <h1 class="mt-1 text-[1.714rem] font-semibold tracking-tight text-ink">Izin Role</h1>
+            <p class="mt-1 text-[0.8125rem] leading-6 text-body">
+                {role
+                    ? `${role.name} — level ${role.level}. Centang aksi yang boleh dilakukan role ini.`
+                    : 'Pilih role untuk mengatur akses menu.'}
+            </p>
+        </div>
+        <a href="/app/master/role" class="vx-btn-outline">
+            Kembali
+        </a>
+    </div>
+
+    {!canView ? (
+        <div class="rounded-[0.5rem] border border-[#f8d4d4] bg-danger-soft p-6">
+            <h2 class="text-[1rem] font-semibold text-danger">Tidak berwenang</h2>
+            <p class="mt-1 text-[0.875rem] leading-6 text-danger/80">
+                Role Anda tidak memiliki akses ke menu Role.
+            </p>
+        </div>
+    ) : dataError ? (
+        <p
+            class="rounded-[0.357rem] border border-[#f8d4d4] bg-danger-soft px-3 py-2 text-sm text-danger"
+            role="alert"
+        >
+            {dataError}
+        </p>
+    ) : !role ? (
+        <div class="vx-card p-6">
+            <p class="text-sm text-body">Role tidak ditemukan.</p>
+        </div>
+    ) : (
+        <div class="space-y-4">
+            {notice && (
+                <p
+                    class="rounded-[0.357rem] border border-[#c9f1d8] bg-success-soft px-3 py-2 text-sm text-success"
+                    role="status"
+                >
+                    {notice}
+                </p>
+            )}
+            {error && (
+                <p
+                    class="rounded-[0.357rem] border border-[#f8d4d4] bg-danger-soft px-3 py-2 text-sm text-danger"
+                    role="alert"
+                >
+                    {error}
+                </p>
+            )}
+
+            {!canWrite && (
+                <p class="rounded-[0.357rem] border border-[#ffe4c9] bg-warning-soft px-3 py-2 text-sm text-[#b76e00]">
+                    Hanya administrator yang dapat mengubah izin role.
+                </p>
+            )}
+
+            <form method="post" action="/api/master/permission" class="vx-card overflow-hidden">
+                <input type="hidden" name="role_id" value={role.id} />
+
+                <div class="overflow-x-auto">
+                    <table class="w-full min-w-[720px] text-left text-sm">
+                        <thead class="border-b border-line bg-[#f3f2f7] text-[0.7rem] uppercase tracking-wide text-muted">
+                            <tr>
+                                <th class="px-3 py-3 font-semibold">Induk</th>
+                                <th class="px-3 py-3 font-semibold">Menu</th>
+                                <th class="px-3 py-3 text-center font-semibold">Lihat</th>
+                                <th class="px-3 py-3 text-center font-semibold">Tambah</th>
+                                <th class="px-3 py-3 text-center font-semibold">Ubah</th>
+                                <th class="px-3 py-3 text-center font-semibold">Hapus</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-line">
+                            {ordered.map(({ menu, parent }) => (
+                                <tr class:list={[!menu.is_active && 'opacity-60']}>
+                                    <td class="px-3 py-2 text-xs text-muted">{parent ?? '—'}</td>
+                                    <td class="px-3 py-2">
+                                        <input type="hidden" name={`menu:${menu.id}`} value="1" />
+                                        <span
+                                            class={parent ? 'text-body' : 'font-semibold text-ink'}
+                                        >
+                                            {menu.name}
+                                        </span>
+                                        {menu.url && menu.url !== '#' && (
+                                            <span class="ml-2 font-mono text-[0.7rem] text-muted">
+                                                {menu.url}
+                                            </span>
+                                        )}
+                                        {!menu.is_active && (
+                                            <span class="ml-2 text-[0.7rem] font-medium text-warning">
+                                                nonaktif
+                                            </span>
+                                        )}
+                                    </td>
+                                    {(
+                                        [
+                                            ['view', 'is_view'],
+                                            ['add', 'is_add'],
+                                            ['edit', 'is_edit'],
+                                            ['delete', 'is_delete'],
+                                        ] as const
+                                    ).map(([action, key]) => (
+                                        <td class="px-3 py-2 text-center">
+                                            <input
+                                                type="checkbox"
+                                                name={`p:${menu.id}:${action}`}
+                                                value="1"
+                                                checked={permission(menu.id, key)}
+                                                disabled={!canWrite}
+                                                aria-label={`${menu.name} — ${action}`}
+                                                class="h-4 w-4 accent-[#7367f0]"
+                                            />
+                                        </td>
+                                    ))}
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+
+                {canWrite && (
+                    <div class="flex items-center justify-between gap-3 border-t border-line px-4 py-3">
+                        <p class="text-xs text-muted">
+                            Perubahan berlaku pada request berikutnya (sidebar dibaca ulang tiap
+                            halaman).
+                        </p>
+                        <button type="submit" class="vx-btn-primary">
+                            Simpan izin
+                        </button>
+                    </div>
+                )}
+            </form>
+        </div>
+    )}
+</AppLayout>

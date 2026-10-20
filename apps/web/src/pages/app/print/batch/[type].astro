@@ -1,0 +1,291 @@
+---
+import PrintLayout from '@/layouts/PrintLayout.astro';
+import PrintToolbar from '@/components/print/PrintToolbar.astro';
+import PrintHeader from '@/components/print/PrintHeader.astro';
+import ReportSheet from '@/components/print/ReportSheet.astro';
+import { readSessionToken } from '@/lib/auth/session';
+import {
+    buildResumeSummary,
+    defaultPrintRange,
+    isIsoDate,
+    isPrintType,
+    printPageConfig,
+    printTitles,
+    printTypeConfig,
+    registerDateFilter,
+    resumeSources,
+    signatureFor,
+    type DoctorRow,
+    type EmployeeRow,
+    type PrintParticipant,
+    type PrintType,
+    type RelatedResults,
+    type ResumeSummaryRow,
+    type SignatureInfo,
+} from '@/lib/print';
+import { inFilter, inTextFilter, postgrestRows } from '@/lib/server-postgrest';
+
+const { type: typeParam } = Astro.params;
+const user = Astro.locals.user;
+const token = readSessionToken(Astro.cookies);
+
+const rawType = typeParam ?? '';
+const isValid = isPrintType(rawType);
+const type: PrintType = isPrintType(rawType) ? rawType : 'identitas';
+
+// Stiker identitas massal memakai halaman khusus yang persis mengikuti view
+// legacy `report/multiple/identitas.blade.php` (plan_name, tanpa Status,
+// nomor "No Form N"). Varian per peserta tetap memakai `ReportSheet`.
+if (isValid && type === 'identitas') {
+    const search = Astro.url.searchParams.toString();
+
+    return Astro.redirect(`/app/print/identitas/print${search ? `?${search}` : ''}`, 302);
+}
+const config = printTypeConfig(type);
+const resource = config.resource;
+const doneKey = config.doneKey;
+
+const url = Astro.url;
+const range = defaultPrintRange();
+const tglAwalParam = url.searchParams.get('tgl_awal');
+const tglAkhirParam = url.searchParams.get('tgl_akhir');
+const tglAwal = isIsoDate(tglAwalParam) ? tglAwalParam : range.start;
+const tglAkhir = isIsoDate(tglAkhirParam) ? tglAkhirParam : range.end;
+
+const divisiParam = Number(url.searchParams.get('divisi_id') ?? '');
+const divisiId = Number.isInteger(divisiParam) && divisiParam > 0 ? divisiParam : null;
+
+const startParam = Number(url.searchParams.get('start') ?? '1');
+const start = Number.isInteger(startParam) && startParam > 0 ? startParam : 1;
+const endRaw = Number(url.searchParams.get('end') ?? '50');
+const end = Number.isInteger(endRaw) && endRaw >= start ? endRaw : start;
+
+const hasContext = Boolean(user?.contract_id && user.client_id && token);
+const { pageSize, pageMargin, contentWidth } = printPageConfig(type);
+
+let participants: PrintParticipant[] = [];
+let results = new Map<number, Record<string, unknown>>();
+let doctors = new Map<string, DoctorRow>();
+let summaries = new Map<number, ResumeSummaryRow[]>();
+let signatures = new Map<number, SignatureInfo>();
+let vitals = new Map<number, Record<string, unknown>>();
+let related = new Map<number, RelatedResults>();
+let loadError = '';
+
+if (!isValid) {
+    Astro.response.status = 404;
+}
+
+if (isValid && hasContext && token && user?.contract_id && user.client_id) {
+    try {
+        const rows = await postgrestRows<PrintParticipant>(token, 'v_mcu_progress', {
+            select: '*',
+            client_id: `eq.${user.client_id}`,
+            contract_id: `eq.${user.contract_id}`,
+            no_form: `gte.${start}`,
+            and: registerDateFilter(tglAwal, tglAkhir).replace(/^\(/, `(no_form.lte.${end},`),
+            ...(divisiId ? { divisi_id: `eq.${divisiId}` } : {}),
+            order: 'no_form.asc',
+            limit: end - start + 1,
+        });
+
+        participants = doneKey
+            ? rows.filter((participant) => participant[doneKey]).slice(0, end - start + 1)
+            : rows;
+
+        const ids = participants.map((participant) => participant.participant_id);
+
+        if (resource && ids.length > 0) {
+            const filter = inFilter(ids);
+            const resultRows = await postgrestRows<
+                Record<string, unknown> & { participant_id: number }
+            >(
+                token,
+                resource,
+                { select: '*', participant_id: filter ?? undefined, limit: 1000 },
+                'public',
+            );
+
+            results = new Map(resultRows.map((resultRow) => [resultRow.participant_id, resultRow]));
+
+            // Satu query employees untuk semua halaman, bukan per peserta.
+            const employeeIds = [
+                ...new Set(
+                    resultRows
+                        .map((resultRow) => Number(resultRow.employee_id ?? 0))
+                        .filter((id) => Number.isInteger(id) && id > 0),
+                ),
+            ];
+            const employeeFilter = inFilter(employeeIds);
+            const employeeRows = employeeFilter
+                ? await postgrestRows<EmployeeRow>(token, 'v_employee_signature', {
+                      select: 'id,nama,ttd',
+                      id: employeeFilter,
+                      limit: 1000,
+                  })
+                : [];
+            const employees = new Map(employeeRows.map((employee) => [employee.id, employee]));
+
+            for (const participant of participants) {
+                const resultRow = results.get(participant.participant_id);
+
+                if (!resultRow) continue;
+
+                signatures.set(
+                    participant.participant_id,
+                    signatureFor(
+                        employees.get(Number(resultRow.employee_id ?? 0)),
+                        (resultRow.diperiksa as string | undefined) ?? null,
+                    ),
+                );
+            }
+
+            // Cetak fisik massal juga memuat tanda vital + hasil terlampir.
+            if (type === 'pemeriksaan-fisik') {
+                const participantFilter = inFilter(ids) ?? undefined;
+                const vitalRows = await postgrestRows<
+                    Record<string, unknown> & { participant_id: number }
+                >(
+                    token,
+                    'tanda_vitals',
+                    { select: '*', participant_id: participantFilter, limit: 1000 },
+                    'public',
+                );
+
+                vitals = new Map(vitalRows.map((vitalRow) => [vitalRow.participant_id, vitalRow]));
+
+                const relatedResources = [
+                    'laboratoria',
+                    'radiologis',
+                    'audiometris',
+                    'ekgs',
+                    'spirometris',
+                    'rectals',
+                ];
+                const relatedRows = await Promise.all(
+                    relatedResources.map((relatedResource) =>
+                        postgrestRows<Record<string, unknown> & { participant_id: number }>(
+                            token,
+                            relatedResource,
+                            { select: '*', participant_id: participantFilter, limit: 1000 },
+                            'public',
+                        ),
+                    ),
+                );
+
+                related = new Map(
+                    participants.map((participant) => [participant.participant_id, {}]),
+                );
+
+                relatedResources.forEach((relatedResource, index) => {
+                    for (const relatedRow of relatedRows[index] ?? []) {
+                        const entry = related.get(relatedRow.participant_id);
+
+                        if (entry) entry[relatedResource] = relatedRow;
+                    }
+                });
+            }
+        }
+
+        if (type === 'resume' && participants.length > 0) {
+            const codes = participants.map((participant) => participant.code);
+            const codeFilter = inTextFilter(codes);
+            const doctorRows = await postgrestRows<DoctorRow>(
+                token,
+                'validate_doctors',
+                {
+                    select: '*',
+                    client_id: `eq.${user.client_id}`,
+                    no_mcu: codeFilter ?? undefined,
+                    limit: 1000,
+                },
+                'public',
+            );
+
+            doctors = new Map(
+                doctorRows
+                    .filter((row): row is DoctorRow & { no_mcu: string } => Boolean(row.no_mcu))
+                    .map((row) => [row.no_mcu, row]),
+            );
+
+            const summaryRows = await Promise.all(
+                resumeSources.map((source) =>
+                    postgrestRows<Record<string, unknown> & { participant_id: number }>(
+                        token!,
+                        source.resource,
+                        {
+                            select: `participant_id,${source.fields.join(',')}`,
+                            participant_id: inFilter(ids) ?? undefined,
+                            limit: 1000,
+                        },
+                        'public',
+                    ),
+                ),
+            );
+
+            for (const participant of participants) {
+                const resultsByResource = new Map(
+                    resumeSources.map((source, index) => [
+                        source.resource,
+                        summaryRows[index]?.find(
+                            (item) => item.participant_id === participant.participant_id,
+                        ) ?? null,
+                    ]),
+                );
+
+                summaries.set(participant.participant_id, buildResumeSummary(resultsByResource));
+            }
+        }
+    } catch (error) {
+        loadError = error instanceof Error ? error.message : 'Data cetak massal gagal dimuat.';
+    }
+}
+---
+
+<PrintLayout
+    title={`${printTitles[type]} (massal)`}
+    pageSize={pageSize}
+    pageMargin={pageMargin}
+    contentWidth={contentWidth}
+>
+    <PrintToolbar backHref="/app/print/mcu" backLabel="Kembali ke Print MCU" />
+
+    {!hasContext ? (
+        <div class="print-sheet">
+            <h1 class="print-title">Konteks MCU belum dipilih</h1>
+            <p style="text-align: center;">
+                Pilih client dan kontrak di <a href="/app/mcu-in-out">MCU IN/OUT</a> sebelum
+                mencetak.
+            </p>
+        </div>
+    ) : loadError ? (
+        <div class="print-sheet">
+            <h1 class="print-title">Cetak massal gagal</h1>
+            <p style="text-align: center;">{loadError}</p>
+        </div>
+    ) : participants.length === 0 ? (
+        <div class="print-sheet">
+            <PrintHeader />
+            <h1 class="print-title">Tidak ada peserta</h1>
+            <p style="text-align: center;">
+                Tidak ada peserta yang memenuhi No. Form {start}–{end}, divisi, dan rentang tanggal
+                yang dipilih.
+            </p>
+        </div>
+    ) : (
+        participants.map((participant) => (
+            <div class="print-page-break">
+                <ReportSheet
+                    type={type}
+                    participant={participant}
+                    row={results.get(participant.participant_id) ?? null}
+                    summary={summaries.get(participant.participant_id) ?? []}
+                    doctor={doctors.get(participant.code) ?? null}
+                    signature={signatures.get(participant.participant_id) ?? null}
+                    vitals={vitals.get(participant.participant_id) ?? null}
+                    related={related.get(participant.participant_id) ?? {}}
+                />
+            </div>
+        ))
+    )}
+</PrintLayout>

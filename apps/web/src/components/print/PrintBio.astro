@@ -1,0 +1,144 @@
+---
+import { ageDetail } from '@/lib/format';
+import { legacyDate, legacyDateTime, legacyShortDate, printGender } from '@/lib/print-format';
+import type { PrintParticipant } from '@/lib/print';
+
+interface Props {
+    participant: PrintParticipant;
+    /** Ukuran huruf blok identitas: 11px (stiker), 12px (semua hasil). */
+    fontSize?: number;
+    /** Legacy pemeriksaan fisik hanya mencetak tanggal lahir, tanpa usia. */
+    birthDate?: 'date-age' | 'date';
+    /** Resume mencetak tanggal `d-m-Y`; view lain mencetak nilai database apa adanya. */
+    dateFormat?: 'raw' | 'short';
+    /** Legacy pemeriksaan fisik tidak memuat Tgl Register. */
+    showRegisterDate?: boolean;
+    /** Resume mencetak tinggi/usia pada tabel MEDICAL RECORD, bukan di bio. */
+    showAge?: boolean;
+    /** Resume tidak mencetak Status di kolom kanan. */
+    showStatus?: boolean;
+    /** Geser blok identitas ke bawah (px) agar sama dengan DomPDF. */
+    topOffset?: number;
+    /** Padding sel identitas; hanya laboratorium yang berbeda (4px, legacy DomPDF). */
+    cellPadding?: string;
+}
+
+const {
+    participant,
+    fontSize = 12,
+    birthDate = 'date-age',
+    dateFormat = 'raw',
+    showRegisterDate = true,
+    showAge = true,
+    showStatus = true,
+    topOffset = 0,
+    cellPadding,
+} = Astro.props;
+
+const formatDate = dateFormat === 'short' ? legacyShortDate : legacyDate;
+---
+
+{/* Jarak ke tabel hasil: legacy 6px, dikurangi 2,4px yang kini dipakai
+    offset header di PrintLayout supaya posisi tabel hasil tetap sama. */}
+<table
+    class="print-bio"
+    style={`font-size: ${fontSize}px; margin-top: ${topOffset}px; margin-bottom: 3.6px;${
+        cellPadding ? ` --bio-cell-padding: ${cellPadding};` : ''
+    }`}
+>
+    <tbody>
+        <tr>
+            <!-- Tanpa lebar tetap seperti view legacy: kolom mengikuti lebar
+                 isi (label, titik dua, nilai) lalu tabel mengisi 100%.
+                 `vertical-align: middle` = default DomPDF, sehingga kolom kanan
+                 yang barisnya lebih sedikit turun setengah baris seperti legacy. -->
+            <td style="vertical-align: middle;">
+                <table class="bio-table">
+                    <tbody>
+                        <tr>
+                            <td>MCU ID</td>
+                            <td>:</td>
+                            <td>{participant.code}</td>
+                        </tr>
+                        <tr>
+                            <td>NIK</td>
+                            <td>:</td>
+                            <td>{participant.nik}</td>
+                        </tr>
+                        <tr>
+                            <td>Nama</td>
+                            <td>:</td>
+                            <td style="white-space: nowrap;">
+                                {participant.name} [{printGender(participant.gender)}]
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Tgl Lahir</td>
+                            <td>:</td>
+                            <td>
+                                {birthDate === 'date' ? (
+                                    formatDate(participant.birthday)
+                                ) : (
+                                    <>
+                                        {formatDate(participant.birthday)} /{' '}
+                                        {ageDetail(participant.birthday)}
+                                    </>
+                                )}
+                            </td>
+                        </tr>
+                        {showAge && (
+                            <tr>
+                                <td>Usia</td>
+                                <td>:</td>
+                                <td>{ageDetail(participant.birthday)}</td>
+                            </tr>
+                        )}
+                    </tbody>
+                </table>
+            </td>
+            <td style="vertical-align: middle;">
+                <table class="bio-table">
+                    <tbody>
+                        <tr>
+                            <td>Perusahaan</td>
+                            <td>:</td>
+                            <td>{participant.client_name ?? '-'}</td>
+                        </tr>
+                        {showStatus && (
+                            <tr>
+                                <td>Status</td>
+                                <td>:</td>
+                                <td>{participant.status ?? ''}</td>
+                            </tr>
+                        )}
+                        <tr>
+                            <td>Dept. ID</td>
+                            <td>:</td>
+                            <td>{participant.divisi_name ?? '-'}</td>
+                        </tr>
+                        <tr>
+                            <td>Department</td>
+                            <td>:</td>
+                            <td>{participant.department_name ?? '-'}</td>
+                        </tr>
+                        {showRegisterDate && (
+                            <tr>
+                                <td>Tgl Register</td>
+                                <td>:</td>
+                                <td>{legacyDateTime(participant.register_date)}</td>
+                            </tr>
+                        )}
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<style>
+    /* Semua view memakai padding sel identitas default DomPDF (2px 3px);
+       laboratorium memakai 4px sesuai `pages/report/laboratorium.blade.php`. */
+    .print-bio .bio-table td {
+        padding: var(--bio-cell-padding, 2px 3px);
+    }
+</style>

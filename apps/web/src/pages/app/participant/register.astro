@@ -1,0 +1,38 @@
+---
+import AppLayout from '@/layouts/AppLayout.astro';
+import RegisterPanel from '@/components/RegisterPanel.vue';
+import { menuAllows } from '@/lib/nav';
+
+const user = Astro.locals.user;
+const menus = Astro.locals.menus ?? [];
+
+// Register = aksi tambah pada menu Register; server tetap memeriksa RLS.
+const canWrite =
+    Boolean(user && user.app_role !== 'participant' && user.contract_id !== null) &&
+    menuAllows(menus, '/participant-register', 'add');
+---
+
+<AppLayout title="Register Peserta" user={user}>
+    <div class="mb-5">
+        <p class="text-[0.7rem] font-semibold uppercase tracking-[0.16em] text-brand">MCU</p>
+        <h1 class="mt-1 text-[1.714rem] font-semibold tracking-tight text-ink">Register peserta</h1>
+    </div>
+
+    {user?.contract_id ? (
+        <RegisterPanel client:load canWrite={canWrite} />
+    ) : (
+        <div class="rounded-[0.5rem] border border-[#ffe4c9] bg-warning-soft p-6">
+            <h2 class="text-[1rem] font-semibold text-[#b76e00]">Konteks MCU belum dipilih</h2>
+            <p class="mt-1 max-w-xl text-[0.875rem] leading-6 text-[#b76e00]/80">
+                Pilih client dan kontrak terlebih dahulu; register hanya berlaku untuk kontrak aktif
+                di klaim sesi.
+            </p>
+            <a
+                href="/app/mcu-in-out"
+                class="mt-4 inline-flex rounded-[0.357rem] bg-[#b76e00] px-4 py-2 text-sm font-medium text-white transition hover:bg-[#9a5c00]"
+            >
+                Atur konteks MCU
+            </a>
+        </div>
+    )}
+</AppLayout>

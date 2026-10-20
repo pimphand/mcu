@@ -1,0 +1,145 @@
+---
+import BaseLayout from './BaseLayout.astro';
+
+interface Props {
+    title: string;
+    /** Ukuran kertas mengikuti view legacy (identitas 150x100mm, hasil 21x33cm). */
+    pageSize?: string;
+    pageMargin?: string;
+    /** Lebar area cetak = lebar kertas - margin kiri/kanan (hasil: 17,5cm). */
+    contentWidth?: string;
+}
+
+const {
+    title,
+    pageSize = '21cm 33cm',
+    pageMargin = '1cm 1cm 1cm 2.5cm',
+    contentWidth = '17.5cm',
+} = Astro.props;
+---
+
+<BaseLayout title={title} description="Cetak hasil MCU Klinik Dr Dini.">
+    <style is:inline set:html={`@page { size: ${pageSize}; margin: ${pageMargin}; }`}></style>
+
+    <style is:global>
+        .print-body {
+            background: #fff;
+            color: #000;
+            /* Legacy dicetak DomPDF dengan font inti Helvetica (Segoe UI tidak
+               ada di server), jadi cetakan baru memakai Helvetica/Arial supaya
+               bentuk huruf dan lebar teksnya sama. */
+            font-family: Helvetica, Arial, sans-serif;
+            font-size: 12px;
+            --print-content-width: 17.5cm;
+        }
+
+        .print-sheet {
+            background: #fff;
+            width: 100%;
+            /* Jangan melebihi area cetak: konten lebih lebar dari 17,5cm akan
+               terpotong margin kanan saat dicetak (legacy memakai width 100%). */
+            max-width: var(--print-content-width);
+            margin: 0 auto;
+            /* DomPDF meletakkan dasar huruf ~1,8pt lebih rendah dari Chrome
+               untuk blok header, jadi padding atas ditambah segitu. */
+            padding: 14.4px 10px 20px;
+            color: #000;
+            /* DomPDF memakai line-height normal 1.222em. Tinggi baris ini yang
+               menentukan pemenggalan halaman cetak (mis. fisik 2 halaman),
+               jadi harus sama dengan cetakan legacy. */
+            line-height: 1.222;
+            /* Padding sel mengikuti `td { padding }` milik tiap view legacy:
+               2px (default DomPDF), 3px di laboratorium, dan 5px di radiologi/
+               audiometri/EKG/spirometri/rectal. */
+            --print-cell-padding: 2px 3px;
+            --print-header-padding: 2px 3px;
+        }
+
+        .print-sheet table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .print-sheet td,
+        .print-sheet th {
+            padding: var(--print-cell-padding);
+            /* DomPDF memakai default CSS `middle`: teks satu baris tidak
+               berubah, tetapi sel label pada baris dua baris (mis. Saran)
+               ikut turun ke tengah seperti cetakan legacy. */
+            vertical-align: middle;
+        }
+
+        .print-header td {
+            padding: var(--print-header-padding);
+        }
+
+        .print-border,
+        .print-border td,
+        .print-border th {
+            border: 1px solid #000;
+        }
+
+        /* `.border` legacy memakai padding 3px dan tinggi baris 22,9px
+           (13px x 1,222 + 6px + garis 1px). */
+        .print-border td,
+        .print-border th {
+            padding: 3px;
+            vertical-align: middle;
+        }
+
+        /* Tabel lab punya lebih banyak baris dari view legacy; rapatkan sedikit
+           supaya kesimpulan + tanda tangan tetap di halaman pertama. */
+        .print-compact td,
+        .print-compact th {
+            padding-top: 1px;
+            padding-bottom: 1px;
+        }
+
+        /* DomPDF memulai blok header lebih rendah daripada Chrome; offset ini
+           menyamakan dasar huruf judul. Nilainya ikut padding sel tiap view
+           legacy (2px, 3px, 5px) dan diatur ReportSheet. */
+        .print-header {
+            margin-top: var(--print-header-offset, 2.4px);
+        }
+
+        .print-title {
+            text-align: center;
+            font-size: 16px;
+            font-weight: 700;
+            margin: 10px 0;
+        }
+
+        .print-muted {
+            color: #444;
+        }
+
+        .print-page-break {
+            break-after: page;
+            page-break-after: always;
+        }
+
+        .print-page-break:last-child {
+            break-after: auto;
+            page-break-after: auto;
+        }
+
+        @media print {
+            body {
+                background: #fff !important;
+            }
+
+            .no-print {
+                display: none !important;
+            }
+
+            .print-sheet {
+                box-shadow: none;
+                padding: 0;
+            }
+        }
+    </style>
+
+    <div class="print-body" style={`--print-content-width: ${contentWidth};`}>
+        <slot />
+    </div>
+</BaseLayout>

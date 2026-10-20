@@ -1,0 +1,132 @@
+---
+import AppLayout from '@/layouts/AppLayout.astro';
+import SystemStatus from '@/components/SystemStatus.vue';
+import { roleLabel } from '@/lib/format';
+
+const user = Astro.locals.user;
+
+const stats = [
+    { label: 'Peserta', value: '—', note: 'Menunggu koneksi data' },
+    {
+        label: 'Kontrak aktif',
+        value: user?.contract_id ? `#${user.contract_id}` : '—',
+        note: 'Dari klaim JWT',
+    },
+    { label: 'Pemeriksaan selesai', value: '—', note: 'Belum diimplementasikan' },
+    { label: 'Cetak tertunda', value: '—', note: 'Belum diimplementasikan' },
+];
+
+const modules = [
+    { name: 'Base web & layout', status: 'Selesai', tone: 'done' },
+    { name: 'Security baseline', status: 'Selesai', tone: 'done' },
+    { name: 'Auth + konteks MCU', status: 'Siap diuji', tone: 'active' },
+    { name: 'Schema PostgreSQL', status: 'Awal', tone: 'active' },
+    { name: 'Peserta & import', status: 'Berikutnya', tone: 'todo' },
+    { name: 'Pemeriksaan & cetak', status: 'Berikutnya', tone: 'todo' },
+];
+---
+
+<AppLayout title="Dashboard" user={user}>
+    <section class="relative mb-6 overflow-hidden rounded-[0.5rem] bg-[linear-gradient(118deg,#7367f0,#9e95f5)] p-6 text-white shadow-vx-lg sm:p-8">
+        <div
+            class="pointer-events-none absolute -right-16 -top-20 size-56 rounded-full border border-white/15"
+            aria-hidden="true"
+        ></div>
+        <div
+            class="pointer-events-none absolute -bottom-24 right-24 size-64 rounded-full bg-white/5"
+            aria-hidden="true"
+        ></div>
+
+        <div class="relative flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+                <p class="text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-white/75">
+                    {roleLabel(user?.app_role)}
+                </p>
+                <h1 class="mt-2 text-2xl font-semibold tracking-tight text-white sm:text-[1.714rem]">
+                    Ruang kerja operasional MCU
+                </h1>
+                <p class="mt-2 max-w-xl text-sm leading-6 text-white/75">
+                    Base sudah berjalan. Pilih konteks MCU, lalu lanjutkan ke modul peserta atau
+                    pemeriksaan.
+                </p>
+            </div>
+            <div class="flex flex-wrap gap-2">
+                <a
+                    href="/app/mcu-in-out"
+                    class="rounded-[0.357rem] bg-white px-4 py-2.5 text-sm font-medium text-brand transition hover:bg-brand-soft"
+                >
+                    Atur konteks MCU
+                </a>
+                <a
+                    href="/app/participant"
+                    class="rounded-[0.357rem] border border-white/30 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-white/10"
+                >
+                    Lihat peserta
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {stats.map((stat) => (
+            <article class="vx-card p-5">
+                <p class="text-[0.8125rem] text-body">{stat.label}</p>
+                <p class="mt-2 text-[1.5rem] font-semibold leading-none text-ink">{stat.value}</p>
+                <p class="mt-2 text-[0.7rem] text-muted">{stat.note}</p>
+            </article>
+        ))}
+    </section>
+
+    <section class="mt-6 grid gap-6 lg:grid-cols-[1.25fr_0.75fr]">
+        <div class="vx-card">
+            <div class="flex items-start justify-between gap-4 border-b border-line px-5 py-4">
+                <div>
+                    <h2 class="text-[1rem] font-semibold text-ink">Kesiapan modul</h2>
+                    <p class="mt-0.5 text-[0.75rem] text-muted">
+                        Status jujur mengikuti pekerjaan yang sudah ada.
+                    </p>
+                </div>
+                <a href="/api/health" class="text-[0.75rem] font-medium text-brand hover:underline">
+                    Health
+                </a>
+            </div>
+
+            <ul class="divide-y divide-line px-5">
+                {modules.map((module) => (
+                    <li class="flex items-center justify-between gap-4 py-3">
+                        <span class="text-[0.875rem] text-body">{module.name}</span>
+                        <span
+                            class:list={[
+                                'rounded-full px-2.5 py-1 text-[0.7rem] font-medium',
+                                module.tone === 'done' && 'bg-success-soft text-success',
+                                module.tone === 'active' && 'bg-brand-soft text-brand-dark',
+                                module.tone === 'todo' && 'bg-[#f3f2f7] text-muted',
+                            ]}
+                        >
+                            {module.status}
+                        </span>
+                    </li>
+                ))}
+            </ul>
+        </div>
+
+        <div class="space-y-4">
+            <SystemStatus client:visible />
+
+            <div class="vx-card p-5">
+                <h2 class="text-[1rem] font-semibold text-ink">Catatan base</h2>
+                <p class="mt-2 text-[0.75rem] leading-5 text-body">
+                    Angka dashboard sengaja kosong sampai query view tersedia. Jangan mengisi UI
+                    dengan data contoh yang terlihat seperti data produksi.
+                </p>
+                <a
+                    href="/app/participant"
+                    class="mt-4 inline-flex items-center gap-2 text-[0.8125rem] font-medium text-brand hover:underline"
+                >
+                    Buka daftar peserta
+                    <span aria-hidden="true">→</span>
+                </a>
+            </div>
+        </div>
+    </section>
+</AppLayout>

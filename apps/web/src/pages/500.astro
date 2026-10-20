@@ -1,0 +1,18 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Terjadi kesalahan">
+    <main class="grid min-h-screen place-items-center bg-surface px-4">
+        <div class="vx-card w-full max-w-md p-8 text-center">
+            <p class="text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-brand">500</p>
+            <h1 class="mt-2 text-[1.5rem] font-semibold text-ink">Terjadi kesalahan</h1>
+            <p class="mt-2 text-[0.875rem] leading-6 text-body">
+                Permintaan tidak dapat diproses. Coba beberapa saat lagi atau hubungi administrator.
+            </p>
+            <a href="/app" class="vx-btn-primary mt-6">
+                Kembali ke dashboard
+            </a>
+        </div>
+    </main>
+</BaseLayout>

@@ -1,0 +1,127 @@
+---
+import AppLayout from '@/layouts/AppLayout.astro';
+import MasterCrud from '@/components/master/MasterCrud.vue';
+import { readSessionToken } from '@/lib/auth/session';
+import { menuAllows } from '@/lib/nav';
+import type { MasterKind } from '@/lib/master-data';
+import { masterConfig, masterKind } from '@/lib/master-data';
+import {
+    listMaster,
+    loadMasterOptions,
+    type MasterOptions,
+    type MasterRow,
+} from '@/lib/master-server';
+
+const kind = masterKind(Astro.params.resource);
+
+if (!kind) {
+    return Astro.redirect('/404');
+}
+
+const config = masterConfig(kind as MasterKind);
+const user = Astro.locals.user;
+const token = readSessionToken(Astro.cookies);
+const menus = Astro.locals.menus ?? [];
+const canView = menuAllows(menus, config.legacyUrl, 'view');
+// Client/role/menu hanya boleh diubah administrator (RLS + endpoint).
+const adminOnly = config.kind === 'client' || config.kind === 'role' || config.kind === 'menu';
+const writable = !adminOnly || user?.app_role === 'admin' || user?.level === 1;
+const canAdd = writable && menuAllows(menus, config.legacyUrl, 'add');
+const canEdit = writable && menuAllows(menus, config.legacyUrl, 'edit');
+const canDelete = writable && menuAllows(menus, config.legacyUrl, 'delete');
+
+const url = Astro.url;
+const perPage = 25;
+const search = (url.searchParams.get('q') ?? '').trim().slice(0, 100);
+const pageParam = Number(url.searchParams.get('page') ?? '1');
+const page = Number.isInteger(pageParam) && pageParam > 0 ? pageParam - 1 : 0;
+const sort = url.searchParams.get('sort') ?? config.defaultSort;
+
+// Baris pertama dirender server supaya tabel langsung terisi: island hanya
+// memuat ulang data setelah pencarian/pindah halaman/simpan.
+let rows: MasterRow[] = [];
+let total = 0;
+let options: MasterOptions = { clients: [], roles: [], rootMenus: [] };
+let dataError = '';
+
+if (canView && token) {
+    try {
+        const list = await listMaster(kind as MasterKind, token, user!, {
+            search,
+            sort,
+            page,
+            perPage,
+        });
+
+        rows = list.rows;
+        total = list.total;
+
+        if (canAdd || canEdit) {
+            options = await loadMasterOptions(token, config.fields, user!);
+        }
+    } catch (cause) {
+        dataError = cause instanceof Error ? cause.message : 'Data master gagal dimuat.';
+    }
+}
+---
+
+<AppLayout title={config.title} user={user}>
+    <div class="mb-5 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+            <p class="text-[0.7rem] font-semibold uppercase tracking-[0.16em] text-brand">
+                Master Data
+            </p>
+            <h1 class="mt-1 text-[1.714rem] font-semibold tracking-tight text-ink">
+                {config.title}
+            </h1>
+            <p class="mt-1 max-w-2xl text-[0.8125rem] leading-6 text-body">{config.description}</p>
+        </div>
+        {config.kind === 'client' && (
+            <a href="/app/master/contract" class="vx-btn-outline">
+                Kelola kontrak
+            </a>
+        )}
+    </div>
+
+    {!canView ? (
+        <div class="rounded-[0.5rem] border border-[#f8d4d4] bg-danger-soft p-6">
+            <h2 class="text-[1rem] font-semibold text-danger">Tidak berwenang</h2>
+            <p class="mt-1 text-[0.875rem] leading-6 text-danger/80">
+                Role Anda tidak memiliki akses ke menu ini.
+            </p>
+        </div>
+    ) : !user?.contract_id && config.kind !== 'client' && config.kind !== 'contract' ? (
+        <div class="mb-4 rounded-[0.357rem] border border-[#ffe4c9] bg-warning-soft px-3 py-2 text-sm text-[#b76e00]">
+            Konteks MCU belum dipilih. Data tetap mengikuti client akun Anda; pilih MCU IN/OUT bila
+            daftar client perlu dipersempit.
+        </div>
+    ) : (
+        <div class="space-y-5">
+            {dataError && (
+                <p
+                    class="rounded-[0.357rem] border border-[#f8d4d4] bg-danger-soft px-3 py-2 text-sm text-danger"
+                    role="alert"
+                >
+                    {dataError}
+                </p>
+            )}
+
+            {!dataError ? (
+                <MasterCrud
+                    client:load
+                    config={config}
+                    rows={rows}
+                    total={total}
+                    page={page}
+                    perPage={perPage}
+                    search={search}
+                    sort={sort}
+                    canAdd={canAdd}
+                    canEdit={canEdit}
+                    canDelete={canDelete}
+                    options={options}
+                />
+            ) : null}
+        </div>
+    )}
+</AppLayout>
