@@ -104,10 +104,15 @@ export const masterConfigs: Record<MasterKind, MasterConfig> = {
         columns: [
             { key: 'code', label: 'Kode' },
             { key: 'name', label: 'Nama' },
+            { key: 'contract_names', label: 'Kontrak' },
             { key: 'address', label: 'Alamat' },
             { key: 'created_at', label: 'Dibuat', format: 'datetime' },
         ],
-        fields: [nameField(), { key: 'address', label: 'Alamat', type: 'textarea' }],
+        // Paritas `ClientController@store`: nama dan alamat wajib diisi.
+        fields: [
+            nameField(),
+            { key: 'address', label: 'Alamat', type: 'textarea', required: true },
+        ],
     },
     contract: {
         kind: 'contract',
@@ -235,6 +240,9 @@ export const masterConfigs: Record<MasterKind, MasterConfig> = {
                 key: 'ttd',
                 label: 'Tanda tangan',
                 type: 'file',
+                // Paritas EmployeeController@store: tanda tangan wajib saat
+                // membuat karyawan baru, opsional (pertahankan yang lama) saat ubah.
+                requiredOnCreate: true,
                 help: 'PNG/JPG maksimal 2 MB. Gambar disimpan ulang (resize) dengan nama acak.',
             },
         ],

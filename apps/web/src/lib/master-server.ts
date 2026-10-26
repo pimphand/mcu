@@ -43,6 +43,47 @@ function safeSort(kind: MasterKind, value: string | undefined): string {
     return value && allowed.includes(value) ? value : config.defaultSort;
 }
 
+/**
+ * Daftar client legacy menampilkan kontrak aktif di dalam baris client. View
+ * ringkas itu dipertahankan sebagai satu kolom teks: satu query untuk semua
+ * baris di halaman ini (`in.(...)`), bukan satu query per client.
+ */
+async function withContractNames(token: string, rows: MasterRow[]): Promise<MasterRow[]> {
+    const ids = rows.map((row) => Number(row.id)).filter((id) => Number.isInteger(id));
+
+    if (ids.length === 0) return rows;
+
+    const contracts = await postgrestRows<{
+        client_id: number | null;
+        code: string | null;
+        name: string | null;
+    }>(
+        token,
+        'contracts',
+        {
+            select: 'client_id,code,name',
+            client_id: `in.(${ids.join(',')})`,
+            deleted_at: 'is.null',
+            order: 'code.asc',
+            limit: 1000,
+        },
+        'public',
+    );
+
+    const byClient = new Map<number, string[]>();
+
+    for (const contract of contracts) {
+        const key = Number(contract.client_id);
+        const label = [contract.code, contract.name].filter(Boolean).join(' / ');
+
+        if (!Number.isInteger(key) || !label) continue;
+
+        byClient.set(key, [...(byClient.get(key) ?? []), label]);
+    }
+
+    return rows.map((row) => ({ ...row, contract_names: byClient.get(Number(row.id)) ?? [] }));
+}
+
 function withClientName(kind: MasterKind, row: MasterRow): MasterRow {
     if (kind === 'contract' || kind === 'department' || kind === 'divisi' || kind === 'employee') {
         const relation = row.clients as { name?: string } | null;
@@ -83,6 +124,10 @@ export async function listMaster(
     );
 
     let mapped = rows.map((row) => withClientName(kind, row));
+
+    if (kind === 'client') {
+        mapped = await withContractNames(token, mapped);
+    }
 
     if (kind === 'menu') {
         const parents = await postgrestRows<{ id: number; name: string }>(

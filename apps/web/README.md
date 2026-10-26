@@ -34,10 +34,17 @@ memerlukan migrasi `db/migrations/0013_upload_views.sql` untuk membuat view daft
 
 `GET /api/health` benar-benar mencoba koneksi database autentikasi: `auth: unreachable` berarti
 `AUTH_DATABASE_URL` terisi tetapi tidak bisa dihubungi (login akan menjawab 502 "Layanan
-autentikasi sedang tidak tersedia"). Penyebab tersering di Supabase: host `db.<ref>.supabase.co`
+autentikasi sedang tidak tersedia"). Bila log server menampilkan `password authentication failed
+for user "mcu_auth"`, password di URL `.env` tidak cocok dengan database — samakan dengan
+`MCU_AUTH_PASSWORD`/`MCU_SERVICE_PASSWORD` di `infra/.env`, bukan dengan mengganti role atau host. Penyebab tersering di Supabase: host `db.<ref>.supabase.co`
 hanya punya record **AAAA (IPv6)**. Mesin tanpa IPv6 harus memakai pooler IPv4
 `postgresql://<role>.<ref>:<password>@aws-0-<region>.pooler.supabase.com:5432/postgres?sslmode=require`,
 atau mengaktifkan add-on IPv4 pada project.
+
+Pemeriksaan `Origin` untuk request JSON (`POST`/`PUT`/`PATCH`/`DELETE`) membandingkan header
+`Origin` dengan `Host`/`X-Forwarded-Host` yang dipakai browser, ditambah `PUBLIC_APP_URL` sebagai
+cadangan (`src/lib/security.ts`). Membuka aplikasi lewat `127.0.0.1`, `localhost`, atau reverse
+proxy yang mengakhiri TLS tetap bisa login; origin situs lain tetap ditolak `403`.
 
 ## Perintah
 
@@ -60,7 +67,8 @@ atau mengaktifkan add-on IPv4 pada project.
 | `POST /api/mcu/in`            | Aktif                                               |
 | `POST /api/mcu/out`           | Aktif                                               |
 | `ANY /api/db/[...path]`       | Proxy PostgREST dengan allowlist + JWT              |
-| `POST /api/master/[kind]`     | CRUD master data (form + redirect 303)              |
+| `GET /api/master/[kind]`      | Daftar master (JSON) untuk pencarian/pagination SPA |
+| `POST /api/master/[kind]`     | CRUD master data (JSON untuk island, redirect 303)  |
 | `POST /api/master/permission` | Simpan matriks izin role (admin)                    |
 
 ## Halaman
@@ -121,6 +129,28 @@ Proxy `/api/db/*` menempelkan `client_id`/`contract_id` dari klaim sesi untuk
 `v_participant_list` dan `v_mcu_progress`; nilai dari query string browser diabaikan. Register
 tunggal (`rpc/register_participant`) menolak peserta di luar kontrak aktif.
 
+## Daftar peserta
+
+`/app/participant` menampilkan `api.v_participant_list` (scope client/kontrak dari klaim sesi)
+dengan kolom MCU ID, NIK, nama, JK, tgl lahir, divisi, department, kontrak, plan, paket, dan
+status register. Filter mengikuti modal legacy: pencarian bebas mencocokkan kode **atau** nama,
+NIK dan tanggal lahir cocok persis, nama memakai `ilike`, gender `L`/`P`, switch plan
+U/A/E/S/R, lab khusus, dan paket A–F.
+
+- State filter dan terjemahannya ke parameter PostgREST ada di
+  `src/lib/participant-filters.ts`; `ParticipantFilterForm.vue` hanya menyusun draft,
+  `ParticipantTable.vue` yang memuat data.
+- Filter dan halaman ditulis ke URL (`?plan_u=1&gender=L&page=2`) lewat
+  `history.replaceState`, dan diurai di server (`index.astro`) supaya tautan yang dibagikan
+  sudah terpasang saat island dihidrasi.
+- `src/lib/participant-parity.test.ts` memastikan setiap field filter Blade legacy
+  (`resources/views/pages/participant/filter.blade.php`) punya padanan dan kolom yang dipakai
+  daftar memang ada di `db/migrations/0003_views.sql`.
+- Catatan paritas: `ParticipantService::paginate` legacy membaca nama field yang salah
+  (`plant_u`, `lab_khusus`, `paket_*`), jadi switch plan U, lab khusus, dan paket di legacy
+  tidak pernah berpengaruh; versi Astro memakai nama field form (`plan_u`, `lab_special`,
+  `packet_*`) sehingga filternya benar-benar diterapkan.
+
 ## Master data
 
 Satu halaman generik `/app/master/[resource]` melayani client, kontrak, department, divisi,
@@ -132,7 +162,14 @@ pagination server-side, pencarian, dan sort yang di-allowlist.
 - `users` di-revoke dari role `authenticated`; CRUD user memakai koneksi `mcu_service` dengan
   pemeriksaan izin per client dan aturan role di server (`src/lib/master-write.ts`).
 - Aksi POST diarahkan ke `/api/master/[kind]`; matriks izin role disimpan lewat
-  `/api/master/permission` (admin saja).
+  `/api/master/permission` (admin saja). Island meminta `Accept: application/json` untuk
+  daftar (`GET`) dan hasil simpan tanpa reload halaman.
+- Field pilihan (`client_id`, role, menu induk) memakai dropdown pencarian `MasterSelect.vue`,
+  pengganti select2 legacy; wajib-isi diperiksa di browser (`MasterModal.vue`) dan diulang di
+  server (`master-validation.ts`).
+- `src/lib/master-parity.test.ts` membaca form tambah dan aturan `required` controller Blade
+  legacy (`resources/views/pages/<kind>`, `app/Http/Controllers/*Controller.php`) supaya field
+  master tetap sepadan.
 - Kode otomatis `C00001`, `KT00001`, `D-00001`, `DV-00001`, `E-00001` dibuat sequence database
   lewat `db/migrations/0014_master_code_defaults.sql`. **Migrasi ini wajib diterapkan** sebelum
   menambah client/kontrak/department/divisi/karyawan; tanpa itu insert gagal karena kolom

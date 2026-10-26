@@ -20,9 +20,11 @@ async function checkAuth(): Promise<DependencyStatus> {
     try {
         await Promise.race([
             queryAuth('select 1 as ok'),
-            // Pool pg menunggu 5 detik; health check tidak boleh selama itu.
+            // Koneksi pertama ke PostgreSQL terkelola (TLS + pooler) bisa lewat
+            // 2 detik; batas ini harus di atas itu agar status tidak salah
+            // "unreachable" saat server baru dinyalakan.
             new Promise((_resolve, reject) =>
-                setTimeout(() => reject(new Error('timeout')), 2_500),
+                setTimeout(() => reject(new Error('timeout')), 5_000),
             ),
         ]);
 
@@ -40,7 +42,9 @@ async function checkPostgrest(): Promise<DependencyStatus> {
     try {
         const response = await fetch(env.POSTGREST_URL, {
             method: 'GET',
-            signal: AbortSignal.timeout(2_000),
+            // `GET /` PostgREST membangun OpenAPI dan pada stack ini butuh
+            // ~0,9 detik; batas 2 detik membuat health check sesekali 503.
+            signal: AbortSignal.timeout(5_000),
             redirect: 'manual',
         });
 

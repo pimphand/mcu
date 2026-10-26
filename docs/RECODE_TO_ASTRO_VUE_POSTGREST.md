@@ -7,7 +7,7 @@ Dokumen kerja untuk memindahkan aplikasi **MCU (Medical Check Up) Klinik Dr Dini
 | Status dokumen | Blueprint + progress tracker |
 | Versi | 1.3 (modul upload hasil) |
 | Tanggal mulai | 2026-10-17 |
-| Progres keseluruhan | **47%** — lihat [§13](#13-progres) |
+| Progres keseluruhan | **56%** — lihat [§13](#13-progres) |
 | Aplikasi sumber | Laravel 11, PHP 8.3, MySQL 8, Blade + Vuexy, Vite |
 | Aplikasi target | Astro (SSR, Node adapter) + Vue 3 islands + PostgreSQL 16+ + PostgREST |
 | Pemilik | _isi nama penanggung jawab_ |
@@ -970,20 +970,20 @@ Bobot ditentukan dari risiko + ukuran pekerjaan. Persentase workstream = item se
 | Database, view, sequence, RPC | 12% | 8/12 | 67% | 🟡 |
 | PostgREST, JWT, RLS | 12% | 7/10 | 70% | 🟡 |
 | Auth, shell, MCU IN/OUT | 8% | 8/8 | 100% | ✅ |
-| Master data | 8% | 4/9 | 44% | 🟡 |
-| Peserta (list, form, import, register, foto) | 15% | 6/14 | 43% | 🟡 |
+| Master data | 8% | 9/9 | 100% | ✅ |
+| Peserta (list, form, import, register, foto) | 15% | 7/14 | 50% | 🟡 |
 | Form pemeriksaan (10 jenis) | 10% | 8/12 | 67% | 🟡 |
 | Upload hasil (4 jenis) | 8% | 8/8 | 100% | ✅ |
 | Cetak, PDF, QR, rekap | 12% | 2/13 | 15% | 🟡 |
 | Migrasi data & cutover | 5% | 0/7 | 0% | ⬜ |
 | Testing, security, performance | 5% | 0/8 | 0% | ⬜ |
-| **Total** | **100%** | **55/109** | **50%** | 🟡 |
+| **Total** | **100%** | **61/109** | **56%** | 🟡 |
 
 ```
-Progres keseluruhan:  [#####.....] 50%
+Progres keseluruhan:  [######....] 56%
 ```
 
-> Checklist fase 0–3 dan 6 direkonsiliasi dengan isi repo pada 2026-10-18; fase 4 direkonsiliasi pada 2026-10-19 (setiap centang punya bukti file/perintah di log). Item yang hanya terpenuhi sebagian tetap `- [ ]` dengan catatan setelahnya; fase 5 dan 7–10 belum disentuh selain item yang sudah dicentang.
+> Checklist fase 0–3 dan 6 direkonsiliasi dengan isi repo pada 2026-10-18; fase 4 direkonsiliasi pada 2026-10-19 dan **diselesaikan 2026-10-20** (setiap centang punya bukti file/perintah di log). Item yang hanya terpenuhi sebagian tetap `- [ ]` dengan catatan setelahnya; fase 5 dan 7–10 belum disentuh selain item yang sudah dicentang.
 
 > MCP (§17) dan security hardening (§18) adalah pekerjaan **cross-cutting**. Saat itemnya dikerjakan, pindahkan ke fase terkait dan hitung ulang total; saat ini belum ada kode aplikasi target yang berubah.
 
@@ -1039,21 +1039,21 @@ Progres keseluruhan:  [#####.....] 50%
 - [x] Guard: route MCU menolak tanpa kontrak aktif — BFF memaksa `contract_id=is.null` dan halaman menampilkan pesan + tautan ke MCU IN/OUT
 - [x] Halaman error 401/403/404 — 401 ditangani redirect login; `403.astro`, `404.astro`, `500.astro` ada
 
-#### Fase 4 — Master data (4/9)
+#### Fase 4 — Master data (9/9)
 
-- [ ] Client: list/create/edit/delete + validasi — kode + validasi selesai; insert belum terverifikasi karena `0014_master_code_defaults.sql` belum diterapkan (kolom `code` belum punya default)
-- [ ] Contract: CRUD + soft delete + select2 — kode + soft delete selesai; dropdown client memakai `select` native, bukan select2; insert menunggu `0014`
-- [ ] Department & Divisi: CRUD per client — kode selesai; insert menunggu `0014`
-- [ ] Employee: CRUD + upload tanda tangan + preview — upload (magic bytes, 2 MB, re-encode sharp, nama acak, direktori privat) dan preview selesai + unit test; insert menunggu `0014`
+- [x] Client: list/create/edit/delete + validasi — insert/update/delete diuji lewat endpoint dengan client sementara (`C00002`; nama + alamat wajib seperti `ClientController@store`, alamat kosong ditolak "Alamat wajib diisi."); daftar client menampilkan kolom Kontrak (`contract_names`, satu query untuk halaman ini) seperti tabel bersarang legacy
+- [x] Contract: CRUD + soft delete + select2 — insert (`KT00101`), update, dan soft delete diuji; kontrak terhapus hilang dari daftar sekaligus dari kolom Kontrak client. Dropdown client/role/menu induk kini memakai `MasterSelect.vue` (kotak pencarian + keyboard + `aria-*`), bukan `<select>` native
+- [x] Department & Divisi: CRUD per client — insert/update/delete diuji dengan departemen `D-00039` dan divisi `DV-00039` pada client sementara
+- [x] Employee: CRUD + upload tanda tangan + preview — karyawan `E-11115` dibuat dengan PNG (magic bytes + re-encode sharp, direktori privat), ubah tanpa berkas baru mempertahankan ttd lama, karyawan baru tanpa ttd ditolak (paritas `EmployeeController@store`)
 - [x] User: CRUD + role/client + status aktif — diuji create/update/delete user sementara lewat endpoint, password `bcryptjs`, lalu data uji dihapus
 - [x] Role: CRUD + matriks permission — role sementara diuji create/update/delete; upsert permission diuji dengan `tx=rollback`; halaman `/app/master/role/[id]` menyimpan semua menu sekaligus
 - [x] Menu: CRUD hierarkis + toggle + urutan — menu sementara diuji create/update/toggle/delete; induk wajib menu utama, self-parent ditolak, menu ber-anak tidak bisa dihapus
 - [x] Semua list: pagination server-side + search + sort — `postgrestPage` menghitung total dari `Content-Range`; sort di-allowlist; user list memakai SQL service dengan scope client
-- [ ] Test parity dengan halaman Blade lama — baru parity manual untuk alur role/user/menu dan pembacaan semua halaman master
+- [x] Test parity dengan halaman Blade lama — `src/lib/master-parity.test.ts` (16 test) membaca `resources/views/pages/<kind>/create.blade.php` dan blok `validate()` controller legacy: setiap field form ada di `masterConfigs`, setiap aturan `required` tetap wajib, kolom identitas daftar tersedia, dan client menampilkan kontrak
 
-#### Fase 5 — Peserta (6/14)
+#### Fase 5 — Peserta (7/14)
 
-- [ ] List peserta + filter (search, NIK, nama, gender, tanggal lahir, plan, paket, lab khusus)
+- [x] List peserta + filter (search, NIK, nama, gender, tanggal lahir, plan, paket, lab khusus) — filter diurai di server dari URL (`participant-filters.ts`) lalu dikirim ke `v_participant_list`; pencarian bebas mencocokkan kode **atau** nama seperti `ParticipantService::paginate`, switch plan U/A/E/S/R + lab khusus + paket A–F, kolom Tgl. Lahir/Plan/Paket ditambahkan. Diuji 24 kasus lewat BFF + PostgREST nyata (tiap plan 1 baris tepat, paket A/B/C/F, komparasi `client_id`/`contract_id` dari URL tetap ditimpa klaim); `participant-parity.test.ts` menjaga nama field filter Blade dan kolom view
 - [x] Scope client/kontrak aktif di server + RLS
 - [ ] Form create peserta + auto kode + akun peserta
 - [ ] Form edit peserta
@@ -1170,6 +1170,12 @@ Semua jenis memakai satu komponen `UploadPage.vue` (panel unggah + tabel hasil) 
 
 | 2026-10-19 | 0 | Menghilangkan peringatan Astro `Shiki syntax highlighting uses inline styles that are not compatible with CSP` yang muncul saat `dev` dan `build`: aplikasi ini tidak merender blok kode Markdown, jadi sintaks penyorot dimatikan (`markdown.syntaxHighlight: false` di `astro.config.mjs`) alih-alih melepas CSP (invariant keamanan 8 tetap aktif). Verifikasi: `build` bersih tanpa `[WARN]`; pada konfigurasi ter-resolusi `markdown.syntaxHighlight=false` dengan `security.csp` aktif dan pemanggilan `warnIfCspWithShiki()` menghasilkan 0 peringatan; `npm run check` lulus (104 test). | 50% |
 
+| 2026-10-20 | 4 | Master data diselesaikan. Field pilihan kini memakai dropdown pencarian `MasterSelect.vue` (pengganti select2 legacy: saring label tanpa peka huruf besar/kecil, navigasi panah/Enter/Escape, `role=combobox` + `aria-*`) dan wajib-isi diperiksa di browser sebelum request; logika saringnya diuji di `master-format.test.ts`. Paritas form: alamat client wajib (sama dengan `ClientController@store`), tanda tangan karyawan wajib saat tambah tapi opsional saat ubah, dan daftar client menampilkan kolom **Kontrak** aktif (`contract_names`, satu query `in.(...)` per halaman) seperti tabel bersarang legacy. `master-parity.test.ts` (16 test) membaca langsung `resources/views/pages/<kind>/create.blade.php` dan blok `validate()` controller Blade sehingga field/aturan wajib yang berubah di legacy memicu kegagalan test. Ditemukan & diperbaiki saat verifikasi: halaman department/divisi/karyawan **hanya** menampilkan peringatan "Konteks MCU belum dipilih" tanpa tabel saat admin belum MCU IN — peringatan kini tampil bersama tabel karena daftar memang mengikuti client akun. Verifikasi E2E (Postgres + PostgREST + Astro dev, admin): create/update/delete client `C00002`, kontrak `KT00101` (termasuk soft delete: hilang dari daftar dan dari kolom Kontrak client), department `D-00039`, divisi `DV-00039`, karyawan `E-11115` dengan PNG (berkas privat dibuat, preview terisi, ubah tanpa berkas mempertahankan ttd lama); penolakan alamat client kosong dan karyawan baru tanpa ttd diuji; semua baris uji beserta berkas ttd dihapus kembali (sisa query `total=0`). Sequence sempat maju melewati kode uji (`C00002`, `KT00101`, `D-00039`, `DV-00039`, `E-11115`) dan tidak bisa di-`setval` dengan role service, jadi kode berikutnya adalah `C00003`, `KT00102`, `D-00040`, `DV-00040`, `E-11116` — celah nomor tidak berpengaruh. Catatan lingkungan: password role `mcu_auth`/`mcu_service` di `apps/web/.env` sudah tidak cocok (`/api/health` → `auth: unreachable`, login 502) sehingga diselaraskan dengan `infra/.env` (health kembali `ok`, tanpa secret dicatat di dokumen). Interaksi dropdown diverifikasi dengan test komponen jsdom sementara (buka via klik, saring "bank", pilih via klik dan panah+Enter, Esc menutup daftar tanpa menutup modal, label terpilih tampil, opsi kosong hanya saat tidak wajib/belum mengetik); test & konfigurasi sementaranya dihapus lagi karena `jsdom`/`@vue/test-utils` bukan dependensi proyek. `npm run check` lulus (138 test), `npm run build` lulus. | 55% |
+
+| 2026-10-20 | 5 | Daftar peserta dapat difilter. Modul baru `src/lib/participant-filters.ts` memegang state filter, query string halaman, dan parameter PostgREST; `ParticipantTable.vue` (pindah ke `components/participant/`) + `ParticipantFilterForm.vue` menampilkan panel filter (search kode/nama, NIK, nama, gender, tanggal lahir, switch plan U/A/E/S/R, lab khusus, paket A–F), kolom Tgl. Lahir/Plan/Paket, empty state khusus filter, dan pagination yang menyinkronkan URL lewat `history.replaceState`. Filter diurai di server (`index.astro`) dan diteruskan ke island, jadi tautan `?plan_u=1&gender=L` memulihkan tabel **dan** isi panel tanpa hydration mismatch. Temuan paritas: `ParticipantService::paginate` legacy membaca `plant_u`, `lab_khusus`, dan `paket_*` yang tidak ada di form (`plan_u`/`lab_special`/`packet_*`), sehingga switch plan U, lab khusus, dan paket di legacy tidak pernah berpengaruh — versi baru memakai nama field form agar berfungsi. Verifikasi: `npm run check` lulus (153 test, termasuk 11 test modul filter + 4 test paritas yang membaca `filter.blade.php` dan definisi `v_participant_list`), `npm run build` lulus; E2E lokal (Postgres 17 + PostgREST 16.4 + Astro dev, admin, kontrak uji) — 24 kasus filter lewat BFF (tiap plan, paket A/B/C/F, lab khusus, kombinasi, pencarian kode+nama huruf kecil, NIK/tanggal lahir persis, input berkoma) semuanya mengembalikan baris yang diharapkan, peserta kontrak lain tidak muncul, dan `client_id`/`contract_id` di URL diabaikan; halaman `/app/participant?plan_u=1&gender=L` merender checkbox U dan gender L dalam keadaan terpilih. Stack uji, data sementara, dan `apps/web/.env` lokal dikembalikan seperti semula. | 56% |
+
+| 2026-10-20 | 3 | Login tidak bisa dipakai pada server hasil build. Dua penyebab: (1) `apps/web/.env` berisi password role `mcu_auth`/`mcu_service` yang salah (13 karakter; `infra/.env` punya 19/22) sehingga `queryAuth` gagal `password authentication failed` → login 502 — password di kedua URL dikembalikan ke nilai yang benar, host/role/`sslmode` dan kunci lain tidak diubah; (2) `isSameOrigin` hanya membandingkan `Origin` dengan `context.url.origin`, sedangkan `@astrojs/node` membentuk URL internal dari alamat bind (`http://localhost:4401`) sehingga membuka aplikasi lewat `http://127.0.0.1:4401` - atau di belakang proxy/TLS - ditolak 403 "Origin tidak valid". Pemeriksaan kini memakai `Host`/`X-Forwarded-Host` + `X-Forwarded-Proto` (origin yang sama dengan yang dilihat browser) dan `PUBLIC_APP_URL` sebagai cadangan; origin situs lain tetap ditolak. `security.test.ts` (7 test) menambah regresi 127.0.0.1 vs localhost, proxy https, cadangan `PUBLIC_APP_URL`, dan penolakan origin asing. Verifikasi: `npm run check` lulus (162 test), `npm run build` lulus, lalu `npm start` di `127.0.0.1:4401` — login `origin: http://127.0.0.1:4401` 200 (sebelumnya 403), `/app` 200 dengan menu, MCU IN 200, `v_participant_list` mengembalikan 337 baris kontrak aktif dan 113 baris untuk filter gender+nama, `/app/participant?plan_u=1&gender=L` 200; `npm run dev` di 4321 login 200 dan `/api/health` 200. PostgREST dijalankan dari `db/scripts/postgrest.sh` (Supabase). Selain itu `GET /api/health` dibuat tidak rewel saat cold start: batas cek PostgREST dan auth dinaikkan dari 2/2,5 detik ke 5 detik (`GET /` PostgREST di stack ini ~0,9 detik dan koneksi TLS Supabase pertama bisa >2 detik), sehingga status tidak lagi sesekali menampilkan `unreachable`/503 padahal layanan hidup — diverifikasi 3 panggilan berurutan setelah restart semuanya `200 {app: ok, postgrest: ok, auth: ok}`. | 56% |
+
 ### 13.5 Cara memperbarui dokumen ini
 
 1. Selesaikan satu item → ubah `- [ ]` menjadi `- [x]`.
@@ -1207,6 +1213,7 @@ Semua jenis memakai satu komponen `UploadPage.vue` (panel unggah + tabel hasil) 
 | `EmployeeSignatureTest` | Upload/ganti/pertahankan ttd |
 | `PrintMcuTest` | Filter default bulan berjalan; kontrak milik client; status hasil |
 | `EmployeeTest`/lainnya | Perilaku CRUD & validasi |
+| Master create (client/kontrak/department/divisi/karyawan) | Field form dan aturan `required` controller Blade tetap sama (`src/lib/master-parity.test.ts`) |
 
 ### 14.3 Definition of Done (per modul)
 

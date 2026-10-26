@@ -8,6 +8,7 @@ import type {
     MasterOptions,
     MasterRow,
 } from '@/lib/master-data';
+import MasterSelect from './MasterSelect.vue';
 
 /**
  * Form tambah/ubah master data sebagai modal di atas tabel. Simpan dikirim
@@ -70,6 +71,36 @@ function close(): void {
     emit('close');
 }
 
+/**
+ * Validasi wajib-isi di browser sebelum request dikirim. Dropdown pencarian
+ * bukan `<select>` native, jadi atribut `required` tidak cukup; aturan ini
+ * memakai daftar field yang sama dengan validasi server.
+ */
+function validateRequired(): boolean {
+    for (const field of props.config.fields) {
+        if (field.type === 'boolean' || !requiredField(field)) continue;
+
+        if (field.type === 'file') {
+            const file =
+                formRef.value?.querySelector<HTMLInputElement>('input[type="file"]')?.files?.[0];
+
+            if (!file) {
+                error.value = `${field.label} wajib diunggah.`;
+                return false;
+            }
+
+            continue;
+        }
+
+        if (!String(values[field.key] ?? '').trim()) {
+            error.value = `${field.label} wajib diisi.`;
+            return false;
+        }
+    }
+
+    return true;
+}
+
 function onKeydown(event: KeyboardEvent): void {
     if (event.key === 'Escape') close();
 }
@@ -77,8 +108,11 @@ function onKeydown(event: KeyboardEvent): void {
 async function submit(): Promise<void> {
     if (saving.value) return;
 
-    saving.value = true;
     error.value = '';
+
+    if (!validateRequired()) return;
+
+    saving.value = true;
 
     const data = new FormData();
 
@@ -178,23 +212,16 @@ onBeforeUnmount(() => {
                                 <span v-if="requiredField(field)" class="text-danger"> *</span>
                             </label>
 
-                            <select
+                            <MasterSelect
                                 v-if="field.type === 'select'"
                                 :id="`field-${field.key}`"
-                                v-model="values[field.key]"
-                                class="vx-input"
+                                :model-value="values[field.key] ?? ''"
+                                :options="optionsFor(field)"
+                                :placeholder="field.placeholder ?? 'Pilih'"
                                 :required="requiredField(field)"
                                 :disabled="saving"
-                            >
-                                <option v-if="!field.required" value="">— Tidak dipilih —</option>
-                                <option
-                                    v-for="option in optionsFor(field)"
-                                    :key="option.value"
-                                    :value="option.value"
-                                >
-                                    {{ option.label }}
-                                </option>
-                            </select>
+                                @update:model-value="values[field.key] = $event"
+                            />
 
                             <label
                                 v-else-if="field.type === 'boolean'"

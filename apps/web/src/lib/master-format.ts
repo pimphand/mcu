@@ -1,5 +1,5 @@
 import { formatDate, formatDateTime } from './format';
-import type { MasterColumn, MasterRow } from './master-data';
+import type { MasterColumn, MasterOption, MasterRow } from './master-data';
 
 /**
  * Aturan tampilan tabel master yang dipakai bersama halaman (SSR dan island
@@ -12,11 +12,23 @@ export function masterCellText(row: MasterRow, column: MasterColumn): string {
     const value = row[column.key];
 
     if (value === null || value === undefined || value === '') return '—';
+    if (Array.isArray(value)) return value.length ? value.map(String).join(', ') : '—';
     if (column.format === 'boolean') return value ? 'Aktif' : 'Nonaktif';
     if (column.format === 'date') return formatDate(String(value));
     if (column.format === 'datetime') return formatDateTime(String(value));
 
     return String(value);
+}
+
+/**
+ * Saring opsi dropdown master dari kata kunci pengguna (select2 legacy).
+ * Pencocokan pada label, tidak peka huruf besar/kecil, dan spasi di ujung
+ * diabaikan supaya mengetik " pt " tetap menemukan "PT Contoh".
+ */
+export function filterMasterOptions(options: MasterOption[], term: string): MasterOption[] {
+    const query = term.trim().toLowerCase();
+
+    return query ? options.filter((option) => option.label.toLowerCase().includes(query)) : options;
 }
 
 /** Jumlah halaman; minimal 1 agar penomoran tetap tampil saat tabel kosong. */

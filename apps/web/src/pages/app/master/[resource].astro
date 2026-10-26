@@ -90,13 +90,17 @@ if (canView && token) {
                 Role Anda tidak memiliki akses ke menu ini.
             </p>
         </div>
-    ) : !user?.contract_id && config.kind !== 'client' && config.kind !== 'contract' ? (
-        <div class="mb-4 rounded-[0.357rem] border border-[#ffe4c9] bg-warning-soft px-3 py-2 text-sm text-[#b76e00]">
-            Konteks MCU belum dipilih. Data tetap mengikuti client akun Anda; pilih MCU IN/OUT bila
-            daftar client perlu dipersempit.
-        </div>
     ) : (
         <div class="space-y-5">
+            {/* Peringatan saja, bukan pengganti tabel: daftar master tetap
+                mengikuti client akun walau konteks MCU belum dipilih. */}
+            {!user?.contract_id && config.kind !== 'client' && config.kind !== 'contract' && (
+                <div class="rounded-[0.357rem] border border-[#ffe4c9] bg-warning-soft px-3 py-2 text-sm text-[#b76e00]">
+                    Konteks MCU belum dipilih. Data tetap mengikuti client akun Anda; pilih MCU
+                    IN/OUT bila daftar client perlu dipersempit.
+                </div>
+            )}
+
             {dataError && (
                 <p
                     class="rounded-[0.357rem] border border-[#f8d4d4] bg-danger-soft px-3 py-2 text-sm text-danger"

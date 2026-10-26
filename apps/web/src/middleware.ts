@@ -1,6 +1,7 @@
 import { defineMiddleware } from 'astro:middleware';
 import { clearSessionCookie, readSessionToken, verifySession } from './lib/auth/session';
 import type { MenuRow } from './lib/nav';
+import { env } from './lib/env';
 import { applySecurityHeaders, isSameOrigin, isUnsafeMethod } from './lib/security';
 import { postgrestRows } from './lib/server-postgrest';
 
@@ -27,7 +28,10 @@ function secure(response: Response, https: boolean): Response {
 export const onRequest = defineMiddleware(async (context, next) => {
     const https = context.url.protocol === 'https:';
 
-    if (isUnsafeMethod(context.request.method) && !isSameOrigin(context.request, context.url)) {
+    if (
+        isUnsafeMethod(context.request.method) &&
+        !isSameOrigin(context.request, context.url, env.PUBLIC_APP_URL)
+    ) {
         return secure(
             new Response(JSON.stringify({ error: 'forbidden', message: 'Origin tidak valid.' }), {
                 status: 403,

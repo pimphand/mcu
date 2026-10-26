@@ -32,6 +32,12 @@ describe('validasi master data', () => {
         expect(result).toEqual({ ok: false, message: 'Nama wajib diisi.' });
     });
 
+    it('mewajibkan alamat client seperti validasi legacy', () => {
+        const result = validateMasterForm('client', form({ name: 'PT Contoh' }), 'create');
+
+        expect(result).toEqual({ ok: false, message: 'Alamat wajib diisi.' });
+    });
+
     it('mengubah client_id pilihan menjadi angka dan mewajibkannya pada kontrak', () => {
         const valid = validateMasterForm(
             'contract',

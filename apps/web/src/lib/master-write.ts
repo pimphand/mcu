@@ -113,7 +113,14 @@ export async function createMaster(
 
     if (config.signature) {
         uploaded = await saveSignature(file);
-        if (uploaded) payload.ttd = uploaded;
+
+        // Legacy mewajibkan tanda tangan saat karyawan dibuat; tanpa berkas,
+        // cetakan hasil MCU tidak punya tanda tangan pemeriksa.
+        if (!uploaded) {
+            throw new MasterWriteError('Tanda tangan wajib diunggah (PNG/JPG maksimal 2 MB).');
+        }
+
+        payload.ttd = uploaded;
     }
 
     try {

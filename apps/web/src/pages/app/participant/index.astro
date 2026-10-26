@@ -1,8 +1,14 @@
 ---
 import AppLayout from '@/layouts/AppLayout.astro';
-import ParticipantTable from '@/components/ParticipantTable.vue';
+import ParticipantTable from '@/components/participant/ParticipantTable.vue';
+import { parseParticipantFilters } from '@/lib/participant-filters';
 
 const user = Astro.locals.user;
+
+// Filter dibaca di server supaya tautan yang dibagikan (mis. `?plan_u=1`) sudah
+// terpasang saat island dihidrasi, bukan hanya setelah JavaScript jalan.
+const initialFilters = parseParticipantFilters(Astro.url.searchParams);
+const initialPage = Math.max(0, (Number(Astro.url.searchParams.get('page')) || 1) - 1);
 ---
 
 <AppLayout title="Peserta" user={user}>
@@ -32,7 +38,7 @@ const user = Astro.locals.user;
     </div>
 
     {user?.contract_id ? (
-        <ParticipantTable client:load />
+        <ParticipantTable client:load initialFilters={initialFilters} initialPage={initialPage} />
     ) : (
         <div class="rounded-[0.5rem] border border-[#ffe4c9] bg-warning-soft p-6">
             <h2 class="text-[1rem] font-semibold text-[#b76e00]">Konteks MCU belum dipilih</h2>
