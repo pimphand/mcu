@@ -531,6 +531,7 @@ class ParticipantController extends Controller
                 'spirometri',
                 'rectal',
             ])
+            ->orderBy('no_form')
             ->orderBy('code')
             ->get();
 

@@ -27,3 +27,5 @@ yarn-error.log
 apps/web/node_modules
 db/etl/node_modules
 db/etl/node_modules
+
+.commandcode

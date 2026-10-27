@@ -42,7 +42,7 @@ if (user?.contract_id && user.client_id && token) {
                 contract_id: `eq.${user.contract_id}`,
                 and: registerDateFilter(tglAwal, tglAkhir),
                 ...(divisiId ? { divisi_id: `eq.${divisiId}` } : {}),
-                order: 'code.asc',
+                order: 'no_form.asc',
                 limit: 1000,
             }),
             postgrestRows<{ id: number; name: string }>(

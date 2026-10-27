@@ -173,10 +173,11 @@ class ReportMultipleController extends Controller
             ->allowedIncludes(['participant'])
             ->allowedFilters($this->participantResultFilters())
             ->where('selesai', 1)
-            ->orderBy('id')
-            ->skip($range['start'] - 1)
-            ->take($range['perPage'])
-            ->get();
+            ->get()
+            ->sortBy(fn ($row) => $row->participant->no_form ?? PHP_INT_MAX)
+            ->values()
+            ->slice($range['start'] - 1, $range['perPage'])
+            ->values();
 
         return $this->stream('pages.report.multiple.pemeriksaan-fisik', $data, 'pemeriksaan-fisik', $range);
     }
@@ -190,10 +191,11 @@ class ReportMultipleController extends Controller
             ->allowedFilters($this->participantResultFilters())
             ->where('selesai', 1)
             ->with('participant')
-            ->orderBy('id')
-            ->skip($range['start'] - 1)
-            ->take($range['perPage'])
-            ->get();
+            ->get()
+            ->sortBy(fn ($row) => $row->participant->no_form ?? PHP_INT_MAX)
+            ->values()
+            ->slice($range['start'] - 1, $range['perPage'])
+            ->values();
 
         return $this->stream('pages.report.multiple.radiologi', $data, 'radiologi', $range);
     }
@@ -207,10 +209,11 @@ class ReportMultipleController extends Controller
             ->allowedFilters($this->participantResultFilters())
             ->where('selesai', 1)
             ->with('participant')
-            ->orderBy('id')
-            ->skip($range['start'] - 1)
-            ->take($range['perPage'])
-            ->get();
+            ->get()
+            ->sortBy(fn ($row) => $row->participant->no_form ?? PHP_INT_MAX)
+            ->values()
+            ->slice($range['start'] - 1, $range['perPage'])
+            ->values();
 
         return $this->stream('pages.report.multiple.ekg', $data, 'ekg', $range);
     }
@@ -224,10 +227,11 @@ class ReportMultipleController extends Controller
             ->allowedFilters($this->participantResultFilters())
             ->where('selesai', 1)
             ->with('participant')
-            ->orderBy('id')
-            ->skip($range['start'] - 1)
-            ->take($range['perPage'])
-            ->get();
+            ->get()
+            ->sortBy(fn ($row) => $row->participant->no_form ?? PHP_INT_MAX)
+            ->values()
+            ->slice($range['start'] - 1, $range['perPage'])
+            ->values();
 
         return $this->stream('pages.report.multiple.rectal', $data, 'rectal', $range);
     }
@@ -241,10 +245,11 @@ class ReportMultipleController extends Controller
             ->allowedFilters($this->participantResultFilters())
             ->where('selesai', 1)
             ->with('participant')
-            ->orderBy('id')
-            ->skip($range['start'] - 1)
-            ->take($range['perPage'])
-            ->get();
+            ->get()
+            ->sortBy(fn ($row) => $row->participant->no_form ?? PHP_INT_MAX)
+            ->values()
+            ->slice($range['start'] - 1, $range['perPage'])
+            ->values();
 
         return $this->stream('pages.report.multiple.laboratorium', $data, 'laboratorium', $range);
     }
@@ -259,11 +264,12 @@ class ReportMultipleController extends Controller
             ->allowedFilters($this->participantFilters())
             ->whereHas('validateDoctor')
             ->with(['divisi', 'department', 'client', 'contract', 'pemeriksaanFisik', 'validateDoctor'])
+            ->orderBy('no_form')
             ->orderBy('code')
             ->skip($range['start'] - 1)
             ->take($range['perPage'])
             ->get();
-
+    
         return $this->stream('pages.report.multiple.resume', $data, 'resume', $range);
     }
 
@@ -275,6 +281,7 @@ class ReportMultipleController extends Controller
             ->allowedFilters($this->participantFilters())
             ->whereHas('audiometri', fn ($query) => $query->where('selesai', 1))
             ->with(['divisi', 'department', 'client', 'contract', 'audiometri'])
+            ->orderBy('no_form')
             ->orderBy('code')
             ->skip($range['start'] - 1)
             ->take($range['perPage'])
